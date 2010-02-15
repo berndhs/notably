@@ -1,5 +1,7 @@
 #include "notesdisplay.h"
 #include "delib-debug.h"
+#include <QFile>
+#include <QByteArray>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -21,7 +23,8 @@ namespace nota {
 
 NotesDisplay::NotesDisplay ()
 :pApp(0),
- pConf(0)
+ pConf(0),
+ mConName ("nota_dbcon")
 {
   setupUi (this);
   exitAction = new QAction (tr("Exit") , this);
@@ -63,11 +66,10 @@ NotesDisplay::dropEvent (QDropEvent *event)
 void
 NotesDisplay::FakeSaveText ()
 {
-  QFile file (pConf->DataFile());
-  file.open (QFile::WriteOnly);
-  file.write (editBox->toHtml().toStdString().c_str(), 
-              editBox->toHtml().length() );
-  file.close();
+  //MakeTables ();
+  OpenDB ();
+  WriteDB (2, "note title", editBox->toHtml());
+  CloseDB ();
 }
 
 void
@@ -76,4 +78,64 @@ NotesDisplay::ReportText ()
   StdOut() << editBox->toHtml ();
 }
 
+void
+NotesDisplay::OpenDB ()
+{
+  db = QSqlDatabase::addDatabase ("QSQLITE",mConName);
+  db.setDatabaseName (pConf->CompleteDBName());
+  db.open ();
+}
+
+void
+NotesDisplay::CloseDB ()
+{
+  db.close();
+}
+
+void
+NotesDisplay::MakeTable (QString table)
+{
+  OpenDB ();
+  QString filename = QString (":qrcfiles/schema-") + table 
+                      + QString (".sql");
+  QFile schemafile (filename);
+  schemafile.open (QFile::ReadOnly);
+  QByteArray createcommands = schemafile.readAll ();
+  schemafile.close ();
+  QString querytext (createcommands);
+  QSqlQuery qry (db);
+  qry.prepare (querytext);
+  qry.exec ();
+  db.close();
+}
+
+void 
+NotesDisplay::MakeTables ()
+{
+  MakeTable ("notes");
+  MakeTable ("tags");
+  MakeTable ("tagrefs");
+  MakeTable ("identndx");
+}
+
+
+void
+NotesDisplay::WriteDB (const qint64 id,
+                       const QString & name,
+                       const QString & text)
+{
+
+  QSqlQuery InsertQuery (db);
+  QString queryPattern ("insert or replace into 'notes' (noteid, usergivenid, notetext)");
+  queryPattern.append (" VALUES (?,?,?)");
+  InsertQuery.prepare (queryPattern);
+  QVariant v[3];
+  v[0].setValue (id);
+  v[1].setValue (name);
+  v[2].setValue (text);
+  for (int i=0; i<3; i++) {
+    InsertQuery.bindValue (i,v[i]);
+  }
+  InsertQuery.exec ();
+}
 }

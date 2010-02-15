@@ -26,6 +26,8 @@ public:
   void dropEvent (QDropEvent * event);
   void dragEnterEvent (QDragEnterEvent *event);
   
+  QString BoxText ();
+  
 public slots:
 
   void paste ();

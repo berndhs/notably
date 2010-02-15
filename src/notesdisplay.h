@@ -19,6 +19,10 @@
 #include <ui_mainwin.h>
 #include "notaconf.h"
 
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QVariant>
+
 /** @brief NotesDisplay class for the Notably note taker program
 */
 
@@ -44,10 +48,21 @@ private:
 
   void ReportText ();
   void FakeSaveText ();
+  void MakeTables ();
+  void MakeTable (QString table);
+  
+  
+  void OpenDB ();
+  void WriteDB (const qint64 id, 
+                const QString & name,
+                const QString & text);
+  void CloseDB ();
 
   QApplication *pApp;
   
-  NotaConf     *pConf;
+  NotaConf     *pConf; 
+  QSqlDatabase  db;
+  QString       mConName;
   
   QAction    *exitAction;
 

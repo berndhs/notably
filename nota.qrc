@@ -1,6 +1,10 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 <qresource>
+  <file>qrcfiles/schema-notes.sql</file>
+  <file>qrcfiles/schema-tags.sql</file>
+  <file>qrcfiles/schema-tagrefs.sql</file>
+  <file>qrcfiles/schema-identndx.sql</file>
 </qresource>
 </RCC>
 

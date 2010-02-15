@@ -24,6 +24,7 @@ public:
   NotaConf ();
 
   QString  DataFile ();
+  QString  CompleteDBName ();
   
 private:
 

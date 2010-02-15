@@ -44,4 +44,5 @@ EditBox::dragEnterEvent (QDragEnterEvent * event)
   }
 }
 
+
 }

@@ -17,4 +17,10 @@ NotaConf::DataFile ()
   return mPath + "/" + mDatafile;
 }
 
+QString
+NotaConf::CompleteDBName ()
+{
+  return mPath + "/" + mDatafile;
+}
+
 }

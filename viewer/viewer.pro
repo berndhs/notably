@@ -27,7 +27,7 @@ CONFIG(release, debug|release) {
   TARGET = notably
 }
 
-QT += gui core
+QT += gui core sql
 
 RESOURCES += \
 	../nota.qrc
