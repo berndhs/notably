@@ -17,6 +17,7 @@
 
 #include "delib-debug.h"
 #include "notesdisplay.h"
+#include "notaconf.h"
 #include <QApplication>
 
 
@@ -28,9 +29,10 @@ main (int argc, char* argv[])
   
   QApplication App (argc, argv);
   
-  deliberate::NotesDisplay notes;
-  
+  nota::NotesDisplay notes;
+  nota::NotaConf     conf;
   notes.SetApplication (&App);
+  notes.SetConf (conf);
   notes.show ();
   
   deliberate::StdOut () << " more later" << endl;

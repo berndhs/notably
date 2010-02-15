@@ -14,7 +14,7 @@
    <string>Notably</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="editBox">
+   <widget class="nota::EditBox" name="editBox">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -22,6 +22,9 @@
       <width>506</width>
       <height>316</height>
      </rect>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
     </property>
    </widget>
   </widget>
@@ -36,6 +39,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>nota::EditBox</class>
+   <extends>QTextEdit</extends>
+   <header>nota-editbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -15,12 +15,14 @@
 
 #include <QMainWindow>
 #include <QApplication>
+#include "nota-editbox.h"
 #include <ui_mainwin.h>
+#include "notaconf.h"
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
 
-namespace deliberate {
+namespace nota {
 
 class NotesDisplay : public QMainWindow, public Ui_MainWindow {
 Q_OBJECT
@@ -30,6 +32,9 @@ public:
   NotesDisplay ();
   
   void SetApplication (QApplication *pA);
+  void SetConf        (NotaConf & conf);
+  
+  void dropEvent (QDropEvent * event);
   
 public slots:
 
@@ -38,8 +43,11 @@ public slots:
 private:
 
   void ReportText ();
+  void FakeSaveText ();
 
   QApplication *pApp;
+  
+  NotaConf     *pConf;
   
   QAction    *exitAction;
 

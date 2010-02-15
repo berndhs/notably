@@ -17,6 +17,7 @@
 TEMPLATE = subdirs
 
 CONFIG += qt debug_and_release
+INCLUDEPATH += src
 
 CONFIG(debug, debug|release) {
   DEFINES += DELIBERATE_DEBUG=1

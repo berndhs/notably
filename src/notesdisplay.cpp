@@ -13,11 +13,15 @@
 //
 //
 
+#include <QFile>
 
-namespace deliberate {
+using namespace deliberate;
+
+namespace nota {
 
 NotesDisplay::NotesDisplay ()
-:pApp(0)
+:pApp(0),
+ pConf(0)
 {
   setupUi (this);
   exitAction = new QAction (tr("Exit") , this);
@@ -33,13 +37,37 @@ NotesDisplay::SetApplication (QApplication * pA)
 }
 
 void
+NotesDisplay::SetConf (NotaConf & conf)
+{
+  pConf = &conf;
+}
+
+void
 NotesDisplay::quit ()
 {
   if (pApp) {
     pApp->quit();
   }
   ReportText ();
+  FakeSaveText ();
   StdOut() << " bye for now" << endl;
+}
+
+void
+NotesDisplay::dropEvent (QDropEvent *event)
+{
+  qDebug () << "drop event " << event;
+  
+}
+
+void
+NotesDisplay::FakeSaveText ()
+{
+  QFile file (pConf->DataFile());
+  file.open (QFile::WriteOnly);
+  file.write (editBox->toHtml().toStdString().c_str(), 
+              editBox->toHtml().length() );
+  file.close();
 }
 
 void
