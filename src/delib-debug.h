@@ -19,7 +19,9 @@
 
 #if DELIBERATE_DEBUG
 #include <QDebug>
-#define QDEBUG qDebug
+#else
+#include <QDebug>
+#warning COMPILING RELEASE
 #endif
 
 namespace deliberate {
