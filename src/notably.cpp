@@ -33,6 +33,7 @@ main (int argc, char* argv[])
   nota::NotaConf     conf;
   notes.SetApplication (&App);
   notes.SetConf (conf);
+  notes.Start ();
   notes.show ();
   
   deliberate::StdOut () << " more later" << endl;
