@@ -17,14 +17,24 @@
    <widget class="nota::EditBox" name="editBox">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>185</x>
       <y>5</y>
-      <width>506</width>
+      <width>441</width>
       <height>316</height>
      </rect>
     </property>
     <property name="textInteractionFlags">
      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="notesIndex">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>5</y>
+      <width>176</width>
+      <height>311</height>
+     </rect>
     </property>
    </widget>
   </widget>

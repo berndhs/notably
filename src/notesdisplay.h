@@ -22,6 +22,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QVariant>
+#include <QListWidgetItem>
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
@@ -37,26 +38,37 @@ public:
   
   void SetApplication (QApplication *pA);
   void SetConf        (NotaConf & conf);
+  void Start ();
   
   void dropEvent (QDropEvent * event);
   
 public slots:
 
   void quit ();
+  void UserPicked (QListWidgetItem *item);
+  void SaveCurrent ();
+  void NewNote ();
 
 private:
 
+  void SetupMenu ();
   void ReportText ();
-  void FakeSaveText ();
   void MakeTables ();
   void MakeTable (QString table);
+  bool DBExists ();
+  void ShowNote (const qint64 id, const QString & name);
   
   
   void OpenDB ();
-  void WriteDB (const qint64 id, 
+  void WriteNote (const qint64 id, 
                 const QString & name,
                 const QString & text);
   void CloseDB ();
+  
+  void FillNotesList (  QListWidget *notesIndex);
+  void ListThisNote (  QListWidget *notesIndex,
+                     const qint64    id,
+                     const QString   &name);
 
   QApplication *pApp;
   
@@ -64,7 +76,13 @@ private:
   QSqlDatabase  db;
   QString       mConName;
   
+  qint64     currentId;
+  QString    currentName;
+  bool       isNew;
+  
   QAction    *exitAction;
+  QAction    *saveAction;
+  QAction    *newAction;
 
 };
 
