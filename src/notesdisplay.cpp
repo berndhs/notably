@@ -51,11 +51,14 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (newAction);
   deleteAction = new QAction (tr("Delete Note"), this);
   menubar->addAction (deleteAction);
+  helpAction = new QAction (tr("Help"), this);
+  menubar->addAction (helpAction);
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
   connect (saveAction, SIGNAL (triggered()), this, SLOT (SaveCurrent()));
   connect (newAction, SIGNAL (triggered()), this, SLOT (NewNote()));
   connect (deleteAction, SIGNAL (triggered()), this, SLOT (DeleteCurrent()));
+  connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
 }
 
 void
@@ -92,6 +95,12 @@ NotesDisplay::dropEvent (QDropEvent *event)
 }
 
 void
+NotesDisplay::Help ()
+{
+  deliberate::ShowVersionWindow ();
+}
+
+void
 NotesDisplay::UserPicked (QListWidgetItem *item)
 {
   if (item) {
@@ -109,7 +118,7 @@ NotesDisplay::DeleteFromDB (const qint64 id)
   delStr.append (QString::number(id));
   delStr.append ("'");
   QSqlQuery qry (db);
-  bool ok =  qry.exec (delStr);
+  qry.exec (delStr);
 }
 
 void

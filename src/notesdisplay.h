@@ -18,6 +18,7 @@
 #include "nota-editbox.h"
 #include <ui_mainwin.h>
 #include "notaconf.h"
+#include "version.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -50,6 +51,7 @@ public slots:
   void DeleteCurrent ();
   void NewNote ();
   void NameChanged (const QString & name);
+  void Help ();
 
 private:
 
@@ -96,6 +98,7 @@ private:
   QAction    *saveAction;
   QAction    *newAction;
   QAction    *deleteAction;
+  QAction    *helpAction;
 
 };
 

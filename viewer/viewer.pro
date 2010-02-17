@@ -41,12 +41,14 @@ SOURCES = \
 	../src/delib-debug.cpp \
 	../src/notaconf.cpp \
 	../src/nota-editbox.cpp \
+	../src/version.cpp \
 	../src/notably.cpp
 
 HEADERS = \
 	../src/notesdisplay.h \
 	../src/delib-debug.h \
 	../src/nota-editbox.h \
+	../src/version.h \
 	../src/notaconf.h \
 	
 

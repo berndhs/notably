@@ -18,6 +18,7 @@
 #include "delib-debug.h"
 #include "notesdisplay.h"
 #include "notaconf.h"
+#include "version.h"
 #include <QApplication>
 
 
@@ -29,6 +30,8 @@ main (int argc, char* argv[])
   
   QApplication App (argc, argv);
   
+  deliberate::CLIVersion ();
+  
   nota::NotesDisplay notes;
   nota::NotaConf     conf;
   notes.SetApplication (&App);
@@ -36,7 +39,6 @@ main (int argc, char* argv[])
   notes.Start ();
   notes.show ();
   
-  deliberate::StdOut () << " more later" << endl;
   
   App.exec ();
   return 0;
