@@ -18,6 +18,7 @@
 #include "nota-editbox.h"
 #include <ui_mainwin.h>
 #include "notaconf.h"
+#include "notemenu.h"
 #include "version.h"
 
 #include <QSqlDatabase>
@@ -52,6 +53,8 @@ public slots:
   void NewNote ();
   void NameChanged (const QString & name);
   void Help ();
+  void ShowNothing ();
+  void ShowNoteMenu ();
 
 private:
 
@@ -60,7 +63,6 @@ private:
   void MakeTables ();
   void MakeTable (QString table);
   bool DBExists ();
-  void ShowNothing ();
   void DeleteFromDB (const qint64 id);
   void MakeNew  (qint64 & id, QString & name);
   void ShowNote (QListWidgetItem * item,
@@ -83,6 +85,7 @@ private:
   QApplication *pApp;
   
   NotaConf     *pConf; 
+  NoteMenu      noteMenu;
   QSqlDatabase  db;
   QString       mConName;
   
@@ -96,8 +99,7 @@ private:
   
   QAction    *exitAction;
   QAction    *saveAction;
-  QAction    *newAction;
-  QAction    *deleteAction;
+  QAction    *noteMenuAction;
   QAction    *helpAction;
 
 };

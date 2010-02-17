@@ -29,6 +29,7 @@ namespace nota {
 NotesDisplay::NotesDisplay ()
 :pApp(0),
  pConf(0),
+ noteMenu(this),
  mConName ("nota_dbcon")
 {
   setupUi (this);
@@ -47,18 +48,20 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (exitAction);
   saveAction = new QAction (tr("Save Note"), this);
   menubar->addAction (saveAction);
-  newAction = new QAction (tr("New Note"), this);
-  menubar->addAction (newAction);
-  deleteAction = new QAction (tr("Delete Note"), this);
-  menubar->addAction (deleteAction);
+  noteMenuAction = new QAction (tr("Note..."), this);
+  menubar->addAction (noteMenuAction);
   helpAction = new QAction (tr("Help"), this);
   menubar->addAction (helpAction);
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
   connect (saveAction, SIGNAL (triggered()), this, SLOT (SaveCurrent()));
-  connect (newAction, SIGNAL (triggered()), this, SLOT (NewNote()));
-  connect (deleteAction, SIGNAL (triggered()), this, SLOT (DeleteCurrent()));
+  connect (noteMenuAction, SIGNAL (triggered()), this, SLOT (ShowNoteMenu()));
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
+  
+  connect (&noteMenu, SIGNAL (SaveNote()), this, SLOT (SaveCurrent()));
+  connect (&noteMenu, SIGNAL (DeleteNote()), this, SLOT (DeleteCurrent()));
+  connect (&noteMenu, SIGNAL (NewNote()), this, SLOT (NewNote()));
+  connect (&noteMenu, SIGNAL (CancelNote()), this, SLOT (ShowNothing()));
 }
 
 void
@@ -98,6 +101,12 @@ void
 NotesDisplay::Help ()
 {
   deliberate::ShowVersionWindow ();
+}
+
+void
+NotesDisplay::ShowNoteMenu ()
+{
+  noteMenu.Exec (editBox->pos());
 }
 
 void
