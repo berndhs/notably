@@ -109,6 +109,14 @@ NotesDisplay::Help ()
 void
 NotesDisplay::ShowNoteMenu ()
 {
+  actionTimer.setSingleShot (true);
+  connect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecNoteMenu()));
+  actionTimer.start (100);
+}
+
+void
+NotesDisplay::ExecNoteMenu ()
+{
   noteMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
 }
 

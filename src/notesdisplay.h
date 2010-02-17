@@ -57,6 +57,7 @@ public slots:
   void ShowNothing ();
   void ShowNoteMenu ();
   void DebugCheck ();
+  void ExecNoteMenu ();
 
 private:
 
@@ -105,6 +106,7 @@ private:
   QAction    *helpAction;
   
   QTimer     debugTimer;
+  QTimer     actionTimer;
 
 };
 
