@@ -166,6 +166,7 @@ NotesDisplay::ShowNothing ()
   currentId = 0;
   currentName = "";
   newName = "";
+  nameChanged = false;
   noteName ->setText ("");
   editBox->setHtml ("");
   curItem = 0;
