@@ -25,6 +25,7 @@
 #include <QSqlQuery>
 #include <QVariant>
 #include <QListWidgetItem>
+#include <QTimer>
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
@@ -55,6 +56,7 @@ public slots:
   void Help ();
   void ShowNothing ();
   void ShowNoteMenu ();
+  void DebugCheck ();
 
 private:
 
@@ -101,6 +103,8 @@ private:
   QAction    *saveAction;
   QAction    *noteMenuAction;
   QAction    *helpAction;
+  
+  QTimer     debugTimer;
 
 };
 

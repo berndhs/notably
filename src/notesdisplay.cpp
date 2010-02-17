@@ -39,6 +39,9 @@ NotesDisplay::NotesDisplay ()
            this, SLOT (UserPicked (QListWidgetItem*)));
   connect (noteName, SIGNAL (textEdited (const QString &)), 
            this, SLOT (NameChanged(const QString &)));
+           
+  connect (&debugTimer, SIGNAL (timeout()), this, SLOT (DebugCheck()));
+  debugTimer.start (1000);
 }
 
 void
@@ -106,9 +109,7 @@ NotesDisplay::Help ()
 void
 NotesDisplay::ShowNoteMenu ()
 {
-  noteMenu.show();
   noteMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
-  noteMenu.hide();
 }
 
 void
@@ -360,4 +361,13 @@ NotesDisplay::WriteNote (const qint64 id,
   }
   InsertQuery.exec ();
 }
+
+
+void
+NotesDisplay::DebugCheck ()
+{
+  qDebug () << " menubar enabled " << menubar->isEnabled ();
+  qDebug () << " menubar active " << menubar->activeAction ();
+}
+
 }
