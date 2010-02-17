@@ -119,6 +119,8 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
       curItem = item;
       currentId = id;
       currentName = name;
+      newName = currentName;
+      nameChanged = false;
       isNew = false;
     }
   }
@@ -134,6 +136,8 @@ NotesDisplay::NewNote ()
   QString time_str = now.toString ("yyyy-MM-dd-hh:mm:ss-Note");
   currentId = time_id;
   currentName = time_str;
+  newName = currentName;
+  nameChanged = false;
   curItem = 0;
   isNew = true;
   noteName->setText (currentName);
