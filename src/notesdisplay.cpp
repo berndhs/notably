@@ -106,7 +106,7 @@ NotesDisplay::Help ()
 void
 NotesDisplay::ShowNoteMenu ()
 {
-  noteMenu.Exec (editBox->pos());
+  noteMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
 }
 
 void

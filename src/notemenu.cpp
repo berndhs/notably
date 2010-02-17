@@ -36,9 +36,9 @@ NoteMenu::NoteMenu (QWidget * parent)
 void
 NoteMenu::Exec (QPoint here)
 {
-  show ();
+ // show ();
   menu.exec (here);
-  hide ();
+ // hide ();
 }
 
 void
