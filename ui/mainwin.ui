@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>626</width>
+    <width>640</width>
     <height>363</height>
    </rect>
   </property>
@@ -17,10 +17,10 @@
    <widget class="nota::EditBox" name="editBox">
     <property name="geometry">
      <rect>
-      <x>185</x>
-      <y>5</y>
-      <width>441</width>
-      <height>316</height>
+      <x>183</x>
+      <y>65</y>
+      <width>456</width>
+      <height>271</height>
      </rect>
     </property>
     <property name="textInteractionFlags">
@@ -31,10 +31,32 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>5</y>
+      <y>0</y>
       <width>176</width>
-      <height>311</height>
+      <height>341</height>
      </rect>
+    </property>
+    <property name="dragDropMode">
+     <enum>QAbstractItemView::NoDragDrop</enum>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="noteName">
+    <property name="geometry">
+     <rect>
+      <x>183</x>
+      <y>0</y>
+      <width>456</width>
+      <height>64</height>
+     </rect>
+    </property>
+    <property name="dragEnabled">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -43,7 +65,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>626</width>
+     <width>640</width>
      <height>22</height>
     </rect>
    </property>

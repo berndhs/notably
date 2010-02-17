@@ -35,6 +35,8 @@ NotesDisplay::NotesDisplay ()
   SetupMenu ();
   connect (notesIndex, SIGNAL (itemActivated (QListWidgetItem*)),
            this, SLOT (UserPicked (QListWidgetItem*)));
+  connect (noteName, SIGNAL (textEdited (const QString &)), 
+           this, SLOT (NameChanged(const QString &)));
 }
 
 void
@@ -76,8 +78,6 @@ NotesDisplay::quit ()
   if (pApp) {
     pApp->quit();
   }
-  //ReportText ();
-  //FakeSaveText ();
   StdOut() << " bye for now" << endl;
 }
 
@@ -94,12 +94,14 @@ NotesDisplay::UserPicked (QListWidgetItem *item)
   if (item) {
     qint64 id = item->data(Qt::UserRole).toLongLong();
     QString name = item->text();
-    ShowNote (id,name);
+    ShowNote (item,id,name);
   }
 }
 
 void
-NotesDisplay::ShowNote (const qint64 id, const QString & name)
+NotesDisplay::ShowNote (QListWidgetItem *item,
+                        const qint64 id, 
+                        const QString & name)
 {
   QString textbody;
   QString qstr ("select usergivenid, notetext from 'notes' where noteid ='");
@@ -112,7 +114,9 @@ NotesDisplay::ShowNote (const qint64 id, const QString & name)
     if (query.next()) {
       int textindex = query.record().indexOf("notetext");
       textbody = query.value(textindex).toString ();
+      noteName->setText (name);
       editBox->setHtml (textbody);
+      curItem = item;
       currentId = id;
       currentName = name;
       isNew = false;
@@ -130,8 +134,20 @@ NotesDisplay::NewNote ()
   QString time_str = now.toString ("yyyy-MM-dd-hh:mm:ss-Note");
   currentId = time_id;
   currentName = time_str;
+  curItem = 0;
   isNew = true;
+  noteName->setText (currentName);
   editBox->setHtml (QString("New Note"));
+}
+
+
+void
+NotesDisplay::NameChanged (const QString & name)
+{
+  if (currentName != name) {
+    nameChanged = true;
+    newName = name;
+  }
 }
 
 void
@@ -141,9 +157,14 @@ NotesDisplay::SaveCurrent ()
     MakeTables ();
   }
   OpenDB ();
+  if (nameChanged) {
+    currentName = newName;
+  }
   WriteNote (currentId, currentName, editBox->toHtml());
   if (isNew) {
     ListThisNote (notesIndex, currentId, currentName);
+  } else if (nameChanged) {
+    curItem->setText (currentName);
   }
 }
 

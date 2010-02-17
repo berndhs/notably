@@ -48,6 +48,7 @@ public slots:
   void UserPicked (QListWidgetItem *item);
   void SaveCurrent ();
   void NewNote ();
+  void NameChanged (const QString & name);
 
 private:
 
@@ -56,7 +57,9 @@ private:
   void MakeTables ();
   void MakeTable (QString table);
   bool DBExists ();
-  void ShowNote (const qint64 id, const QString & name);
+  void ShowNote (QListWidgetItem * item,
+                 const qint64 id, 
+                 const QString & name);
   
   
   void OpenDB ();
@@ -78,7 +81,10 @@ private:
   
   qint64     currentId;
   QString    currentName;
+  QString    newName;
+  QListWidgetItem  *curItem;
   bool       isNew;
+  bool       nameChanged;
   
   QAction    *exitAction;
   QAction    *saveAction;
