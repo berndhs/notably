@@ -47,6 +47,7 @@ public slots:
   void quit ();
   void UserPicked (QListWidgetItem *item);
   void SaveCurrent ();
+  void DeleteCurrent ();
   void NewNote ();
   void NameChanged (const QString & name);
 
@@ -57,6 +58,9 @@ private:
   void MakeTables ();
   void MakeTable (QString table);
   bool DBExists ();
+  void ShowNothing ();
+  void DeleteFromDB (const qint64 id);
+  void MakeNew  (qint64 & id, QString & name);
   void ShowNote (QListWidgetItem * item,
                  const qint64 id, 
                  const QString & name);
@@ -69,9 +73,10 @@ private:
   void CloseDB ();
   
   void FillNotesList (  QListWidget *notesIndex);
-  void ListThisNote (  QListWidget *notesIndex,
-                     const qint64    id,
-                     const QString   &name);
+  
+  QListWidgetItem * ListThisNote (  QListWidget *notesIndex,
+                                  const qint64    id,
+                                  const QString   &name);
 
   QApplication *pApp;
   
@@ -85,10 +90,12 @@ private:
   QListWidgetItem  *curItem;
   bool       isNew;
   bool       nameChanged;
+  bool       showingNote;
   
   QAction    *exitAction;
   QAction    *saveAction;
   QAction    *newAction;
+  QAction    *deleteAction;
 
 };
 

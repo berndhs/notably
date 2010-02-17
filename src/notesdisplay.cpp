@@ -33,6 +33,7 @@ NotesDisplay::NotesDisplay ()
 {
   setupUi (this);
   SetupMenu ();
+  ShowNothing ();
   connect (notesIndex, SIGNAL (itemActivated (QListWidgetItem*)),
            this, SLOT (UserPicked (QListWidgetItem*)));
   connect (noteName, SIGNAL (textEdited (const QString &)), 
@@ -48,10 +49,13 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (saveAction);
   newAction = new QAction (tr("New Note"), this);
   menubar->addAction (newAction);
+  deleteAction = new QAction (tr("Delete Note"), this);
+  menubar->addAction (deleteAction);
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
   connect (saveAction, SIGNAL (triggered()), this, SLOT (SaveCurrent()));
   connect (newAction, SIGNAL (triggered()), this, SLOT (NewNote()));
+  connect (deleteAction, SIGNAL (triggered()), this, SLOT (DeleteCurrent()));
 }
 
 void
@@ -78,7 +82,6 @@ NotesDisplay::quit ()
   if (pApp) {
     pApp->quit();
   }
-  StdOut() << " bye for now" << endl;
 }
 
 void
@@ -99,6 +102,34 @@ NotesDisplay::UserPicked (QListWidgetItem *item)
 }
 
 void
+NotesDisplay::DeleteFromDB (const qint64 id)
+{
+  OpenDB ();
+  QString delStr ("delete from notes where noteid ='");
+  delStr.append (QString::number(id));
+  delStr.append ("'");
+  QSqlQuery qry (db);
+  bool ok =  qry.exec (delStr);
+}
+
+void
+NotesDisplay::DeleteCurrent ()
+{
+  if (showingNote) {
+    DeleteFromDB (currentId);
+    if (curItem) {
+      int row = notesIndex->row (curItem);
+      QListWidgetItem * deadItem = notesIndex->takeItem (row);
+      if (deadItem) {
+        delete deadItem;
+        curItem = 0;
+      }
+    }
+  }
+  ShowNothing();
+}
+
+void
 NotesDisplay::ShowNote (QListWidgetItem *item,
                         const qint64 id, 
                         const QString & name)
@@ -116,6 +147,7 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
       textbody = query.value(textindex).toString ();
       noteName->setText (name);
       editBox->setHtml (textbody);
+      showingNote = true;
       curItem = item;
       currentId = id;
       currentName = name;
@@ -127,21 +159,38 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
   
 }
 
+void
+NotesDisplay::ShowNothing ()
+{
+  isNew = false;
+  currentId = 0;
+  currentName = "";
+  newName = "";
+  noteName ->setText ("");
+  editBox->setHtml ("");
+  curItem = 0;
+  showingNote = false;
+}
+
+void
+NotesDisplay::MakeNew (qint64 & id, QString &name)
+{
+  QDateTime now = QDateTime::currentDateTime ();
+  id = now.toTime_t();
+  name = now.toString ("yyyy-MM-dd-hh:mm:ss-Note");
+}
 
 void
 NotesDisplay::NewNote ()
 {
-  QDateTime now = QDateTime::currentDateTime ();
-  qint64 time_id = now.toTime_t();
-  QString time_str = now.toString ("yyyy-MM-dd-hh:mm:ss-Note");
-  currentId = time_id;
-  currentName = time_str;
+  MakeNew (currentId, currentName);
   newName = currentName;
   nameChanged = false;
   curItem = 0;
   isNew = true;
   noteName->setText (currentName);
   editBox->setHtml (QString("New Note"));
+  showingNote = true;
 }
 
 
@@ -161,12 +210,17 @@ NotesDisplay::SaveCurrent ()
     MakeTables ();
   }
   OpenDB ();
+  if (!showingNote) {
+    MakeNew (currentId, currentName);
+    isNew = true;
+  }
   if (nameChanged) {
     currentName = newName;
   }
   WriteNote (currentId, currentName, editBox->toHtml());
   if (isNew) {
-    ListThisNote (notesIndex, currentId, currentName);
+    curItem = ListThisNote (notesIndex, currentId, currentName);
+    noteName->setText (currentName);
   } else if (nameChanged) {
     curItem->setText (currentName);
   }
@@ -253,7 +307,7 @@ NotesDisplay::FillNotesList (  QListWidget * notesIndex)
   }
 }
 
-void
+QListWidgetItem *
 NotesDisplay::ListThisNote (      QListWidget *notesIndex,
                             const qint64  id,
                             const QString  &name)
@@ -263,6 +317,7 @@ NotesDisplay::ListThisNote (      QListWidget *notesIndex,
   item->setText (name);
   item->setData (Qt::UserRole, QVariant(id));
   notesIndex->addItem (item);
+  return item;
 }
 
 void
