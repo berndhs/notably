@@ -143,7 +143,7 @@ NotesDisplay::ToggleFont (const FontProperty prop)
 void
 NotesDisplay::Help ()
 {
-  deliberate::ShowVersionWindow ();
+  deliberate::ProgramVersion::ShowVersionWindow ();
 }
 
 void

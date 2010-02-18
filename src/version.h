@@ -17,11 +17,25 @@
 
 namespace deliberate {
 
-  QString MyName();
-  QString Version() ;
+class ProgramVersion {
+
+public:
+
+  ProgramVersion (QString pgmname);
   
-  void ShowVersionWindow();
-  void CLIVersion();
+  static QString Version (); 
+  static QString MyName ();
+  
+  static void ShowVersionWindow ();
+  static void CLIVersion ();
+  
+private:
+
+  static QString VersionNumber;
+  static QString ProgramName;
+  static QString copyright;
+
+};
 
 }
 

@@ -1,6 +1,7 @@
 #include "version.h"
 #include <QMessageBox>
 #include <QTimer>
+#include <QCoreApplication>
 
 //
 //  Copyright (C) 2009 - Bernd H Stramm 
@@ -15,21 +16,27 @@
 
 namespace deliberate {
 
-  QString ProgramVersion("0.1");
+  QString ProgramVersion::VersionNumber ("0.1");
 
-  QString ProgramName("Notably");
-  QString copyright ("Copyright (C) 2010 Bernd H Stramm");
+  QString ProgramVersion::ProgramName("Notably");
+  QString ProgramVersion::copyright ("Copyright (C) 2010 Bernd H Stramm");
   
-  QString Version ()
+  ProgramVersion::ProgramVersion (QString pgmname)
+  {
+    ProgramName = pgmname;
+    QCoreApplication::setApplicationName (pgmname);
+  }
+  
+  QString ProgramVersion::Version ()
   { 
-    return QString(ProgramName + " Version " 
-                   + ProgramVersion + " " + QString(__DATE__) + " "
+    return ProgramName + QString (" Version " )
+                   + VersionNumber + " " + QString(__DATE__) + " "
 		       + QString(__TIME__)
 		       + QString("\r\n")
-		       + copyright);
+		       + copyright;
   }
 
-  void ShowVersionWindow ()
+  void ProgramVersion::ShowVersionWindow ()
   {
     QString versionMessage(Version());
     QMessageBox box;
@@ -38,12 +45,12 @@ namespace deliberate {
     box.exec();
   }
   
-  void CLIVersion ()
+  void ProgramVersion::CLIVersion ()
   {
     StdOut() << Version() << endl;
   }
   
-  QString MyName()
+  QString ProgramVersion::MyName()
   { 
     return ProgramName;
   }

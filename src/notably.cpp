@@ -26,11 +26,13 @@ int
 main (int argc, char* argv[])
 {
 
+  deliberate::ProgramVersion pv ("Notably");
+  
   deliberate::UseMyOwnMessageHandler ();
   
   QApplication App (argc, argv);
   
-  deliberate::CLIVersion ();
+  pv.CLIVersion ();
   
   nota::NotesDisplay notes;
   nota::NotaConf     conf;
