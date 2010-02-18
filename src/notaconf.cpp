@@ -24,6 +24,12 @@ NotaConf::NotaConf ()
   mDatafile = QString ("nota.sql");
 }
 
+QString 
+NotaConf::Directory ()
+{
+  return mPath;
+}
+
 
 QString
 NotaConf::DataFile ()
