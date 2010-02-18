@@ -30,18 +30,23 @@ NotesDisplay::NotesDisplay ()
 :pApp(0),
  pConf(0),
  noteMenu(this),
+ editMenu(this),
  mConName ("nota_dbcon")
 {
   setupUi (this);
   SetupMenu ();
+  SetupEdit ();
   ShowNothing ();
+  fontProperty[FP_bold] = false;
+  fontProperty[FP_italic] = false;
+  fontProperty[FP_underline] = false;
   connect (notesIndex, SIGNAL (itemActivated (QListWidgetItem*)),
            this, SLOT (UserPicked (QListWidgetItem*)));
   connect (noteName, SIGNAL (textEdited (const QString &)), 
            this, SLOT (NameChanged(const QString &)));
            
   connect (&debugTimer, SIGNAL (timeout()), this, SLOT (DebugCheck()));
-  debugTimer.start (1000);
+ // debugTimer.start (1000);
 }
 
 void
@@ -53,18 +58,28 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (saveAction);
   noteMenuAction = new QAction (tr("Note..."), this);
   menubar->addAction (noteMenuAction);
+  editAction = new QAction (tr("Edit..."), this);
+  menubar->addAction (editAction);
   helpAction = new QAction (tr("Help"), this);
   menubar->addAction (helpAction);
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
   connect (saveAction, SIGNAL (triggered()), this, SLOT (SaveCurrent()));
   connect (noteMenuAction, SIGNAL (triggered()), this, SLOT (ShowNoteMenu()));
+  connect (editAction, SIGNAL (triggered()), this, SLOT (ScheduleEdit()));
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
   
   connect (&noteMenu, SIGNAL (SaveNote()), this, SLOT (SaveCurrent()));
   connect (&noteMenu, SIGNAL (DeleteNote()), this, SLOT (DeleteCurrent()));
   connect (&noteMenu, SIGNAL (NewNote()), this, SLOT (NewNote()));
   connect (&noteMenu, SIGNAL (CancelNote()), this, SLOT (ShowNothing()));
+}
+
+void
+NotesDisplay::SetupEdit ()
+{
+  connect (&editMenu, SIGNAL (SigFontToggle (const FontProperty)),
+            this, SLOT (ToggleFont (const FontProperty)));
 }
 
 void
@@ -101,6 +116,29 @@ NotesDisplay::dropEvent (QDropEvent *event)
 }
 
 void
+NotesDisplay::ToggleFont (const FontProperty prop)
+{
+  if (prop <= FP_none || prop >= FP_max) {
+    return;
+  }
+  bool newVal = !fontProperty[prop];
+  fontProperty[prop] = newVal;
+  switch (prop) {
+  case FP_bold:
+    editBox->setFontWeight (newVal ? QFont::Bold : QFont::Normal);
+    break;
+  case FP_italic:
+    editBox->setFontItalic (newVal);
+    break;
+  case FP_underline:
+    editBox->setFontUnderline (newVal);
+    break;
+  default:
+    break;
+  }
+}
+
+void
 NotesDisplay::Help ()
 {
   deliberate::ShowVersionWindow ();
@@ -115,8 +153,24 @@ NotesDisplay::ShowNoteMenu ()
 }
 
 void
+NotesDisplay::ScheduleEdit ()
+{
+  actionTimer.setSingleShot (true);
+  connect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecEditMenu()));
+  actionTimer.start (100);
+}
+
+void
+NotesDisplay::ExecEditMenu ()
+{
+  disconnect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecEditMenu()));
+  editMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
+}
+
+void
 NotesDisplay::ExecNoteMenu ()
 {
+  disconnect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecNoteMenu()));
   noteMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
 }
 
@@ -374,6 +428,7 @@ NotesDisplay::WriteNote (const qint64 id,
 void
 NotesDisplay::DebugCheck ()
 {
+  qDebug () << " debug timer check " << time (0);
   qDebug () << " menubar enabled " << menubar->isEnabled ();
   qDebug () << " menubar active " << menubar->activeAction ();
 }

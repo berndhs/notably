@@ -19,6 +19,7 @@
 #include <ui_mainwin.h>
 #include "notaconf.h"
 #include "notemenu.h"
+#include "editmenu.h"
 #include "version.h"
 
 #include <QSqlDatabase>
@@ -58,10 +59,15 @@ public slots:
   void ShowNoteMenu ();
   void DebugCheck ();
   void ExecNoteMenu ();
+  void ScheduleEdit ();
+  void ExecEditMenu ();
+  
+  void ToggleFont (const FontProperty);
 
 private:
 
   void SetupMenu ();
+  void SetupEdit ();
   void ReportText ();
   void MakeTables ();
   void MakeTable (QString table);
@@ -89,6 +95,7 @@ private:
   
   NotaConf     *pConf; 
   NoteMenu      noteMenu;
+  EditMenu      editMenu;
   QSqlDatabase  db;
   QString       mConName;
   
@@ -99,11 +106,13 @@ private:
   bool       isNew;
   bool       nameChanged;
   bool       showingNote;
+  bool       fontProperty[FP_max];
   
   QAction    *exitAction;
   QAction    *saveAction;
   QAction    *noteMenuAction;
   QAction    *helpAction;
+  QAction    *editAction;
   
   QTimer     debugTimer;
   QTimer     actionTimer;

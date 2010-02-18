@@ -37,7 +37,7 @@ void
 NoteMenu::Exec (QPoint here)
 {
  // show ();
-  menu.exec (here);
+  menu.popup (here);
  // hide ();
 }
 
