@@ -51,6 +51,7 @@ public slots:
   void quit ();
   void UserPicked (QListWidgetItem *item);
   void SaveCurrent ();
+  void PublishCurrent ();
   void DeleteCurrent ();
   void NewNote ();
   void NameChanged (const QString & name);

@@ -25,6 +25,7 @@ public:
 
   QString  DataFile ();
   QString  CompleteDBName ();
+  QString  Directory ();
   
 private:
 

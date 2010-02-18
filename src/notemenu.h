@@ -30,6 +30,7 @@ public:
 public slots:
 
   void SaveCurrent ();
+  void PublishCurrent ();
   void DeleteCurrent ();
   void MakeNewNote ();
   void CancelCurrent ();
@@ -37,6 +38,7 @@ public slots:
 signals:
 
   void SaveNote ();
+  void PublishNote ();
   void DeleteNote ();
   void NewNote ();
   void CancelNote ();
@@ -46,6 +48,7 @@ private:
   QMenu   menu;
   
   QAction  *saveAction;
+  QAction  *publishAction;
   QAction  *deleteAction;
   QAction  *newAction;
   QAction  *cancelAction;

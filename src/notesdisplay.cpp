@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QDateTime>
+#include <QMessageBox>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -70,6 +71,7 @@ NotesDisplay::SetupMenu ()
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
   
   connect (&noteMenu, SIGNAL (SaveNote()), this, SLOT (SaveCurrent()));
+  connect (&noteMenu, SIGNAL (PublishNote()), this, SLOT (PublishCurrent()));
   connect (&noteMenu, SIGNAL (DeleteNote()), this, SLOT (DeleteCurrent()));
   connect (&noteMenu, SIGNAL (NewNote()), this, SLOT (NewNote()));
   connect (&noteMenu, SIGNAL (CancelNote()), this, SLOT (ShowNothing()));
@@ -308,6 +310,22 @@ NotesDisplay::SaveCurrent ()
   } else if (nameChanged) {
     curItem->setText (currentName);
   }
+}
+
+void
+NotesDisplay::PublishCurrent ()
+{
+  QString wholeName (pConf->Directory() + "/" + noteName->text() + ".html");
+  QFile pageFile (wholeName);
+  pageFile.open (QFile::WriteOnly);
+  pageFile.write (editBox->toHtml().toLocal8Bit());
+  pageFile.close();
+  QMessageBox report;
+  QString savedMessage = QString (tr("Note saved as %1"))
+                            .arg (wholeName);
+  report.setText (savedMessage);
+  QTimer::singleShot (20000, &report, SLOT(accept()));
+  report.exec ();
 }
 
 void
