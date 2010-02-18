@@ -446,7 +446,7 @@ NotesDisplay::WriteNote (const qint64 id,
 void
 NotesDisplay::DebugCheck ()
 {
-  qDebug () << " debug timer check " << time (0);
+  //qDebug () << " debug timer check " << time (0);
   qDebug () << " menubar enabled " << menubar->isEnabled ();
   qDebug () << " menubar active " << menubar->activeAction ();
 }
