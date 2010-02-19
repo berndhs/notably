@@ -38,9 +38,6 @@ NotesDisplay::NotesDisplay ()
   SetupMenu ();
   SetupEdit ();
   ShowNothing ();
-  fontProperty[FP_bold] = false;
-  fontProperty[FP_italic] = false;
-  fontProperty[FP_underline] = false;
   connect (notesIndex, SIGNAL (itemActivated (QListWidgetItem*)),
            this, SLOT (UserPicked (QListWidgetItem*)));
   connect (noteName, SIGNAL (textEdited (const QString &)), 
@@ -48,6 +45,7 @@ NotesDisplay::NotesDisplay ()
            
   connect (&debugTimer, SIGNAL (timeout()), this, SLOT (DebugCheck()));
  // debugTimer.start (1000);
+ qDebug () << " tiflags "<< hex << editBox->textInteractionFlags ();
 }
 
 void
@@ -256,6 +254,9 @@ NotesDisplay::ShowNothing ()
   editBox->setHtml ("");
   curItem = 0;
   showingNote = false;
+  fontProperty[FP_bold] = false;
+  fontProperty[FP_italic] = false;
+  fontProperty[FP_underline] = false;
 }
 
 void

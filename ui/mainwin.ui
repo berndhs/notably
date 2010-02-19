@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Notably</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../nota.qrc">
+    <normaloff>:/img/nb.png</normaloff>:/img/nb.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="nota::EditBox" name="editBox">
     <property name="geometry">
@@ -78,6 +82,8 @@
    <header>nota-editbox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../nota.qrc"/>
+ </resources>
  <connections/>
 </ui>

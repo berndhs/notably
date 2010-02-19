@@ -28,9 +28,16 @@ public:
   
   QString BoxText ();
   
+  void insertFromMimeData ( const QMimeData * source );
+  
 public slots:
 
   void paste ();
+  
+private:
+
+  void IsolateUrls (QDropEvent *event);
+  
 };
 
 }

@@ -5,6 +5,7 @@
   <file>qrcfiles/schema-tags.sql</file>
   <file>qrcfiles/schema-tagrefs.sql</file>
   <file>qrcfiles/schema-identndx.sql</file>
+  <file>img/nb.png</file>
 </qresource>
 </RCC>
 
