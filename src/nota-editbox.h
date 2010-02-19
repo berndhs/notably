@@ -15,6 +15,8 @@
 
 #include <QTextEdit>
 #include <QDropEvent>
+#include <QImage>
+#include "notaconf.h"
 
 namespace nota {
 
@@ -22,6 +24,8 @@ class EditBox : public QTextEdit {
 public:
 
   EditBox (QWidget *parent);
+  
+  void SetConf (NotaConf *pc) { pConf = pc; }
 
   void dropEvent (QDropEvent * event);
   void dragEnterEvent (QDragEnterEvent *event);
@@ -37,6 +41,9 @@ public slots:
 private:
 
   void IsolateUrls (QDropEvent *event);
+  QString ImgFilename (QImage & img);
+  
+  NotaConf *pConf;
   
 };
 

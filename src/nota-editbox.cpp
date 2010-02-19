@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QUrl>
 #include <QList>
+#include <QDateTime>
+#include <QTime>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -18,7 +20,8 @@
 namespace nota {
 
 EditBox::EditBox (QWidget * parent)
-:QTextEdit(parent)
+:QTextEdit(parent),
+ pConf (0)
 {
 }
 
@@ -47,6 +50,9 @@ EditBox::dragEnterEvent (QDragEnterEvent * event)
 {
   qDebug () << " drag enter " << event;
   qDebug () << " mime data" << event->mimeData()->formats();
+  if (event->mimeData()->hasImage()) {
+    qDebug () << " ---------- we have an image ";
+  }
   if (event->mimeData()->hasUrls()) {
     event->acceptProposedAction ();
   } else  if (event->mimeData()->hasFormat("text/plain")) {
@@ -66,11 +72,22 @@ EditBox::IsolateUrls (QDropEvent * event)
     ustr = uit->toString ();
     insert = anchor.arg(ustr).arg(ustr);
     insertHtml (insert);
-    qDebug () << " inserted " << insert;
   }
-  qDebug () << " text with urls: " << event->mimeData()->text();
-  qDebug () << " html with urls: " << event->mimeData()->html();
-  qDebug () << " mime data: " << event->mimeData();
+}
+
+QString 
+EditBox::ImgFilename (QImage & img)
+{
+  qDebug() << " image format " << img.format();
+  QDateTime now = QDateTime::currentDateTime ();
+  quint64 epochsec = now.toTime_t ();
+  QTime     nowTime = QTime::currentTime ();
+  quint64  msec = nowTime.msec ();
+  QString name = QString ("img-") + QString::number(epochsec) 
+                 + QString ("-") + QString::number (msec)
+                 + QString (".png");
+  qDebug () << " prelim name " << name;
+  return name;
 }
 
 void
@@ -80,6 +97,20 @@ EditBox::insertFromMimeData ( const QMimeData * source )
   qDebug () << " urls " << source->urls();
   qDebug () << " text " << source->text ();
   qDebug () << " html " << source->html();
+  if (source->hasImage()) {
+    qDebug () << " have image in paste ";
+    QImage img = qvariant_cast<QImage> (source->imageData());
+    qDebug () << " image width/height " << img.width() << "/" << img.height();
+    QString imgname = ImgFilename (img);
+    if (pConf) {
+      QString path = pConf->Directory ();
+      imgname.prepend (path + "/");
+      img.save (imgname);
+      QString pattern (" <img src=\"%1\" /> ");
+      insertHtml (pattern.arg(imgname));
+    }
+    
+  }
   QTextEdit::insertFromMimeData (source);
 }
 

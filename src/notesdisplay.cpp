@@ -37,6 +37,7 @@ NotesDisplay::NotesDisplay ()
   setupUi (this);
   SetupMenu ();
   SetupEdit ();
+  editBox->SetConf (pConf);
   ShowNothing ();
   connect (notesIndex, SIGNAL (itemActivated (QListWidgetItem*)),
            this, SLOT (UserPicked (QListWidgetItem*)));
@@ -92,6 +93,7 @@ void
 NotesDisplay::SetConf (NotaConf & conf)
 {
   pConf = &conf;
+  editBox->SetConf (pConf);
 }
 
 void
