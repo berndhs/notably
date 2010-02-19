@@ -29,7 +29,7 @@ public:
 
   void dropEvent (QDropEvent * event);
   void dragEnterEvent (QDragEnterEvent *event);
-  
+  void InsertImage (QImage & img);
   QString BoxText ();
   
   void insertFromMimeData ( const QMimeData * source );

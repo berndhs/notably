@@ -8,6 +8,8 @@
 #include <QSqlRecord>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QPixmap>
+#include <QDesktopWidget>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -81,6 +83,8 @@ NotesDisplay::SetupEdit ()
 {
   connect (&editMenu, SIGNAL (SigFontToggle (const FontProperty)),
             this, SLOT (ToggleFont (const FontProperty)));
+  connect (&editMenu , SIGNAL (SigShootScreen ()),
+            this, SLOT (ShootScreen ()));
 }
 
 void
@@ -443,6 +447,25 @@ NotesDisplay::WriteNote (const qint64 id,
     InsertQuery.bindValue (i,v[i]);
   }
   InsertQuery.exec ();
+}
+
+void
+NotesDisplay::DoShootScreen ()
+{
+  qDebug () << " screen shot called";
+  QPixmap pixBuffer = QPixmap::grabWindow (QApplication::desktop()->winId());
+  qDebug () << " pix buf wide " << pixBuffer.width();
+  qDebug () << " pix buf height " << pixBuffer.height();
+  QImage img = pixBuffer.toImage();
+  editBox->InsertImage (img);
+  show ();
+}
+
+void
+NotesDisplay::ShootScreen ()
+{
+  hide ();
+  QTimer::singleShot (5000, this, SLOT (DoShootScreen()));
 }
 
 

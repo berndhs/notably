@@ -64,6 +64,9 @@ public slots:
   void ExecEditMenu ();
   
   void ToggleFont (const FontProperty);
+  
+  void ShootScreen ();
+  void DoShootScreen ();
 
 private:
 
@@ -104,6 +107,7 @@ private:
   QString    currentName;
   QString    newName;
   QListWidgetItem  *curItem;
+  
   bool       isNew;
   bool       nameChanged;
   bool       showingNote;

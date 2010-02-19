@@ -91,6 +91,21 @@ EditBox::ImgFilename (QImage & img)
 }
 
 void
+EditBox::InsertImage (QImage & img)
+{
+qDebug () << " image width/height " << img.width() << "/" << img.height();
+  QString imgname = ImgFilename (img);
+  if (pConf) {
+    QString path = pConf->Directory ();
+    imgname.prepend (path + "/");
+    img.save (imgname);
+    QString pattern (" <img src=\"%1\" /> ");
+    insertHtml (pattern.arg(imgname));
+    return ;
+  }
+}
+
+void
 EditBox::insertFromMimeData ( const QMimeData * source )
 {
   qDebug () << " inserting from mime data " << source;
@@ -100,16 +115,8 @@ EditBox::insertFromMimeData ( const QMimeData * source )
   if (source->hasImage()) {
     qDebug () << " have image in paste ";
     QImage img = qvariant_cast<QImage> (source->imageData());
-    qDebug () << " image width/height " << img.width() << "/" << img.height();
-    QString imgname = ImgFilename (img);
-    if (pConf) {
-      QString path = pConf->Directory ();
-      imgname.prepend (path + "/");
-      img.save (imgname);
-      QString pattern (" <img src=\"%1\" /> ");
-      insertHtml (pattern.arg(imgname));
-    }
-    
+    InsertImage (img);
+    return;
   }
   QTextEdit::insertFromMimeData (source);
 }

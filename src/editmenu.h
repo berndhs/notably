@@ -28,15 +28,17 @@ public:
   
   void Exec (QPoint here);
   
-public slots:
+private slots:
 
   void Bold ();
   void Italic ();
   void Underline ();
+  void ScreenShot ();
 
 signals:
 
   void SigFontToggle (const FontProperty);
+  void SigShootScreen ();
 
 private:
 
@@ -44,6 +46,7 @@ private:
   QAction  *boldAction;
   QAction  *italicAction;
   QAction  *underlineAction;
+  QAction  *shootAction;
 
 };
 

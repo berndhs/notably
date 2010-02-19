@@ -1,5 +1,7 @@
 
 #include "editmenu.h"
+#include <QMessageBox>
+#include <QTimer>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -28,6 +30,9 @@ EditMenu::EditMenu (QWidget * parent)
   underlineAction = new QAction (tr("Underline"),this);
   menu.addAction (underlineAction);
   connect (underlineAction, SIGNAL (triggered()), this, SLOT (Underline()));
+  shootAction = new QAction (tr("Screenshot"), this);
+  menu.addAction (shootAction);
+  connect (shootAction, SIGNAL (triggered()), this, SLOT (ScreenShot ()));
 }
 
 void
@@ -46,6 +51,22 @@ void
 EditMenu::Underline ()
 {
   emit SigFontToggle (FP_underline);
+}
+
+void
+EditMenu::ScreenShot ()
+{
+  QMessageBox box;
+  box.setText (tr("Click OK, then wait 5 seconds\nScreenshot taken in those 5 seconds"));
+  box.addButton (QMessageBox::Cancel);
+  box.addButton (QMessageBox::Ok);
+  QTimer::singleShot (20000, &box, SLOT (reject()));
+  int result = box.exec ();
+  qDebug () << " msg box result " << result;
+  qDebug () << " ok is " << QMessageBox::Ok;
+  if (result == QMessageBox::Ok) {
+    emit SigShootScreen ();
+  }
 }
 
 void
