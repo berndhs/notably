@@ -41,7 +41,6 @@ EditBox::dropEvent (QDropEvent * event)
 void
 EditBox::paste ()
 {
-  qDebug () << " paste " ;
   QTextEdit::paste ();
 }
 
@@ -78,7 +77,6 @@ EditBox::IsolateUrls (QDropEvent * event)
 QString 
 EditBox::ImgFilename (QImage & img)
 {
-  qDebug() << " image format " << img.format();
   QDateTime now = QDateTime::currentDateTime ();
   quint64 epochsec = now.toTime_t ();
   QTime     nowTime = QTime::currentTime ();
@@ -86,14 +84,12 @@ EditBox::ImgFilename (QImage & img)
   QString name = QString ("img-") + QString::number(epochsec) 
                  + QString ("-") + QString::number (msec)
                  + QString (".png");
-  qDebug () << " prelim name " << name;
   return name;
 }
 
 void
 EditBox::InsertImage (QImage & img)
 {
-qDebug () << " image width/height " << img.width() << "/" << img.height();
   QString imgname = ImgFilename (img);
   if (pConf) {
     QString path = pConf->Directory ();
@@ -108,12 +104,13 @@ qDebug () << " image width/height " << img.width() << "/" << img.height();
 void
 EditBox::insertFromMimeData ( const QMimeData * source )
 {
+#if 0
   qDebug () << " inserting from mime data " << source;
   qDebug () << " urls " << source->urls();
   qDebug () << " text " << source->text ();
   qDebug () << " html " << source->html();
+  #endif
   if (source->hasImage()) {
-    qDebug () << " have image in paste ";
     QImage img = qvariant_cast<QImage> (source->imageData());
     InsertImage (img);
     return;

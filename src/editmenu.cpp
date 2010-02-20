@@ -30,9 +30,12 @@ EditMenu::EditMenu (QWidget * parent)
   underlineAction = new QAction (tr("Underline"),this);
   menu.addAction (underlineAction);
   connect (underlineAction, SIGNAL (triggered()), this, SLOT (Underline()));
-  shootAction = new QAction (tr("Screenshot"), this);
+  shootAction = new QAction (tr("Part Screen Shot"), this);
   menu.addAction (shootAction);
   connect (shootAction, SIGNAL (triggered()), this, SLOT (ScreenShot ()));
+  shootAllAction = new QAction (tr("Whole Screen Shot"), this);
+  menu.addAction (shootAllAction);
+  connect (shootAllAction, SIGNAL (triggered()), this, SLOT (WholeScreenShot()));
 }
 
 void
@@ -54,19 +57,37 @@ EditMenu::Underline ()
 }
 
 void
-EditMenu::ScreenShot ()
+EditMenu::EmitScreenShot (const QString msg, const bool whole)
 {
   QMessageBox box;
-  box.setText (tr("Click OK, then wait 5 seconds\nScreenshot taken in those 5 seconds"));
+  box.setText (msg);
   box.addButton (QMessageBox::Cancel);
   box.addButton (QMessageBox::Ok);
   QTimer::singleShot (20000, &box, SLOT (reject()));
   int result = box.exec ();
-  qDebug () << " msg box result " << result;
-  qDebug () << " ok is " << QMessageBox::Ok;
   if (result == QMessageBox::Ok) {
-    emit SigShootScreen ();
+    emit SigShootScreen (whole);
   }
+}
+
+void
+EditMenu::ScreenShot ()
+{
+  EmitScreenShot (
+  tr("Click OK, then wait 5 seconds\n"
+     "Grab Screen Section to Capture\n"
+     "Screenshot taken in those 5 seconds"),
+                  false);
+}
+
+void
+EditMenu::WholeScreenShot ()
+{
+  EmitScreenShot (
+  tr("Click OK, then wait 5 seconds\n"
+      "Notably window will hide for 5 seconds\n"
+      "Entire Screen captured in those 5 seconds")
+      , true  );
 }
 
 void

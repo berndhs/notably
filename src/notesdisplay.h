@@ -27,6 +27,7 @@
 #include <QVariant>
 #include <QListWidgetItem>
 #include <QTimer>
+#include <QMouseEvent>
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
@@ -45,6 +46,8 @@ public:
   void Start ();
   
   void dropEvent (QDropEvent * event);
+  void mousePressEvent (QMouseEvent *event );
+  void mouseReleaseEvent (QMouseEvent *event );
   
 public slots:
 
@@ -65,7 +68,7 @@ public slots:
   
   void ToggleFont (const FontProperty);
   
-  void ShootScreen ();
+  void ShootScreen (const bool whole);
   void DoShootScreen ();
 
 private:
@@ -107,6 +110,9 @@ private:
   QString    currentName;
   QString    newName;
   QListWidgetItem  *curItem;
+  
+  QPoint     corner1;
+  QPoint     corner2;
   
   bool       isNew;
   bool       nameChanged;

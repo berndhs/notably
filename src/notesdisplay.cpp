@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QDesktopWidget>
+#include <QCursor>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -47,8 +48,7 @@ NotesDisplay::NotesDisplay ()
            this, SLOT (NameChanged(const QString &)));
            
   connect (&debugTimer, SIGNAL (timeout()), this, SLOT (DebugCheck()));
- // debugTimer.start (1000);
- qDebug () << " tiflags "<< hex << editBox->textInteractionFlags ();
+// debugTimer.start (1000);
 }
 
 void
@@ -83,8 +83,8 @@ NotesDisplay::SetupEdit ()
 {
   connect (&editMenu, SIGNAL (SigFontToggle (const FontProperty)),
             this, SLOT (ToggleFont (const FontProperty)));
-  connect (&editMenu , SIGNAL (SigShootScreen ()),
-            this, SLOT (ShootScreen ()));
+  connect (&editMenu , SIGNAL (SigShootScreen (const bool)),
+            this, SLOT (ShootScreen (const bool)));
 }
 
 void
@@ -450,31 +450,63 @@ NotesDisplay::WriteNote (const qint64 id,
 }
 
 void
+NotesDisplay::ShootScreen (const bool whole)
+{
+  if (whole) {
+    hide();
+  } else {
+    this->grabMouse (Qt::CrossCursor);
+  };
+  QDesktopWidget *desk = QApplication::desktop();
+  QRect dimensions = desk->screenGeometry (this);
+  corner1 = dimensions.topLeft();
+  corner2 = dimensions.bottomRight ();
+  QTimer::singleShot (5000, this, SLOT (DoShootScreen()));
+}
+
+
+void
 NotesDisplay::DoShootScreen ()
 {
-  qDebug () << " screen shot called";
-  QPixmap pixBuffer = QPixmap::grabWindow (QApplication::desktop()->winId());
-  qDebug () << " pix buf wide " << pixBuffer.width();
-  qDebug () << " pix buf height " << pixBuffer.height();
+  this->releaseMouse ();
+  int x1 = corner1.x ();
+  int y1 = corner1.y ();
+  int x2 = corner2.x ();
+  int y2 = corner2.y ();
+  int swap;
+  if (x2 < x1) {
+    swap = x1;
+    x1 = x2;
+    x2 = swap;
+  }
+  if (y2 < y1) {
+    swap = y1;
+    y1 = y2;
+    y2 = swap;
+  }
+  QPixmap pixBuffer = QPixmap::grabWindow (QApplication::desktop()->winId(),
+                              x1,y1, x2-x1, y2-y1 );
   QImage img = pixBuffer.toImage();
   editBox->InsertImage (img);
   show ();
 }
 
 void
-NotesDisplay::ShootScreen ()
+NotesDisplay::mousePressEvent (QMouseEvent *event)
 {
-  hide ();
-  QTimer::singleShot (5000, this, SLOT (DoShootScreen()));
+  corner1 = event->globalPos();
 }
 
+void
+NotesDisplay::mouseReleaseEvent (QMouseEvent *event)
+{
+  corner2 = event->globalPos();
+}
 
 void
 NotesDisplay::DebugCheck ()
 {
-  //qDebug () << " debug timer check " << time (0);
-  qDebug () << " menubar enabled " << menubar->isEnabled ();
-  qDebug () << " menubar active " << menubar->activeAction ();
+  qDebug () << " debug timer check " << time (0);
 }
 
 }

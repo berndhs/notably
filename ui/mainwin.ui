@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>363</height>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
       <x>183</x>
       <y>65</y>
       <width>456</width>
-      <height>271</height>
+      <height>290</height>
      </rect>
     </property>
     <property name="textInteractionFlags">
@@ -36,8 +36,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>176</width>
-      <height>341</height>
+      <width>180</width>
+      <height>355</height>
      </rect>
     </property>
     <property name="dragDropMode">
@@ -58,6 +58,12 @@
       <width>456</width>
       <height>64</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>64</height>
+     </size>
     </property>
     <property name="dragEnabled">
      <bool>true</bool>

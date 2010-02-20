@@ -34,19 +34,23 @@ private slots:
   void Italic ();
   void Underline ();
   void ScreenShot ();
+  void WholeScreenShot ();
 
 signals:
 
   void SigFontToggle (const FontProperty);
-  void SigShootScreen ();
+  void SigShootScreen (const bool whole);
 
 private:
+
+  void EmitScreenShot (const QString msg, const bool whole);
 
   QMenu    menu;
   QAction  *boldAction;
   QAction  *italicAction;
   QAction  *underlineAction;
   QAction  *shootAction;
+  QAction  *shootAllAction;
 
 };
 
