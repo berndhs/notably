@@ -320,6 +320,8 @@ NotesDisplay::SaveCurrent ()
   } else if (nameChanged) {
     curItem->setText (currentName);
   }
+  isNew = false;
+  nameChanged = false;
 }
 
 void
