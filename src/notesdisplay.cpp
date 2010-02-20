@@ -506,7 +506,9 @@ NotesDisplay::mouseReleaseEvent (QMouseEvent *event)
 void
 NotesDisplay::DebugCheck ()
 {
+#ifndef _WIN32
   qDebug () << " debug timer check " << time (0);
+#endif
 }
 
 }

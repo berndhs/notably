@@ -21,7 +21,6 @@
 #include <QDebug>
 #else
 #include <QDebug>
-#warning COMPILING RELEASE
 #endif
 
 namespace deliberate {
