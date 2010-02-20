@@ -19,7 +19,13 @@
 namespace nota {
 
 EditMenu::EditMenu (QWidget * parent)
-:QWidget(parent)
+:QWidget(parent),
+ pConf(0)
+{
+}
+
+void
+EditMenu::Init ()
 {
   boldAction = new QAction (tr("Bold"),this);
   menu.addAction (boldAction);
@@ -29,10 +35,15 @@ EditMenu::EditMenu (QWidget * parent)
   connect (italicAction, SIGNAL (triggered()), this, SLOT (Italic()));
   underlineAction = new QAction (tr("Underline"),this);
   menu.addAction (underlineAction);
-  connect (underlineAction, SIGNAL (triggered()), this, SLOT (Underline()));
-  shootAction = new QAction (tr("Part Screen Shot"), this);
-  menu.addAction (shootAction);
-  connect (shootAction, SIGNAL (triggered()), this, SLOT (ScreenShot ()));
+  connect (underlineAction, SIGNAL (triggered()), 
+               this, SLOT (Underline()));
+  if (pConf) {
+    if (pConf->SupportPartScreenShot()) {
+      shootAction = new QAction (tr("Part Screen Shot"), this);
+      menu.addAction (shootAction);
+      connect (shootAction, SIGNAL (triggered()), this, SLOT (ScreenShot ()));
+    }
+  }
   shootAllAction = new QAction (tr("Whole Screen Shot"), this);
   menu.addAction (shootAllAction);
   connect (shootAllAction, SIGNAL (triggered()), this, SLOT (WholeScreenShot()));

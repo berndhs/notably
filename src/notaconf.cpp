@@ -43,4 +43,16 @@ NotaConf::CompleteDBName ()
   return mPath + "/" + mDatafile;
 }
 
+bool
+NotaConf::SupportPartScreenShot ()
+{
+  #ifdef _WIN32
+  return false;
+  #endif
+  #ifdef Q_WS_MAEMO_5
+  return false;
+  #endif
+  return true;
+}
+
 }

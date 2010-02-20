@@ -15,6 +15,7 @@
 #include <QWidget>
 #include <QMenu>
 #include "delib-debug.h"
+#include "notaconf.h"
 
 namespace nota {
 
@@ -25,6 +26,8 @@ Q_OBJECT
 public:
 
   EditMenu (QWidget *parent);
+  void SetConf (NotaConf *pC) {pConf = pC; }
+  void Init ();
   
   void Exec (QPoint here);
   
@@ -45,6 +48,7 @@ private:
 
   void EmitScreenShot (const QString msg, const bool whole);
 
+  NotaConf *pConf;
   QMenu    menu;
   QAction  *boldAction;
   QAction  *italicAction;
