@@ -55,19 +55,32 @@ NotesDisplay::NotesDisplay ()
 void
 NotesDisplay::SetupMenu ()
 {
-  exitAction = new QAction (tr("Exit") , this);
+  exitAction = new QAction (tr("E&xit") , this);
   menubar->addAction (exitAction);
-  saveAction = new QAction (tr("Save Note"), this);
+  saveAction = new QAction (tr("&Save Note"), this);
   menubar->addAction (saveAction);
-  noteMenuAction = new QAction (tr("Note..."), this);
+  noteMenuAction = new QAction (tr("&Note..."), this);
   menubar->addAction (noteMenuAction);
-  editAction = new QAction (tr("Edit..."), this);
+  editAction = new QAction (tr("&Edit..."), this);
   menubar->addAction (editAction);
-  helpAction = new QAction (tr("Help"), this);
+  helpAction = new QAction (tr("&Help"), this);
   menubar->addAction (helpAction);
   
+  saveShort = new QShortcut (QKeySequence(tr("Ctrl+S")),this);
+  connect (saveShort, SIGNAL(activated()), this, SLOT (SaveCurrent()));
+  exitShort = new QShortcut (QKeySequence (tr("Ctrl+X")), this);
+  connect (exitShort, SIGNAL (activated()), this, SLOT (quit()));
+  noteMenuShort = new QShortcut (QKeySequence (tr("Ctrl+N")), this);
+  connect (noteMenuShort, SIGNAL (activated()), this, SLOT (ShowNoteMenu()));
+  editShort = new QShortcut (QKeySequence (tr("Ctrl+E")), this);
+  connect (editShort, SIGNAL (activated()), this, SLOT (ScheduleEdit()));
+  helpShort = new QShortcut (QKeySequence (tr("Ctrl+H")), this);
+  connect (helpShort, SIGNAL (activated()), this, SLOT (Help()));
+  
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
+ 
   connect (saveAction, SIGNAL (triggered()), this, SLOT (SaveCurrent()));
+  
   connect (noteMenuAction, SIGNAL (triggered()), this, SLOT (ShowNoteMenu()));
   connect (editAction, SIGNAL (triggered()), this, SLOT (ScheduleEdit()));
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));

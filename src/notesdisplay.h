@@ -28,6 +28,7 @@
 #include <QListWidgetItem>
 #include <QTimer>
 #include <QMouseEvent>
+#include <QShortcut>
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
@@ -124,6 +125,12 @@ private:
   QAction    *noteMenuAction;
   QAction    *helpAction;
   QAction    *editAction;
+  
+  QShortcut  *exitShort;
+  QShortcut  *noteMenuShort;
+  QShortcut  *editShort;
+  QShortcut  *saveShort;
+  QShortcut  *helpShort;
   
   QTimer     debugTimer;
   QTimer     actionTimer;
