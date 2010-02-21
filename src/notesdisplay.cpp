@@ -36,13 +36,24 @@ NotesDisplay::NotesDisplay ()
  noteMenu(this),
  editMenu(this),
  helpBox (this),
- mConName ("nota_dbcon")
+ mConName ("nota_dbcon"),
+ noLabel (this),
+ maxTags (5),
+ numTags (0)
 {
   setupUi (this);
   SetupMenu ();
   SetupEdit ();
   editBox->SetConf (pConf);
   editMenu.SetConf (pConf);
+  noTagPix.load (":img/notag.jpg");
+  noLabel.hide();
+  noLabel.setPixmap (noTagPix);
+  noLabel.resize (noTagPix.size());
+  for (int t=0; t<maxTags; t++) {
+    tagLabel[t].setParent(this);
+    tagLabel[t].hide();
+  }
   ShowNothing ();
   connect (notesIndex, SIGNAL (itemActivated (QListWidgetItem*)),
            this, SLOT (UserPicked (QListWidgetItem*)));
@@ -292,9 +303,63 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
       newName = currentName;
       nameChanged = false;
       isNew = false;
+      QPoint topleft (centralwidget->pos());
+      topleft.rx() += noteName->pos().x();
+      ListTags (topleft, currentId);
     }
   }
   
+}
+
+
+void
+NotesDisplay::GetTagPix (const QString tagname, QPixmap & pix)
+{
+  OpenDB ();
+  QString qryPattern ("select icon from tags where tagname = '%1'");
+  QString qryStr = qryPattern.arg (tagname);
+  QSqlQuery query (db);
+  query.exec (qryStr);
+  if (query.next()) {
+    int index = query.record().indexOf ("icon");
+    QByteArray bytes = query.value(index).toByteArray();
+    pix.loadFromData (bytes);
+  } else {
+    pix = noTagPix;
+  }
+}
+void
+NotesDisplay::ListTags (const QPoint topleft, const qint64 noteid)
+{
+  QStringList tagnames;
+  GetTagnames (noteid, tagnames);
+  int ntags = tagnames.size();
+  if (tagnames.size() < 1) {
+    QPoint tagPos (topleft);
+    noLabel.move (tagPos);
+    noLabel.show ();
+    noLabel.raise ();
+    noLabel.clearFocus ();
+    numTags = 1;
+  } else {
+    noLabel.hide ();
+    if (ntags > maxTags) { ntags = maxTags; }
+    QPoint  here = topleft;
+    for (int t=0; t<ntags; t++) {
+      GetTagPix (tagnames[t], tagPix[t]);
+      tagLabel[t].setPixmap (tagPix[t]);
+      tagLabel[t].resize (tagPix[t].size());
+      tagLabel[t].move (here);
+      tagLabel[t].show ();
+      tagLabel[t].raise ();
+      tagLabel[t].clearFocus ();
+      here.rx() += tagLabel[t].width();
+    }
+    numTags = ntags;
+  }
+  for (int mt=ntags; mt<maxTags; mt++) {
+    tagLabel[mt].hide();
+  }
 }
 
 void
@@ -307,6 +372,8 @@ NotesDisplay::ShowNothing ()
   nameChanged = false;
   noteName ->setText ("");
   editBox->setHtml ("");
+  noLabel.hide();
+  numTags = 0;
   curItem = 0;
   showingNote = false;
   fontProperty[FP_bold] = false;
@@ -464,6 +531,22 @@ NotesDisplay::FillNotesList (  QListWidget * notesIndex)
     id = ListQuery.value(idField).toLongLong();
     name = ListQuery.value(nameField).toString();
     ListThisNote (notesIndex, id, name);
+  }
+}
+
+void
+NotesDisplay::GetTagnames ( const qint64 noteid, QStringList & names)
+{
+  OpenDB ();
+  names.clear ();
+  QString tagsPattern ("select tagname from tagrefs where noteid = '%1'");
+  QString tagsQuery = tagsPattern.arg(QString::number(noteid));
+  QSqlQuery query (db);
+  query.exec (tagsQuery);
+  int tagField = query.record().indexOf ("tagname");
+  QString tagname;
+  while (query.next()) {
+    names.append (query.value(tagField).toString());
   }
 }
 

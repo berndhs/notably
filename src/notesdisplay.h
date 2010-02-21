@@ -31,6 +31,8 @@
 #include <QTimer>
 #include <QMouseEvent>
 #include <QShortcut>
+#include <QLabel>
+#include <QPixmap>
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
@@ -92,7 +94,9 @@ private:
                  const qint64 id, 
                  const QString & name);
   
-  
+  void ListTags (const QPoint topleft, const qint64 noteid);
+  void GetTagnames (const qint64 noteid, QStringList & names);
+  void GetTagPix (const QString tagname, QPixmap & pix);
   void OpenDB ();
   void WriteNote (const qint64 id, 
                 const QString & name,
@@ -122,6 +126,13 @@ private:
   
   QPoint     corner1;
   QPoint     corner2;
+  
+  QLabel     noLabel;
+  QLabel     tagLabel[5];
+  QPixmap    tagPix[5];
+  int        maxTags;
+  int        numTags;
+  QPixmap    noTagPix;
   
   bool       isNew;
   bool       nameChanged;

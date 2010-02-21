@@ -12,7 +12,7 @@ itself, not to this program.
 
 This program is    
 
-Copyright (C) 2009 Bernd H Stramm
+Copyright (C) 2010 Bernd H Stramm
 
 --------------------------------------------------- 
 

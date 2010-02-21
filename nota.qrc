@@ -6,6 +6,10 @@
   <file>qrcfiles/schema-tagrefs.sql</file>
   <file>qrcfiles/schema-identndx.sql</file>
   <file>img/nb.png</file>
+  <file>img/notag.jpg</file>
+  <file>img/dead.jpg</file>
+  <file>img/important.jpg</file>
+  <file>img/done.jpg</file>
   <file>qrcfiles/userman.html</file>
   <file>qrcfiles/LICENSE.txt</file>
 </qresource>
