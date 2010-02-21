@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DRSS Help</string>
+   <string>Notably Help</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../nota.qrc">
+    <normaloff>:/img/nb.png</normaloff>:/img/nb.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -70,6 +74,8 @@
    <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../nota.qrc"/>
+ </resources>
  <connections/>
 </ui>
