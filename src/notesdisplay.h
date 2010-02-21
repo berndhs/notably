@@ -21,6 +21,8 @@
 #include "notemenu.h"
 #include "editmenu.h"
 #include "version.h"
+#include "helpbox.h"
+#include "nota-help.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -60,6 +62,8 @@ public slots:
   void NewNote ();
   void NameChanged (const QString & name);
   void Help ();
+  void HelpHelp ();
+  void LicenseHelp ();
   void ShowNothing ();
   void ShowNoteMenu ();
   void DebugCheck ();
@@ -106,6 +110,8 @@ private:
   NotaConf     *pConf; 
   NoteMenu      noteMenu;
   EditMenu      editMenu;
+  HelpBox       helpBox;
+  NotaHelp      helpBrowser;
   QSqlDatabase  db;
   QString       mConName;
   

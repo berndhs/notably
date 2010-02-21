@@ -1,0 +1,61 @@
+Notably Manual
+==============
+Bernd Stramm <bernd.stramm@gmail.com>
+v0.1, February 2010
+
+*Notably* is a note taker program. *Notably* focuses on simplicity and quick usage. 
+
+Notes can be composed by typing, by copy/paste and by drag/drop. The notes are
+stored in rich text with html-like format. The format supports functional
+links and html, as well as images. Integration with normal desktop services is
+provided (web links, mailto links) as far as the platform allows.
+
+*Notably* works on Linux and Windows, and has been pre-tested on Maemo.
+
+[[Notes]]
+== Notes
+
+The basic focus of *Notably* are Notes. These are small documents written
+by the user.
+
+== Prerequisits
+
+To build and run *Notably*, the current version uses:
+
+. C++
+.. Gcc or Visual C++
+. Qt4, including these parts:
+.. Core
+.. Gui
+.. Sql
+.. WebKit
+
+=== How to Build
+
+It's pretty straightforward. Please read the INSTALL file that comes with
+the source code.
+
+== License and Warranty ==
+
+This is free open source software, hence the usual licensing. And the 
+usual warranty, or lack thereof:
+
+****
+These programs are distributed under the terms of the 
+GNU General Public License version 3.
+
+See the file *LICENSE.txt* for the complete text of the license. You can
+also find it on http://www.gnu.org. Or you can select *Help->License* from the
+menu bar to see a copy.
+
+This software is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+****
+
+
+____
+
+ 
+~Copyright (C) 2010 http://www.bernd-stramm.com/[Bernd Stramm] All Rights Reserved~
+____

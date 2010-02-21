@@ -35,6 +35,7 @@ NotesDisplay::NotesDisplay ()
  pConf(0),
  noteMenu(this),
  editMenu(this),
+ helpBox (this),
  mConName ("nota_dbcon")
 {
   setupUi (this);
@@ -90,6 +91,9 @@ NotesDisplay::SetupMenu ()
   connect (&noteMenu, SIGNAL (DeleteNote()), this, SLOT (DeleteCurrent()));
   connect (&noteMenu, SIGNAL (NewNote()), this, SLOT (NewNote()));
   connect (&noteMenu, SIGNAL (CancelNote()), this, SLOT (ShowNothing()));
+  
+  connect (&helpBox, SIGNAL (WantHelp()), this, SLOT (HelpHelp ()));
+  connect (&helpBox, SIGNAL (WantLicense()), this, SLOT (LicenseHelp()));
 }
 
 void
@@ -179,7 +183,20 @@ NotesDisplay::ToggleFont (const FontProperty prop)
 void
 NotesDisplay::Help ()
 {
-  deliberate::ProgramVersion::ShowVersionWindow ();
+  helpBox.setText (deliberate::ProgramVersion::Version());
+  helpBox.exec ();
+}
+
+void
+NotesDisplay::HelpHelp ()
+{
+  helpBrowser.ShowPage (":qrcfiles/userman.html");
+}
+
+void
+NotesDisplay::LicenseHelp ()
+{
+  helpBrowser.ShowPage (":qrcfiles/LICENSE.txt");
 }
 
 void

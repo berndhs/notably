@@ -27,13 +27,15 @@ CONFIG(release, debug|release) {
   TARGET = notably
 }
 
-QT += gui core sql
+QT += gui core sql webkit
 
 RESOURCES += \
 	../nota.qrc
 
 FORMS = \
-	../ui/mainwin.ui 
+	../ui/mainwin.ui \
+	../ui/helpwin.ui \
+	../ui/helpbox.ui 
 
 
 SOURCES = \
@@ -44,6 +46,8 @@ SOURCES = \
 	../src/version.cpp \
 	../src/notemenu.cpp \
 	../src/editmenu.cpp \
+	../src/nota-help.cpp \
+	../src/helpbox.cpp \
 	../src/notably.cpp
 
 HEADERS = \
@@ -54,5 +58,7 @@ HEADERS = \
 	../src/notemenu.h \
 	../src/editmenu.h \
 	../src/notaconf.h \
+	../src/nota-help.h \
+	../src/helpbox.h 
 	
 

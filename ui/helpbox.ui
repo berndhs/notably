@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HelpDialog</class>
+ <widget class="QDialog" name="HelpDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>397</width>
+    <height>173</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Notably</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../nota.qrc">
+    <normaloff>:/img/nb.png</normaloff>:/img/nb.png</iconset>
+  </property>
+  <widget class="QPushButton" name="okButton">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>110</y>
+     <width>90</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="helpButton">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>110</y>
+     <width>90</width>
+     <height>64</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="licenseButton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>110</y>
+     <width>90</width>
+     <height>64</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>License</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="textBox">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>5</y>
+     <width>356</width>
+     <height>96</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../nota.qrc"/>
+ </resources>
+ <connections/>
+</ui>
