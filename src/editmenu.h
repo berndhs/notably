@@ -38,11 +38,15 @@ private slots:
   void Underline ();
   void ScreenShot ();
   void WholeScreenShot ();
+  void GrabHtml ();
+  void GrabLink ();
 
 signals:
 
   void SigFontToggle (const FontProperty);
   void SigShootScreen (const bool whole);
+  void SigGrabSelection ();
+  void SigGrabLink ();
 
 private:
 
@@ -55,6 +59,8 @@ private:
   QAction  *underlineAction;
   QAction  *shootAction;
   QAction  *shootAllAction;
+  QAction  *htmlAction;
+  QAction  *linkAction;
 
 };
 

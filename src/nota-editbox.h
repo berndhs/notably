@@ -21,6 +21,7 @@
 namespace nota {
 
 class EditBox : public QTextEdit {
+Q_OBJECT
 public:
 
   EditBox (QWidget *parent);
@@ -33,6 +34,10 @@ public:
   QString BoxText ();
   
   void insertFromMimeData ( const QMimeData * source );
+  void mousePressEvent ( QMouseEvent * event );
+  
+  void GrabHtml ();
+  void GrabLink ();
   
 public slots:
 

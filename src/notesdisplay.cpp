@@ -55,7 +55,7 @@ NotesDisplay::NotesDisplay ()
 void
 NotesDisplay::SetupMenu ()
 {
-  exitAction = new QAction (tr("E&xit") , this);
+  exitAction = new QAction (tr("&Quit") , this);
   menubar->addAction (exitAction);
   saveAction = new QAction (tr("&Save Note"), this);
   menubar->addAction (saveAction);
@@ -68,7 +68,7 @@ NotesDisplay::SetupMenu ()
   
   saveShort = new QShortcut (QKeySequence(tr("Ctrl+S")),this);
   connect (saveShort, SIGNAL(activated()), this, SLOT (SaveCurrent()));
-  exitShort = new QShortcut (QKeySequence (tr("Ctrl+X")), this);
+  exitShort = new QShortcut (QKeySequence (tr("Ctrl+Q")), this);
   connect (exitShort, SIGNAL (activated()), this, SLOT (quit()));
   noteMenuShort = new QShortcut (QKeySequence (tr("Ctrl+N")), this);
   connect (noteMenuShort, SIGNAL (activated()), this, SLOT (ShowNoteMenu()));
@@ -99,6 +99,10 @@ NotesDisplay::SetupEdit ()
             this, SLOT (ToggleFont (const FontProperty)));
   connect (&editMenu , SIGNAL (SigShootScreen (const bool)),
             this, SLOT (ShootScreen (const bool)));
+  connect (&editMenu, SIGNAL (SigGrabSelection ()),
+            this, SLOT (GrabHtml()));
+  connect (&editMenu, SIGNAL (SigGrabLink()), 
+            this, SLOT (GrabLink ()));
 }
 
 void
@@ -135,6 +139,18 @@ NotesDisplay::dropEvent (QDropEvent *event)
 {
   qDebug () << "drop event " << event;
   
+}
+
+void
+NotesDisplay::GrabHtml ()
+{
+  editBox->GrabHtml ();
+}
+
+void
+NotesDisplay::GrabLink ()
+{
+  editBox->GrabLink ();
 }
 
 void

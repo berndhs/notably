@@ -47,6 +47,12 @@ EditMenu::Init ()
   shootAllAction = new QAction (tr("Whole Screen Shot"), this);
   menu.addAction (shootAllAction);
   connect (shootAllAction, SIGNAL (triggered()), this, SLOT (WholeScreenShot()));
+  htmlAction = new QAction (tr("Insert Selection as Html"), this);
+  menu.addAction (htmlAction);
+  connect (htmlAction, SIGNAL (triggered()), this, SLOT (GrabHtml()));
+  linkAction = new QAction (tr("Make Selection a Link"), this);
+  menu.addAction (linkAction);
+  connect (linkAction, SIGNAL (triggered ()), this, SLOT (GrabLink()));
 }
 
 void
@@ -65,6 +71,18 @@ void
 EditMenu::Underline ()
 {
   emit SigFontToggle (FP_underline);
+}
+
+void
+EditMenu::GrabHtml ()
+{
+  emit SigGrabSelection ();
+}
+
+void
+EditMenu::GrabLink ()
+{
+  emit SigGrabLink ();
 }
 
 void

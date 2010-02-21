@@ -5,6 +5,7 @@
 #include <QList>
 #include <QDateTime>
 #include <QTime>
+#include <QDesktopServices>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -42,6 +43,43 @@ void
 EditBox::paste ()
 {
   QTextEdit::paste ();
+}
+
+void
+EditBox::GrabHtml ()
+{
+  QTextCursor curse = textCursor();
+  QString text = curse.selectedText ();
+  curse.removeSelectedText ();
+  curse.insertHtml (" " +text+ " ");
+}
+
+void
+EditBox::GrabLink ()
+{
+  QTextCursor curse = textCursor();
+  QString text = curse.selectedText ();
+  curse.removeSelectedText ();
+  QString linkpattern (" <a href=\"%1\">%1</a> ");
+  QString linkhtml = linkpattern.arg(text);
+  curse.insertHtml (linkhtml);
+}
+
+void
+EditBox::mousePressEvent (QMouseEvent * event)
+{
+  if (event) {
+    QString anch = this->anchorAt (event->pos());
+    if (anch.length () > 0) {
+      QUrl url (anch);
+      if (url.isValid()) {
+        QDesktopServices::openUrl (url);
+        return;
+      }
+    }
+  } 
+  /// don't know what to do with this one, maybe QTextEdit knows
+  QTextEdit::mousePressEvent (event);
 }
 
 void

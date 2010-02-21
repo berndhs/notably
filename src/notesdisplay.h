@@ -66,6 +66,8 @@ public slots:
   void ExecNoteMenu ();
   void ScheduleEdit ();
   void ExecEditMenu ();
+  void GrabHtml ();
+  void GrabLink ();
   
   void ToggleFont (const FontProperty);
   
