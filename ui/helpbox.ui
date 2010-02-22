@@ -28,7 +28,7 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>48</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -41,11 +41,11 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>48</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
-        <string>Help</string>
+        <string>Manual</string>
        </property>
       </widget>
      </item>
@@ -54,7 +54,7 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>48</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">

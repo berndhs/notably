@@ -342,8 +342,10 @@ NotesDisplay::ListTags (const qint64 noteid)
 {
   QStringList tagnames;
   noteTagEditor.GetTagnames (noteid, tagnames);
+  QPoint offset (3,4);
   QPoint topleft (centralwidget->pos());
   topleft.rx() += noteName->pos().x();
+  topleft += offset;
   int ntags = tagnames.size();
   if (tagnames.size() < 1) {
     QPoint tagPos (topleft);
@@ -364,7 +366,7 @@ NotesDisplay::ListTags (const qint64 noteid)
       tagLabel[t].show ();
       tagLabel[t].raise ();
       tagLabel[t].clearFocus ();
-      here.rx() += tagLabel[t].width();
+      here.rx() += tagLabel[t].width() +2;
     }
     numTags = ntags;
   }
