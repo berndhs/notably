@@ -35,7 +35,8 @@ RESOURCES += \
 FORMS = \
 	../ui/mainwin.ui \
 	../ui/helpwin.ui \
-	../ui/helpbox.ui 
+	../ui/helpbox.ui \
+	../ui/notetags.ui
 
 
 SOURCES = \
@@ -48,6 +49,7 @@ SOURCES = \
 	../src/editmenu.cpp \
 	../src/nota-help.cpp \
 	../src/helpbox.cpp \
+	../src/notetag-edit.cpp \
 	../src/notably.cpp
 
 HEADERS = \
@@ -59,6 +61,7 @@ HEADERS = \
 	../src/editmenu.h \
 	../src/notaconf.h \
 	../src/nota-help.h \
+	../src/notetag-edit.h \
 	../src/helpbox.h 
 	
 

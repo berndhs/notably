@@ -16,6 +16,7 @@
 #include <QMainWindow>
 #include <QApplication>
 #include "nota-editbox.h"
+#include "notetag-edit.h"
 #include <ui_mainwin.h>
 #include "notaconf.h"
 #include "notemenu.h"
@@ -74,6 +75,7 @@ public slots:
   void ExecEditMenu ();
   void GrabHtml ();
   void GrabLink ();
+  void DoNoteTags ();
   
   void ToggleFont (const FontProperty);
   
@@ -94,8 +96,7 @@ private:
                  const qint64 id, 
                  const QString & name);
   
-  void ListTags (const QPoint topleft, const qint64 noteid);
-  void GetTagnames (const qint64 noteid, QStringList & names);
+  void ListTags (const qint64 noteid);
   void GetTagPix (const QString tagname, QPixmap & pix);
   void OpenDB ();
   void WriteNote (const qint64 id, 
@@ -116,6 +117,7 @@ private:
   EditMenu      editMenu;
   HelpBox       helpBox;
   NotaHelp      helpBrowser;
+  NoteTagEdit   noteTagEditor;
   QSqlDatabase  db;
   QString       mConName;
   

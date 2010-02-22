@@ -36,6 +36,7 @@ NotesDisplay::NotesDisplay ()
  noteMenu(this),
  editMenu(this),
  helpBox (this),
+ noteTagEditor (this),
  mConName ("nota_dbcon"),
  noLabel (this),
  maxTags (5),
@@ -46,6 +47,7 @@ NotesDisplay::NotesDisplay ()
   SetupEdit ();
   editBox->SetConf (pConf);
   editMenu.SetConf (pConf);
+  noteTagEditor.SetDB (db);
   noTagPix.load (":img/notag.jpg");
   noLabel.hide();
   noLabel.setPixmap (noTagPix);
@@ -102,6 +104,7 @@ NotesDisplay::SetupMenu ()
   connect (&noteMenu, SIGNAL (DeleteNote()), this, SLOT (DeleteCurrent()));
   connect (&noteMenu, SIGNAL (NewNote()), this, SLOT (NewNote()));
   connect (&noteMenu, SIGNAL (CancelNote()), this, SLOT (ShowNothing()));
+  connect (&noteMenu, SIGNAL (ChangeTags()), this, SLOT (DoNoteTags()));
   
   connect (&helpBox, SIGNAL (WantHelp()), this, SLOT (HelpHelp ()));
   connect (&helpBox, SIGNAL (WantLicense()), this, SLOT (LicenseHelp()));
@@ -140,6 +143,14 @@ NotesDisplay::Start ()
   editMenu.Init ();
   FillNotesList (notesIndex);
 }
+
+void
+NotesDisplay::DoNoteTags ()
+{
+  noteTagEditor.ManageTags (currentId, currentName);
+  ListTags (currentId);
+}
+
 
 void
 NotesDisplay::quit ()
@@ -303,9 +314,7 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
       newName = currentName;
       nameChanged = false;
       isNew = false;
-      QPoint topleft (centralwidget->pos());
-      topleft.rx() += noteName->pos().x();
-      ListTags (topleft, currentId);
+      ListTags (currentId);
     }
   }
   
@@ -329,10 +338,12 @@ NotesDisplay::GetTagPix (const QString tagname, QPixmap & pix)
   }
 }
 void
-NotesDisplay::ListTags (const QPoint topleft, const qint64 noteid)
+NotesDisplay::ListTags (const qint64 noteid)
 {
   QStringList tagnames;
-  GetTagnames (noteid, tagnames);
+  noteTagEditor.GetTagnames (noteid, tagnames);
+  QPoint topleft (centralwidget->pos());
+  topleft.rx() += noteName->pos().x();
   int ntags = tagnames.size();
   if (tagnames.size() < 1) {
     QPoint tagPos (topleft);
@@ -531,22 +542,6 @@ NotesDisplay::FillNotesList (  QListWidget * notesIndex)
     id = ListQuery.value(idField).toLongLong();
     name = ListQuery.value(nameField).toString();
     ListThisNote (notesIndex, id, name);
-  }
-}
-
-void
-NotesDisplay::GetTagnames ( const qint64 noteid, QStringList & names)
-{
-  OpenDB ();
-  names.clear ();
-  QString tagsPattern ("select tagname from tagrefs where noteid = '%1'");
-  QString tagsQuery = tagsPattern.arg(QString::number(noteid));
-  QSqlQuery query (db);
-  query.exec (tagsQuery);
-  int tagField = query.record().indexOf ("tagname");
-  QString tagname;
-  while (query.next()) {
-    names.append (query.value(tagField).toString());
   }
 }
 
