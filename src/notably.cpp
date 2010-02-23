@@ -38,6 +38,7 @@ main (int argc, char* argv[])
   nota::NotaConf     conf;
   notes.SetApplication (&App);
   notes.SetConf (conf);
+  conf.CheckInit ();
   notes.Start ();
   notes.show ();
   

@@ -142,6 +142,10 @@ NotesDisplay::Start ()
 {
   editMenu.Init ();
   FillNotesList (notesIndex);
+  qDebug () << "width in MM " << 
+       QApplication::desktop()->widthMM();
+  qDebug () << "width in MM " << 
+       QApplication::desktop()->heightMM();
 }
 
 void

@@ -27,6 +27,7 @@ public:
   QString  CompleteDBName ();
   QString  Directory ();
   bool     SupportPartScreenShot ();
+  void     CheckInit ();
   
 private:
 

@@ -1,5 +1,7 @@
 #include "notaconf.h"
 #include <QDesktopServices>
+#include <QCoreApplication>
+#include "delib-debug.h"
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -22,6 +24,12 @@ NotaConf::NotaConf ()
   mPath = homedir + QString ("/data/nota");
  
   mDatafile = QString ("nota.sql");
+}
+
+void
+NotaConf::CheckInit ()
+{
+  qDebug () << "conf app name " << QCoreApplication::applicationName ();
 }
 
 QString 
