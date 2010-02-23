@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QTime>
 #include <QDesktopServices>
+#include <QDir>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -131,7 +132,8 @@ EditBox::InsertImage (QImage & img)
   QString imgname = ImgFilename (img);
   if (pConf) {
     QString path = pConf->Directory ();
-    imgname.prepend (path + "/");
+    imgname.prepend (QDir::separator());
+    imgname.prepend (path);
     img.save (imgname);
     QString pattern (" <img src=\"%1\" /> ");
     insertHtml (pattern.arg(imgname));
