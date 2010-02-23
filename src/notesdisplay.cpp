@@ -142,10 +142,16 @@ NotesDisplay::Start ()
 {
   editMenu.Init ();
   FillNotesList (notesIndex);
-  qDebug () << "width in MM " << 
-       QApplication::desktop()->widthMM();
-  qDebug () << "width in MM " << 
-       QApplication::desktop()->heightMM();
+  QString mess;
+  int w = QApplication::desktop()->widthMM();
+  int h = QApplication::desktop()->heightMM();
+  mess.append (" width mm ");
+  mess.append (QString::number(w));
+  mess.append (" height mm ");
+  mess.append (QString::number(h));
+  QMessageBox box;
+  box.setText (mess);
+  box.exec ();
 }
 
 void
