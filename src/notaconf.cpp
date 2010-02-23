@@ -2,6 +2,7 @@
 #include <QDesktopServices>
 #include <QCoreApplication>
 #include "delib-debug.h"
+#include "deliberate.h"
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -14,6 +15,7 @@
 // of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 //
 
+using namespace deliberate;
 
 namespace nota {
 
@@ -21,16 +23,26 @@ NotaConf::NotaConf ()
 {
   QString homedir = QDesktopServices::storageLocation
                        (QDesktopServices::HomeLocation);
-  mPath = homedir + QString ("/data/nota");
+                       
+  //mPath = homedir + QString ("/data/nota");
+  mPath = QDesktopServices::storageLocation (QDesktopServices::DataLocation);
+  if (Settings().contains("datapath")) {
+    mPath = Settings().value("datapath", mPath).toString();
+  }
  
   mDatafile = QString ("nota.sql");
+  if (Settings().contains("datafile")) {
+    mDatafile = Settings().value ("datafile", mDatafile).toString();
+  }
 }
 
-void
-NotaConf::CheckInit ()
+NotaConf::~NotaConf ()
 {
-  qDebug () << "conf app name " << QCoreApplication::applicationName ();
+  Settings().setValue ("datapath",mPath);
+  Settings().setValue ("datafile",mDatafile);
+  Settings().sync();
 }
+
 
 QString 
 NotaConf::Directory ()

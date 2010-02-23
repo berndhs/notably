@@ -22,12 +22,12 @@ class NotaConf {
 public:
 
   NotaConf ();
+  ~NotaConf ();
 
   QString  DataFile ();
   QString  CompleteDBName ();
   QString  Directory ();
   bool     SupportPartScreenShot ();
-  void     CheckInit ();
   
 private:
 

@@ -1,6 +1,7 @@
 #include "notesdisplay.h"
 #include "deliberate.h"
 #include "delib-debug.h"
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QByteArray>
@@ -548,6 +549,16 @@ NotesDisplay::MakeTable (QString table)
 void 
 NotesDisplay::MakeTables ()
 {
+  QString dirname = pConf->Directory();
+  QDir dir (dirname);
+  if (!dir.exists()) {
+    dir.mkpath (dirname);
+  }
+  QString filename = pConf->DataFile ();
+  QFile file (filename);
+  file.open (QFile::WriteOnly);
+  file.write (QString("").toLatin1(), 0);
+  file.close ();
   MakeTable ("notes");
   MakeTable ("tags");
   MakeTable ("tagrefs");
