@@ -40,6 +40,7 @@ FORMS = \
 
 
 SOURCES = \
+        ../src/deliberate.cpp \
         ../src/notesdisplay.cpp \
 	../src/delib-debug.cpp \
 	../src/notaconf.cpp \
@@ -53,6 +54,7 @@ SOURCES = \
 	../src/notably.cpp
 
 HEADERS = \
+        ../src/deliberate.h \
 	../src/notesdisplay.h \
 	../src/delib-debug.h \
 	../src/nota-editbox.h \

@@ -24,7 +24,6 @@ namespace deliberate {
   ProgramVersion::ProgramVersion (QString pgmname)
   {
     ProgramName = pgmname;
-    QCoreApplication::setApplicationName (pgmname);
   }
   
   QString ProgramVersion::Version ()

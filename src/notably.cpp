@@ -15,6 +15,7 @@
 //
 //
 
+#include "deliberate.h"
 #include "delib-debug.h"
 #include "notesdisplay.h"
 #include "notaconf.h"
@@ -25,10 +26,14 @@
 int 
 main (int argc, char* argv[])
 {
-
+  QCoreApplication::setApplicationName ("notably");
+  QCoreApplication::setOrganizationName ("BerndStramm");
+  QCoreApplication::setOrganizationDomain ("bernd-stramm.com");
   deliberate::ProgramVersion pv ("Notably");
-  
+  QSettings  settings;
+  deliberate::SetSettings (settings);
   deliberate::UseMyOwnMessageHandler ();
+  
   
   QApplication App (argc, argv);
   

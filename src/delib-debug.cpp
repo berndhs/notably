@@ -23,15 +23,6 @@ void UseMyOwnMessageHandler ()
   qInstallMsgHandler (deliberate::MyOwnMessageOutput);
 }
 
-QTextStream & StdOut ()
-{
-  static QTextStream *out(0);
-  
-  if (out == 0) {
-    out = new QTextStream (stdout);
-  }
-  return *out;
-}
 void MyOwnMessageOutput (QtMsgType type, const char* msg)
 {
 #if DELIBERATE_DEBUG

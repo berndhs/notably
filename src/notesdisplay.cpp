@@ -1,4 +1,5 @@
 #include "notesdisplay.h"
+#include "deliberate.h"
 #include "delib-debug.h"
 #include <QFile>
 #include <QFileInfo>
@@ -141,7 +142,13 @@ void
 NotesDisplay::Start ()
 {
   editMenu.Init ();
+  if (Settings().contains("size")) {
+    QSize defaultSize = size();
+    QSize newsize = Settings().value ("size", defaultSize).toSize();
+    resize (newsize);
+  }
   FillNotesList (notesIndex);
+  #if 0
   QString mess;
   int w = QApplication::desktop()->widthMM();
   int h = QApplication::desktop()->heightMM();
@@ -152,6 +159,14 @@ NotesDisplay::Start ()
   QMessageBox box;
   box.setText (mess);
   box.exec ();
+  #endif
+}
+
+void
+NotesDisplay::resizeEvent (QResizeEvent * event)
+{
+  QSize newsize = event->size();
+  Settings().setValue ("size",newsize);
 }
 
 void
@@ -165,6 +180,7 @@ NotesDisplay::DoNoteTags ()
 void
 NotesDisplay::quit ()
 {
+  Settings().sync();
   if (pApp) {
     pApp->quit();
   }

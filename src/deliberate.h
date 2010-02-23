@@ -1,6 +1,5 @@
-#ifndef DELIB_DEBUG_H
-#define DELIB_DEBUG_H
-
+#ifndef DELIBERATE_H
+#define DELIBERATE_H
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
 //
@@ -11,22 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty 
 // of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 //
+//
 
-#include "deliberate.h"
-
-#if DELIBERATE_DEBUG
-#include <QDebug>
-#else
-#include <QDebug>
-#endif
+#include <qapplication.h>
+#include <stdio.h>
+#include <QTextStream>
+#include <QSettings>
 
 namespace deliberate {
 
 
-void UseMyOwnMessageHandler ();
+QTextStream  & StdOut();
 
-void MyOwnMessageOutput (QtMsgType type, const char* msg);
+void SetSettings (QSettings & settings);
 
+QSettings & Settings ();
 
 }
+
+
 #endif

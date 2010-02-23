@@ -34,6 +34,7 @@
 #include <QShortcut>
 #include <QLabel>
 #include <QPixmap>
+#include <QResizeEvent>
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
@@ -54,6 +55,7 @@ public:
   void dropEvent (QDropEvent * event);
   void mousePressEvent (QMouseEvent *event );
   void mouseReleaseEvent (QMouseEvent *event );
+  void resizeEvent ( QResizeEvent * event );
   
 public slots:
 
