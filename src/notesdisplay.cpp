@@ -480,7 +480,7 @@ NotesDisplay::SaveCurrent ()
 void
 NotesDisplay::PublishCurrent ()
 {
-  QString wholeName (pConf->Directory() + "/" + noteName->text() + ".html");
+  QString wholeName (pConf->Directory() + QDir::separator() + noteName->text() + ".html");
   QFile pageFile (wholeName);
   pageFile.open (QFile::WriteOnly);
   pageFile.write (editBox->toHtml().toLocal8Bit());

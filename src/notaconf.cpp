@@ -1,6 +1,7 @@
 #include "notaconf.h"
 #include <QDesktopServices>
 #include <QCoreApplication>
+#include <QDir>
 #include "delib-debug.h"
 #include "deliberate.h"
 
@@ -54,13 +55,13 @@ NotaConf::Directory ()
 QString
 NotaConf::DataFile ()
 {
-  return mPath + "/" + mDatafile;
+  return mPath + QDir::separator() + mDatafile;
 }
 
 QString
 NotaConf::CompleteDBName ()
 {
-  return mPath + "/" + mDatafile;
+  return mPath + QDir::separator() + mDatafile;
 }
 
 bool
