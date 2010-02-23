@@ -525,9 +525,9 @@ NotesDisplay::DBExists ()
     return false;
   }
   if (!inf.isWritable()) {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 void
@@ -549,6 +549,7 @@ NotesDisplay::MakeTable (QString table)
 void 
 NotesDisplay::MakeTables ()
 {
+qDebug () << " makeing tables ";
   QString dirname = pConf->Directory();
   QDir dir (dirname);
   if (!dir.exists()) {
