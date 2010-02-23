@@ -36,6 +36,7 @@ FORMS = \
 	../ui/mainwin.ui \
 	../ui/helpwin.ui \
 	../ui/helpbox.ui \
+	../ui/changefile.ui \
 	../ui/notetags.ui
 
 
@@ -48,6 +49,8 @@ SOURCES = \
 	../src/version.cpp \
 	../src/notemenu.cpp \
 	../src/editmenu.cpp \
+	../src/managemenu.cpp \
+	../src/db-manage.cpp \
 	../src/nota-help.cpp \
 	../src/helpbox.cpp \
 	../src/notetag-edit.cpp \
@@ -61,6 +64,8 @@ HEADERS = \
 	../src/version.h \
 	../src/notemenu.h \
 	../src/editmenu.h \
+	../src/managemenu.h \
+	../src/db-manage.h \
 	../src/notaconf.h \
 	../src/nota-help.h \
 	../src/notetag-edit.h \

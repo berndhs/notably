@@ -44,6 +44,12 @@ NotaConf::~NotaConf ()
   Settings().sync();
 }
 
+void
+NotaConf::Sync ()
+{
+  Settings().sync();
+}
+
 
 QString 
 NotaConf::Directory ()
@@ -62,6 +68,26 @@ QString
 NotaConf::CompleteDBName ()
 {
   return mPath + QDir::separator() + mDatafile;
+}
+
+QString
+NotaConf::FileName ()
+{
+  return mDatafile;
+}
+
+void
+NotaConf::SetFileName (QString fn)
+{
+  mDatafile = fn;
+  Settings().setValue ("datafile", mPath);
+}
+
+void
+NotaConf::SetDirectory (QString dir)
+{
+  mPath = dir;
+  Settings().setValue ("datapath",mPath);
 }
 
 bool

@@ -37,8 +37,10 @@ NotesDisplay::NotesDisplay ()
  pConf(0),
  noteMenu(this),
  editMenu(this),
+ manageMenu (this),
  helpBox (this),
  noteTagEditor (this),
+ dbManager (db),
  mConName ("nota_dbcon"),
  noLabel (this),
  maxTags (5),
@@ -49,8 +51,9 @@ NotesDisplay::NotesDisplay ()
   SetupEdit ();
   editBox->SetConf (pConf);
   editMenu.SetConf (pConf);
+  manageMenu.SetConf (pConf);
   noteTagEditor.SetDB (db);
-  noTagPix.load (":img/notag.jpg");
+  noTagPix.load (":img/notag.png");
   noLabel.hide();
   noLabel.setPixmap (noTagPix);
   noLabel.resize (noTagPix.size());
@@ -79,6 +82,8 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (noteMenuAction);
   editAction = new QAction (tr("&Edit..."), this);
   menubar->addAction (editAction);
+  manageAction = new QAction (tr("M&anage..."), this);
+  menubar->addAction (manageAction);
   helpAction = new QAction (tr("&Help"), this);
   menubar->addAction (helpAction);
   
@@ -92,6 +97,8 @@ NotesDisplay::SetupMenu ()
   connect (editShort, SIGNAL (activated()), this, SLOT (ScheduleEdit()));
   helpShort = new QShortcut (QKeySequence (tr("Ctrl+H")), this);
   connect (helpShort, SIGNAL (activated()), this, SLOT (Help()));
+  manageShort = new QShortcut (QKeySequence (tr("Ctrl+A")), this);
+  connect (manageShort, SIGNAL (activated()), this, SLOT (ScheduleManage()));
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
  
@@ -99,6 +106,7 @@ NotesDisplay::SetupMenu ()
   
   connect (noteMenuAction, SIGNAL (triggered()), this, SLOT (ShowNoteMenu()));
   connect (editAction, SIGNAL (triggered()), this, SLOT (ScheduleEdit()));
+  connect (manageAction, SIGNAL (triggered()), this, SLOT (ScheduleManage()));
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
   
   connect (&noteMenu, SIGNAL (SaveNote()), this, SLOT (SaveCurrent()));
@@ -107,6 +115,8 @@ NotesDisplay::SetupMenu ()
   connect (&noteMenu, SIGNAL (NewNote()), this, SLOT (NewNote()));
   connect (&noteMenu, SIGNAL (CancelNote()), this, SLOT (ShowNothing()));
   connect (&noteMenu, SIGNAL (ChangeTags()), this, SLOT (DoNoteTags()));
+  
+  connect (&manageMenu, SIGNAL (SigReload()), this, SLOT (ReloadDB()));
   
   connect (&helpBox, SIGNAL (WantHelp()), this, SLOT (HelpHelp ()));
   connect (&helpBox, SIGNAL (WantLicense()), this, SLOT (LicenseHelp()));
@@ -137,6 +147,8 @@ NotesDisplay::SetConf (NotaConf & conf)
   pConf = &conf;
   editBox->SetConf (pConf);
   editMenu.SetConf (pConf);
+  manageMenu.SetConf (pConf);
+  dbManager.SetConf (pConf);
 }
 
 void
@@ -168,6 +180,17 @@ NotesDisplay::resizeEvent (QResizeEvent * event)
 {
   QSize newsize = event->size();
   Settings().setValue ("size",newsize);
+}
+
+void
+NotesDisplay::ReloadDB ()
+{
+  CloseDB ();
+  if (!DBExists()) {
+    dbManager.MakeTables (mConName);
+  }
+  OpenDB ();
+  FillNotesList (notesIndex);
 }
 
 void
@@ -251,33 +274,38 @@ NotesDisplay::LicenseHelp ()
 void
 NotesDisplay::ShowNoteMenu ()
 {
-  actionTimer.setSingleShot (true);
-  connect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecNoteMenu()));
-  actionTimer.start (100);
+  QTimer::singleShot (50, this, SLOT (ExecNoteMenu()));
 }
 
 void
 NotesDisplay::ScheduleEdit ()
 {
-  actionTimer.setSingleShot (true);
-  connect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecEditMenu()));
-  actionTimer.start (100);
+  QTimer::singleShot (50, this, SLOT (ExecEditMenu()));
+}
+
+void
+NotesDisplay::ScheduleManage ()
+{
+  QTimer::singleShot (50, this, SLOT (ShowManage()));
 }
 
 void
 NotesDisplay::ExecEditMenu ()
 {
-  disconnect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecEditMenu()));
   editMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
 }
 
 void
 NotesDisplay::ExecNoteMenu ()
 {
-  disconnect (&actionTimer, SIGNAL (timeout()), this, SLOT (ExecNoteMenu()));
   noteMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
 }
 
+void
+NotesDisplay::ShowManage ()
+{
+  manageMenu.Exec (editBox->mapToGlobal (QPoint(0,0)));
+}
 void
 NotesDisplay::UserPicked (QListWidgetItem *item)
 {
@@ -419,6 +447,9 @@ NotesDisplay::ShowNothing ()
   fontProperty[FP_bold] = false;
   fontProperty[FP_italic] = false;
   fontProperty[FP_underline] = false;
+  for (int mt=0; mt<maxTags; mt++) {
+    tagLabel[mt].hide();
+  }
 }
 
 void
@@ -440,6 +471,7 @@ NotesDisplay::NewNote ()
   noteName->setText (currentName);
   editBox->setHtml (QString("New Note"));
   showingNote = true;
+  ListTags (currentId);
 }
 
 
@@ -456,7 +488,7 @@ void
 NotesDisplay::SaveCurrent ()
 {
   if (!DBExists()) {
-    MakeTables ();
+    dbManager.MakeTables (mConName);
   }
   OpenDB ();
   if (!showingNote) {
@@ -514,6 +546,7 @@ void
 NotesDisplay::CloseDB ()
 {
   db.close();
+  QSqlDatabase::removeDatabase (mConName);
 }
 
 bool
@@ -530,41 +563,6 @@ NotesDisplay::DBExists ()
   return true;
 }
 
-void
-NotesDisplay::MakeTable (QString table)
-{
-  OpenDB ();
-  QString filename = QString (":qrcfiles/schema-") + table 
-                      + QString (".sql");
-  QFile schemafile (filename);
-  schemafile.open (QFile::ReadOnly);
-  QByteArray createcommands = schemafile.readAll ();
-  schemafile.close ();
-  QString querytext (createcommands);
-  QSqlQuery qry (db);
-  qry.prepare (querytext);
-  qry.exec ();
-}
-
-void 
-NotesDisplay::MakeTables ()
-{
-qDebug () << " makeing tables ";
-  QString dirname = pConf->Directory();
-  QDir dir (dirname);
-  if (!dir.exists()) {
-    dir.mkpath (dirname);
-  }
-  QString filename = pConf->DataFile ();
-  QFile file (filename);
-  file.open (QFile::WriteOnly);
-  file.write (QString("").toLatin1(), 0);
-  file.close ();
-  MakeTable ("notes");
-  MakeTable ("tags");
-  MakeTable ("tagrefs");
-  MakeTable ("identndx");
-}
 
 void
 NotesDisplay::FillNotesList (  QListWidget * notesIndex)
@@ -578,6 +576,7 @@ NotesDisplay::FillNotesList (  QListWidget * notesIndex)
   int nameField = ListQuery.record().indexOf ("usergivenid");
   QString name;
   qint64  id;
+  notesIndex->clear ();
   while (ListQuery.next()) {
     id = ListQuery.value(idField).toLongLong();
     name = ListQuery.value(nameField).toString();

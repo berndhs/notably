@@ -29,6 +29,12 @@ public:
   QString  Directory ();
   bool     SupportPartScreenShot ();
   
+  QString FileName ();
+  
+  void    SetFileName (QString fn);
+  void    SetDirectory (QString dir);
+  void    Sync ();
+  
 private:
 
   QString    mPath;

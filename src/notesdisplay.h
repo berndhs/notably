@@ -21,6 +21,8 @@
 #include "notaconf.h"
 #include "notemenu.h"
 #include "editmenu.h"
+#include "managemenu.h"
+#include "db-manage.h"
 #include "version.h"
 #include "helpbox.h"
 #include "nota-help.h"
@@ -71,6 +73,8 @@ public slots:
   void LicenseHelp ();
   void ShowNothing ();
   void ShowNoteMenu ();
+  void ScheduleManage ();
+  void ShowManage ();
   void DebugCheck ();
   void ExecNoteMenu ();
   void ScheduleEdit ();
@@ -78,6 +82,8 @@ public slots:
   void GrabHtml ();
   void GrabLink ();
   void DoNoteTags ();
+  
+  void ReloadDB ();
   
   void ToggleFont (const FontProperty);
   
@@ -117,9 +123,12 @@ private:
   NotaConf     *pConf; 
   NoteMenu      noteMenu;
   EditMenu      editMenu;
+  ManageMenu    manageMenu;
   HelpBox       helpBox;
   NotaHelp      helpBrowser;
   NoteTagEdit   noteTagEditor;
+  
+  DBManage      dbManager;
   QSqlDatabase  db;
   QString       mConName;
   
@@ -148,15 +157,16 @@ private:
   QAction    *noteMenuAction;
   QAction    *helpAction;
   QAction    *editAction;
+  QAction    *manageAction;
   
   QShortcut  *exitShort;
   QShortcut  *noteMenuShort;
   QShortcut  *editShort;
   QShortcut  *saveShort;
+  QShortcut  *manageShort;
   QShortcut  *helpShort;
   
   QTimer     debugTimer;
-  QTimer     actionTimer;
 
 };
 
