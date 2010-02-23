@@ -426,7 +426,7 @@ NotesDisplay::MakeNew (qint64 & id, QString &name)
 {
   QDateTime now = QDateTime::currentDateTime ();
   id = now.toTime_t();
-  name = now.toString ("yyyy-MM-dd-hh:mm:ss-Note");
+  name = now.toString ("yyyy-MM-dd-hh-mm-ss-Note");
 }
 
 void
