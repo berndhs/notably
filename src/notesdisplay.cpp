@@ -239,13 +239,13 @@ NotesDisplay::Help ()
 void
 NotesDisplay::HelpHelp ()
 {
-  helpBrowser.ShowPage (":qrcfiles/userman.html");
+  helpBrowser.ShowPage ("qrc:qrcfiles/userman.html");
 }
 
 void
 NotesDisplay::LicenseHelp ()
 {
-  helpBrowser.ShowPage (":qrcfiles/LICENSE.txt");
+  helpBrowser.ShowPage ("qrc:qrcfiles/LICENSE.txt");
 }
 
 void
