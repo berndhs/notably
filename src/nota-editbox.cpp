@@ -137,6 +137,7 @@ EditBox::InsertImage (QImage & img)
     img.save (imgname);
     QString pattern (" <img src=\"%1\" /> ");
     insertHtml (pattern.arg(imgname));
+    emit NewImage (imgname);
     return ;
   }
 }

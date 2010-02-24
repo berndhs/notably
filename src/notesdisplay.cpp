@@ -69,6 +69,9 @@ NotesDisplay::NotesDisplay ()
            this, SLOT (NameChanged(const QString &)));
            
   connect (&debugTimer, SIGNAL (timeout()), this, SLOT (DebugCheck()));
+  
+  connect (editBox, SIGNAL (NewImage (QString)), 
+           this, SLOT (ImageInserted (QString)));
 // debugTimer.start (1000);
 }
 
@@ -321,11 +324,19 @@ void
 NotesDisplay::DeleteFromDB (const qint64 id)
 {
   OpenDB ();
-  QString delStr ("delete from notes where noteid ='");
-  delStr.append (QString::number(id));
-  delStr.append ("'");
+  
+  QStringList tables;
+  tables << "notes" << "tagrefs" << "imagerefs";
+  QStringList::iterator tableit;
+  QString qryPattern ("delete from %1 where noteid = %2");
+  QString qryStr;
   QSqlQuery qry (db);
-  qry.exec (delStr);
+  bool ok;
+  for (tableit = tables.begin(); tableit != tables.end(); tableit++)
+  {
+    qryStr = qryPattern.arg(*tableit).arg (QString::number(id));
+    ok = qry.exec (qryStr);
+  }
 }
 
 void
@@ -483,6 +494,22 @@ NotesDisplay::NameChanged (const QString & name)
     nameChanged = true;
     newName = name;
   }
+}
+
+void
+NotesDisplay::ImageInserted (QString imgname)
+{
+  QString qryStr ("insert or replace into imagerefs ( noteid, imageref) "
+                  " values (?, ?)");
+  QSqlQuery query (db);
+  query.prepare (qryStr);
+  QVariant  idval;
+  QVariant  imgnameval;
+  idval.setValue (currentId);
+  query.bindValue (0,idval);
+  imgnameval.setValue (imgname);
+  query.bindValue (1, imgnameval);
+  query.exec ();
 }
 
 void

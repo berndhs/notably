@@ -29,7 +29,12 @@ DBManage::DBManage (QSqlDatabase & db)
           << "important"
           << "dead"
           << "done";
-          
+   dbElementList << "notes"      
+                 << "tags"
+                 << "tagrefs"
+                 << "imagerefs"
+                 << "identndx"
+                 << "uniquetags";
 }
 
 
@@ -37,7 +42,6 @@ void
 DBManage::MakeTables (QString connectionName)
 {
   OpenDB (connectionName);
-qDebug () << " making tables ";
   QString dirname = pConf->Directory();
   QDir dir (dirname);
   if (!dir.exists()) {
@@ -48,10 +52,10 @@ qDebug () << " making tables ";
   file.open (QFile::WriteOnly);
   file.write (QString("").toLatin1(), 0);
   file.close ();
-  MakeTable ("notes");
-  MakeTable ("tags");
-  MakeTable ("tagrefs");
-  MakeTable ("identndx");
+  QStringList::iterator dbit;
+  for (dbit = dbElementList.begin(); dbit != dbElementList.end(); dbit++ ) {
+    MakeTable (*dbit);
+  }
   InitTags  ();
 }
 

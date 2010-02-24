@@ -82,6 +82,7 @@ public slots:
   void GrabHtml ();
   void GrabLink ();
   void DoNoteTags ();
+  void ImageInserted (QString imgname);
   
   void ReloadDB ();
   

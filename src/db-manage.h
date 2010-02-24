@@ -39,6 +39,7 @@ private:
   QSqlDatabase   *pDB;
   NotaConf       *pConf;
   QStringList    tagList;
+  QStringList    dbElementList;
 
 };
 

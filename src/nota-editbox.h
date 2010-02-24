@@ -42,6 +42,10 @@ public:
 public slots:
 
   void paste ();
+
+signals:
+
+  void NewImage (QString filename);
   
 private:
 

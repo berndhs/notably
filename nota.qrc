@@ -5,6 +5,8 @@
   <file>qrcfiles/schema-tags.sql</file>
   <file>qrcfiles/schema-tagrefs.sql</file>
   <file>qrcfiles/schema-identndx.sql</file>
+  <file>qrcfiles/schema-uniquetags.sql</file>
+  <file>qrcfiles/schema-imagerefs.sql</file>
   <file>img/nb.png</file>
   <file>img/notag.png</file>
   <file>img/dead.png</file>
