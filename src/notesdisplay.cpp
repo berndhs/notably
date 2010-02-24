@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QCursor>
 
 //
@@ -513,16 +514,30 @@ void
 NotesDisplay::PublishCurrent ()
 {
   QString wholeName (pConf->Directory() + QDir::separator() + noteName->text() + ".html");
-  QFile pageFile (wholeName);
-  pageFile.open (QFile::WriteOnly);
-  pageFile.write (editBox->toHtml().toLocal8Bit());
-  pageFile.close();
-  QMessageBox report;
-  QString savedMessage = QString (tr("Note saved as %1"))
-                            .arg (wholeName);
-  report.setText (savedMessage);
-  QTimer::singleShot (20000, &report, SLOT(accept()));
-  report.exec ();
+
+  QString dataHome = QDesktopServices::storageLocation 
+                         (QDesktopServices::DataLocation);
+  QString copyToHere = QFileDialog::getSaveFileName(this, tr("Save File"),
+                            wholeName,
+                            tr("All Files (*.*)"));
+  if (copyToHere.length() > 0) {
+    QFile pageFile (copyToHere);
+    pageFile.open (QFile::WriteOnly);
+    qint64 nbytes = pageFile.write (editBox->toHtml().toLocal8Bit());
+    pageFile.close();
+    QMessageBox report;
+    QString savedMessage;
+    if (nbytes > 0) {
+      savedMessage = QString (tr("Note saved as %1"))
+                              .arg (copyToHere);  
+    } else {
+      savedMessage = QString (tr("Could not write %1 !"))
+                              .arg (copyToHere);
+    }
+    report.setText (savedMessage);
+    QTimer::singleShot (20000, &report, SLOT(accept()));
+    report.exec ();
+  }
 }
 
 void
@@ -602,7 +617,6 @@ NotesDisplay::WriteNote (const qint64 id,
                        const QString & name,
                        const QString & text)
 {
-
   QSqlQuery InsertQuery (db);
   QString queryPattern ("insert or replace into 'notes' (noteid, usergivenid, notetext)");
   queryPattern.append (" VALUES (?,?,?)");
@@ -614,7 +628,18 @@ NotesDisplay::WriteNote (const qint64 id,
   for (int i=0; i<3; i++) {
     InsertQuery.bindValue (i,v[i]);
   }
-  InsertQuery.exec ();
+  bool worked = InsertQuery.exec ();
+  QString result;
+  if (worked) {
+    result = QString(tr("saved"));
+  } else {
+    result = QString(tr("save failed!"));
+  }
+  QMessageBox box;
+  box.setText (result);
+  int delay = (worked ? 2000 : 15000);
+  QTimer::singleShot (delay, &box, SLOT (accept()));
+  box.exec ();
 }
 
 void

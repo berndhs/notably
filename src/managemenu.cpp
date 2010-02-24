@@ -1,5 +1,8 @@
 
 #include "managemenu.h"
+#include <QDesktopServices>
+#include <QMessageBox>
+#include <QTimer>
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -21,19 +24,31 @@ ManageMenu::ManageMenu (QWidget * parent)
  fileDialog (this)
 {
   fileUI.setupUi (&fileDialog);
+  fileDialog.setWindowTitle (tr("Change Data Location"));
   fileNameAction = new QAction (tr("Data Location"),this);
   menu.addAction (fileNameAction);
   connect (fileNameAction, SIGNAL (triggered()), this, SLOT(ChangeFilename()));
-  ConnectDialog ();
+
+  exportAction = new QAction (tr("Export All"), this);
+  menu.addAction (exportAction);
+  connect (exportAction, SIGNAL (triggered()), this, SLOT (ExportAll()));
+  
+  ConnectDialogs ();
 }
 
 void
-ManageMenu::ConnectDialog ()
+ManageMenu::ConnectDialogs ()
 {
   connect (fileUI.saveButton, SIGNAL(clicked()),
-           this, SLOT (Save()));
+           this, SLOT (SaveLoc()));
   connect (fileUI.cancelButton, SIGNAL (clicked()),
-           this, SLOT (Cancel()));
+           this, SLOT (CancelLoc()));
+  #if 0
+  connect (exportUI.saveButton, SIGNAL (clicked()),
+           this, SLOT (DoExport()));
+  connect (exportUI.cancelButton, SIGNAL (clicked()),
+           this, SLOT (CancelExport()));
+  #endif
 }
 void
 ManageMenu::Exec (QPoint here)
@@ -52,7 +67,35 @@ ManageMenu::ChangeFilename ()
 }
 
 void
-ManageMenu::Save ()
+ManageMenu::ExportAll ()
+{
+  QString dataHome = QDesktopServices::storageLocation 
+                         (QDesktopServices::DataLocation);
+  QString copyToHere = QFileDialog::getSaveFileName(this, tr("Save File"),
+                            dataHome,
+                            tr("All Files (*.*)"));
+  if (copyToHere.length() > 0) {
+    QFile oldDB (pConf->CompleteDBName());
+    QFile newDB (copyToHere);
+    if (newDB.exists()) {
+      newDB.remove();
+    }
+    bool copied = oldDB.copy (copyToHere);
+    QString status (copyToHere);
+    if (copied) {
+      status.append (QString (tr(" Written OK")));
+    } else {
+      status.append (QString (tr(" Copy  failed!")));
+    }
+    QMessageBox box;
+    box.setText (status);
+    QTimer::singleShot (30000,&box,SLOT(accept()));
+    box.exec ();
+  }
+}
+
+void
+ManageMenu::SaveLoc ()
 {
   pConf->SetFileName (fileUI.notesFileEdit->text());
   pConf->SetDirectory (fileUI.directoryEdit->text());
@@ -62,9 +105,15 @@ ManageMenu::Save ()
 }
 
 void
-ManageMenu::Cancel ()
+ManageMenu::CancelLoc ()
 {
   fileDialog.reject ();
+}
+
+void
+ManageMenu::DoExport ()
+{
+  qDebug () << " do export called";
 }
 
 } // namespace

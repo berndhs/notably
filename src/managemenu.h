@@ -15,6 +15,7 @@
 #include "deliberate.h"
 #include <QWidget>
 #include <QMenu>
+#include <QFileDialog>
 #include "delib-debug.h"
 #include "notaconf.h"
 #include "ui_changefile.h"
@@ -35,8 +36,10 @@ public:
 public slots:
 
   void ChangeFilename ();
-  void Save ();
-  void Cancel ();
+  void SaveLoc ();
+  void CancelLoc ();
+  void DoExport ();
+  void ExportAll ();
   
 signals:
 
@@ -44,15 +47,17 @@ signals:
 
 private:
 
-  void ConnectDialog ();
+  void ConnectDialogs ();
 
   QMenu   menu;
   Ui_ChangeFile   fileUI;
   QDialog         fileDialog;
   
+  
   NotaConf  *pConf;
   
   QAction  *fileNameAction;
+  QAction  *exportAction;
   
 };
 

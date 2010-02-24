@@ -88,14 +88,12 @@ DBManage::InitTags ()
   QString filenamePattern (":img/%1.png");
   QString qryStr ("insert or replace into tags (tagname, icon) values (?, ?)");
   QStringList::iterator tagit;
-  qDebug () << " init tags: " << tagList;
   for (tagit = tagList.begin(); tagit != tagList.end(); tagit++) {
     QString name = *tagit;
     QString filename = filenamePattern.arg(name);
     QFile file(filename);
     file.open (QFile::ReadOnly);
     QByteArray imgbytes = file.readAll();
-    qDebug () << " tag image " << filename << " has byte count " << imgbytes.size();
     file.close ();
     QSqlQuery query (*pDB);
     QVariant tagname;
@@ -106,7 +104,6 @@ DBManage::InitTags ()
     query.bindValue (0,tagname);
     query.bindValue (1,iconbytes);
     bool ok = query.exec ();
-    qDebug () << " tag insert query " << qryStr << " was " << ok;
   }
 }
 } // namespace
