@@ -87,7 +87,10 @@ ManageMenu::ExportAll ()
     } else {
       status.append (QString (tr(" Copy  failed!")));
     }
-    QMessageBox box;
+    QMessageBox box(this);
+    Qt::WindowFlags flags = box.windowFlags();
+    flags |= Qt::FramelessWindowHint;
+    box.setWindowFlags (flags);
     box.setText (status);
     QTimer::singleShot (30000,&box,SLOT(accept()));
     box.exec ();

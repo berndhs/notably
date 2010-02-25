@@ -45,5 +45,15 @@ Settings ()
   return *mySettings;
 }
 
+bool
+IsMaemo ()
+{
+  #ifdef Q_WS_MAEMO_5
+  return true;
+  #else
+  return false;
+  #endif
+}
+
 
 }

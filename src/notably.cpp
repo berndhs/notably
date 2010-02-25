@@ -40,9 +40,8 @@ main (int argc, char* argv[])
   
   pv.CLIVersion ();
   
-  nota::NotesDisplay notes;
+  nota::NotesDisplay notes (App);
   nota::NotaConf     conf;
-  notes.SetApplication (&App);
   notes.SetConf (conf);
   notes.Start ();
   notes.show ();

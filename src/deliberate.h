@@ -26,6 +26,8 @@ void SetSettings (QSettings & settings);
 
 QSettings & Settings ();
 
+bool IsMaemo ();
+
 }
 
 

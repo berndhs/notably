@@ -48,7 +48,7 @@ Q_OBJECT
 
 public:
 
-  NotesDisplay ();
+  NotesDisplay (QApplication &app);
   
   void SetApplication (QApplication *pA);
   void SetConf        (NotaConf & conf);
@@ -62,6 +62,7 @@ public:
 public slots:
 
   void quit ();
+  void AboutToQuit ();
   void UserPicked (QListWidgetItem *item);
   void SaveCurrent ();
   void PublishCurrent ();
@@ -95,6 +96,7 @@ private:
 
   void SetupMenu ();
   void SetupEdit ();
+  void ShutdownClean ();
   void ReportText ();
   void MakeTables ();
   void MakeTable (QString table);
@@ -123,6 +125,8 @@ private:
                                   const QString   &name);
 
   QApplication *pApp;
+  
+  bool          didShutdownActions;
   
   NotaConf     *pConf; 
   NoteMenu      noteMenu;

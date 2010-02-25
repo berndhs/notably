@@ -88,7 +88,10 @@ EditMenu::GrabLink ()
 void
 EditMenu::EmitScreenShot (const QString msg, const bool whole)
 {
-  QMessageBox box;
+  QMessageBox box(this);
+  Qt::WindowFlags flags = box.windowFlags();
+  flags |= Qt::FramelessWindowHint;
+  box.setWindowFlags (flags);
   box.setText (msg);
   box.addButton (QMessageBox::Cancel);
   box.addButton (QMessageBox::Ok);

@@ -33,8 +33,9 @@ using namespace deliberate;
 
 namespace nota {
 
-NotesDisplay::NotesDisplay ()
-:pApp(0),
+NotesDisplay::NotesDisplay (QApplication & app)
+:pApp(&app),
+ didShutdownActions (false),
  pConf(0),
  noteMenu(this),
  editMenu(this),
@@ -63,6 +64,9 @@ NotesDisplay::NotesDisplay ()
     tagLabel[t].hide();
   }
   ShowNothing ();
+  if (pApp) {
+    connect (pApp, SIGNAL (aboutToQuit()), this, SLOT (AboutToQuit()));
+  }
   connect (notesIndex, SIGNAL (itemActivated (QListWidgetItem*)),
            this, SLOT (UserPicked (QListWidgetItem*)));
   connect (noteName, SIGNAL (textEdited (const QString &)), 
@@ -79,7 +83,9 @@ void
 NotesDisplay::SetupMenu ()
 {
   exitAction = new QAction (tr("&Quit") , this);
-  menubar->addAction (exitAction);
+  if (!deliberate::IsMaemo ()) {
+    menubar->addAction (exitAction);
+  }
   saveAction = new QAction (tr("&Save Note"), this);
   menubar->addAction (saveAction);
   noteMenuAction = new QAction (tr("&Note..."), this);
@@ -168,18 +174,6 @@ NotesDisplay::Start ()
   if (pConf) {
     QDir::setCurrent (pConf->Directory());
   }
-  #if 0
-  QString mess;
-  int w = QApplication::desktop()->widthMM();
-  int h = QApplication::desktop()->heightMM();
-  mess.append (" width mm ");
-  mess.append (QString::number(w));
-  mess.append (" height mm ");
-  mess.append (QString::number(h));
-  QMessageBox box;
-  box.setText (mess);
-  box.exec ();
-  #endif
 }
 
 void
@@ -207,14 +201,30 @@ NotesDisplay::DoNoteTags ()
   ListTags (currentId);
 }
 
+void
+NotesDisplay::ShutdownClean ()
+{
+  if (!didShutdownActions) {
+    CloseDB ();
+    Settings().sync();
+    didShutdownActions = true;
+  }
+}
+
 
 void
 NotesDisplay::quit ()
 {
-  Settings().sync();
+  ShutdownClean();
   if (pApp) {
     pApp->quit();
   }
+}
+
+void
+NotesDisplay::AboutToQuit ()
+{
+  ShutdownClean();
 }
 
 void
@@ -407,6 +417,8 @@ NotesDisplay::GetTagPix (const QString tagname, QPixmap & pix)
     pix = noTagPix;
   }
 }
+
+
 void
 NotesDisplay::ListTags (const qint64 noteid)
 {
@@ -554,10 +566,13 @@ NotesDisplay::PublishCurrent ()
     qint64 nbytes = pageFile.write (editBox->toHtml().toLocal8Bit());
     pageFile.close();
     QFileInfo destInfo (copyToHere);
-    QMessageBox report;
+    QMessageBox report (this);
+    Qt::WindowFlags flags = report.windowFlags();
+    flags |= Qt::FramelessWindowHint;
+    report.setWindowFlags (flags);
     QString savedMessage;
     if (nbytes > 0) {
-      savedMessage = QString (tr("Note saved as %1"))
+      savedMessage = QString (tr("Note exported as %1"))
                               .arg (copyToHere);  
       if (destInfo.path() != defaultInfo.path()) {
         CopyPageImages (currentId, defaultInfo.path(), destInfo.path ());
@@ -698,7 +713,11 @@ NotesDisplay::WriteNote (const qint64 id,
   } else {
     result = QString(tr("save failed!"));
   }
-  QMessageBox box;
+  QMessageBox box(this);
+  Qt::WindowFlags flags = box.windowFlags();
+  flags |= Qt::FramelessWindowHint;
+  box.setWindowFlags (flags);
+  
   box.setText (result);
   int delay = (worked ? 2000 : 15000);
   QTimer::singleShot (delay, &box, SLOT (accept()));
