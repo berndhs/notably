@@ -165,6 +165,9 @@ NotesDisplay::Start ()
     resize (newsize);
   }
   FillNotesList (notesIndex);
+  if (pConf) {
+    QDir::setCurrent (pConf->Directory());
+  }
   #if 0
   QString mess;
   int w = QApplication::desktop()->widthMM();
@@ -541,9 +544,7 @@ void
 NotesDisplay::PublishCurrent ()
 {
   QString wholeName (pConf->Directory() + QDir::separator() + noteName->text() + ".html");
-
-  QString dataHome = QDesktopServices::storageLocation 
-                         (QDesktopServices::DataLocation);
+  QFileInfo defaultInfo (wholeName);
   QString copyToHere = QFileDialog::getSaveFileName(this, tr("Save File"),
                             wholeName,
                             tr("All Files (*.*)"));
@@ -552,11 +553,15 @@ NotesDisplay::PublishCurrent ()
     pageFile.open (QFile::WriteOnly);
     qint64 nbytes = pageFile.write (editBox->toHtml().toLocal8Bit());
     pageFile.close();
+    QFileInfo destInfo (copyToHere);
     QMessageBox report;
     QString savedMessage;
     if (nbytes > 0) {
       savedMessage = QString (tr("Note saved as %1"))
                               .arg (copyToHere);  
+      if (destInfo.path() != defaultInfo.path()) {
+        CopyPageImages (currentId, defaultInfo.path(), destInfo.path ());
+      }
     } else {
       savedMessage = QString (tr("Could not write %1 !"))
                               .arg (copyToHere);
@@ -565,6 +570,37 @@ NotesDisplay::PublishCurrent ()
     QTimer::singleShot (20000, &report, SLOT(accept()));
     report.exec ();
   }
+}
+
+void
+NotesDisplay::CopyPageImages (const qint64 noteid,
+                              const QString srcdir,
+                              const QString destdir)
+{
+  QString selectPattern ("select imageref from imagerefs where noteid = %1");
+  QString select = selectPattern.arg(QString::number(noteid));
+  QSqlQuery query (db);
+  QString imgname;
+  QString srcfile;
+  QString destfile;
+  QChar    sep = QDir::separator();
+  bool ok = query.exec (select);
+  QDir dest (destdir);
+  if (!dest.exists()) {
+    dest.mkpath (destdir);
+  }
+  while (query.next()) {
+    imgname = query.value(0).toString();
+    srcfile = srcdir + sep + imgname;
+    destfile = destdir + sep + imgname;
+    QFile oldFile (srcfile);
+    QFile newFile (destfile);
+    if (newFile.exists()) {
+      newFile.remove();
+    }
+    ok = oldFile.copy (destfile);
+  }
+  
 }
 
 void

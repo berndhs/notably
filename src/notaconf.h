@@ -27,18 +27,22 @@ public:
   QString  DataFile ();
   QString  CompleteDBName ();
   QString  Directory ();
+  QString  ImagePath ();
+  QString  CompleteImagePath ();
   bool     SupportPartScreenShot ();
   
   QString FileName ();
   
   void    SetFileName (QString fn);
   void    SetDirectory (QString dir);
+  void    SetImagePath (QString dir);
   void    Sync ();
   
 private:
 
   QString    mPath;
   QString    mDatafile;
+  QString    mImgPath;
   
 };
 

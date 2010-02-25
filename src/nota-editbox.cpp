@@ -131,9 +131,14 @@ EditBox::InsertImage (QImage & img)
 {
   QString imgname = ImgFilename (img);
   if (pConf) {
-    QString path = pConf->Directory ();
+    QString path = pConf->ImagePath ();
     imgname.prepend (QDir::separator());
     imgname.prepend (path);
+    QString completePath = pConf->CompleteImagePath ();
+    QDir imgdir (completePath);
+    if (!imgdir.exists()) {
+      imgdir.mkpath (completePath);
+    }
     img.save (imgname);
     QString pattern (" <img src=\"%1\" /> ");
     insertHtml (pattern.arg(imgname));

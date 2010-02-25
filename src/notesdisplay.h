@@ -107,6 +107,9 @@ private:
   
   void ListTags (const qint64 noteid);
   void GetTagPix (const QString tagname, QPixmap & pix);
+  void CopyPageImages (const qint64 notesid, 
+                   const QString srcdir,
+                   const QString destdir);
   void OpenDB ();
   void WriteNote (const qint64 id, 
                 const QString & name,

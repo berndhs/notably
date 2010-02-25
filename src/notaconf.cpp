@@ -35,12 +35,18 @@ NotaConf::NotaConf ()
   if (Settings().contains("datafile")) {
     mDatafile = Settings().value ("datafile", mDatafile).toString();
   }
+  
+  mImgPath = "notably_images";
+  if (Settings().contains("imgpath")) {
+    mImgPath = Settings().value("imgpath", mImgPath).toString ();
+  }
 }
 
 NotaConf::~NotaConf ()
 {
   Settings().setValue ("datapath",mPath);
   Settings().setValue ("datafile",mDatafile);
+  Settings().setValue ("imgpath", mImgPath);
   Settings().sync();
 }
 
@@ -76,6 +82,18 @@ NotaConf::FileName ()
   return mDatafile;
 }
 
+QString
+NotaConf::ImagePath ()
+{
+  return mImgPath;
+}
+
+QString
+NotaConf::CompleteImagePath ()
+{
+  return mPath + QDir::separator() + mImgPath;
+}
+
 void
 NotaConf::SetFileName (QString fn)
 {
@@ -88,6 +106,13 @@ NotaConf::SetDirectory (QString dir)
 {
   mPath = dir;
   Settings().setValue ("datapath",mPath);
+}
+
+void
+NotaConf::SetImagePath (QString dir)
+{
+  mImgPath = dir;
+  Settings().setValue ("imgpath", mImgPath);
 }
 
 bool
