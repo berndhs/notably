@@ -14,6 +14,7 @@
 //
 
 #include "delib-debug.h"
+#include "utility-types.h"
 #include "ui_notetags.h"
 #include <QDialog>
 #include <QSqlDatabase>
@@ -22,14 +23,10 @@
 
 namespace nota {
 
-typedef std::map <QString, QPixmap*> TagPixMapType;
 
 class NoteTagEdit : public QDialog, public Ui_NoteTagDialog {
 
 Q_OBJECT
-
-private:
-
 
 public:
 

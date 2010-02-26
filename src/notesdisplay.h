@@ -15,14 +15,16 @@
 
 #include <QMainWindow>
 #include <QApplication>
+#include "utility-types.h"
 #include "nota-editbox.h"
 #include "notetag-edit.h"
-#include <ui_mainwin.h>
+#include "ui_mainwin.h"
 #include "notaconf.h"
 #include "notemenu.h"
 #include "editmenu.h"
 #include "managemenu.h"
 #include "db-manage.h"
+#include "content-menu.h"
 #include "version.h"
 #include "helpbox.h"
 #include "nota-help.h"
@@ -75,6 +77,8 @@ public slots:
   void ShowNothing ();
   void ShowNoteMenu ();
   void ScheduleManage ();
+  void ScheduleContent ();
+  void DoContent ();
   void ShowManage ();
   void DebugCheck ();
   void ExecNoteMenu ();
@@ -84,6 +88,8 @@ public slots:
   void GrabLink ();
   void DoNoteTags ();
   void ImageInserted (QString imgname);
+  void SelectionMade (NoteIdSetType & idset);
+  void SelectionMade ();
   
   void ReloadDB ();
   
@@ -119,6 +125,7 @@ private:
   void CloseDB ();
   
   void FillNotesList (  QListWidget *notesIndex);
+  void FillNotesList ( QListWidget * notesIndex, NoteIdSetType & idset);
   
   QListWidgetItem * ListThisNote (  QListWidget *notesIndex,
                                   const qint64    id,
@@ -132,6 +139,7 @@ private:
   NoteMenu      noteMenu;
   EditMenu      editMenu;
   ManageMenu    manageMenu;
+  ContentMenu   contentMenu;
   HelpBox       helpBox;
   NotaHelp      helpBrowser;
   NoteTagEdit   noteTagEditor;
@@ -166,6 +174,7 @@ private:
   QAction    *helpAction;
   QAction    *editAction;
   QAction    *manageAction;
+  QAction    *contentAction;
   
   QShortcut  *exitShort;
   QShortcut  *noteMenuShort;
@@ -173,6 +182,7 @@ private:
   QShortcut  *saveShort;
   QShortcut  *manageShort;
   QShortcut  *helpShort;
+  QShortcut  *contentShort;
   
   QTimer     debugTimer;
 

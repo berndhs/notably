@@ -40,6 +40,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
  noteMenu(this),
  editMenu(this),
  manageMenu (this),
+ contentMenu (this),
  helpBox (this),
  noteTagEditor (this),
  dbManager (db),
@@ -54,6 +55,8 @@ NotesDisplay::NotesDisplay (QApplication & app)
   editBox->SetConf (pConf);
   editMenu.SetConf (pConf);
   manageMenu.SetConf (pConf);
+  contentMenu.SetConf (pConf);
+  contentMenu.SetDB (db);
   noteTagEditor.SetDB (db);
   noTagPix.load (":img/notag.png");
   noLabel.hide();
@@ -94,6 +97,8 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (editAction);
   manageAction = new QAction (tr("M&anage..."), this);
   menubar->addAction (manageAction);
+  contentAction = new QAction (tr("Con&tent..."), this);
+  menubar->addAction (contentAction);
   helpAction = new QAction (tr("&Help"), this);
   menubar->addAction (helpAction);
   
@@ -109,6 +114,8 @@ NotesDisplay::SetupMenu ()
   connect (helpShort, SIGNAL (activated()), this, SLOT (Help()));
   manageShort = new QShortcut (QKeySequence (tr("Ctrl+A")), this);
   connect (manageShort, SIGNAL (activated()), this, SLOT (ScheduleManage()));
+  contentShort = new QShortcut (QKeySequence (tr("Ctrl+T")), this);
+  connect (contentShort, SIGNAL (activated()), this, SLOT (ScheduleContent()));
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
  
@@ -117,6 +124,7 @@ NotesDisplay::SetupMenu ()
   connect (noteMenuAction, SIGNAL (triggered()), this, SLOT (ShowNoteMenu()));
   connect (editAction, SIGNAL (triggered()), this, SLOT (ScheduleEdit()));
   connect (manageAction, SIGNAL (triggered()), this, SLOT (ScheduleManage()));
+  connect (contentAction, SIGNAL (triggered()), this, SLOT (ScheduleContent()));
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
   
   connect (&noteMenu, SIGNAL (SaveNote()), this, SLOT (SaveCurrent()));
@@ -128,6 +136,11 @@ NotesDisplay::SetupMenu ()
   
   connect (&manageMenu, SIGNAL (SigReload()), this, SLOT (ReloadDB()));
   
+  connect (&contentMenu, SIGNAL (Selected (NoteIdSetType &)),
+           this, SLOT (SelectionMade (NoteIdSetType &)));
+  connect (&contentMenu, SIGNAL (DoneSelection ()),
+           this, SLOT (SelectionMade ()));
+
   connect (&helpBox, SIGNAL (WantHelp()), this, SLOT (HelpHelp ()));
   connect (&helpBox, SIGNAL (WantLicense()), this, SLOT (LicenseHelp()));
 }
@@ -158,6 +171,7 @@ NotesDisplay::SetConf (NotaConf & conf)
   editBox->SetConf (pConf);
   editMenu.SetConf (pConf);
   manageMenu.SetConf (pConf);
+  contentMenu.SetConf (pConf);
   dbManager.SetConf (pConf);
 }
 
@@ -307,6 +321,12 @@ NotesDisplay::ScheduleManage ()
 }
 
 void
+NotesDisplay::ScheduleContent ()
+{
+  QTimer::singleShot (50, this, SLOT (DoContent()));
+}
+
+void
 NotesDisplay::ExecEditMenu ()
 {
   editMenu.Exec (editBox->mapToGlobal(QPoint(0,0)));
@@ -323,6 +343,13 @@ NotesDisplay::ShowManage ()
 {
   manageMenu.Exec (editBox->mapToGlobal (QPoint(0,0)));
 }
+
+void
+NotesDisplay::DoContent ()
+{
+  contentMenu.Exec (editBox->mapToGlobal (QPoint(0,0)));
+}
+
 void
 NotesDisplay::UserPicked (QListWidgetItem *item)
 {
@@ -675,6 +702,39 @@ NotesDisplay::FillNotesList (  QListWidget * notesIndex)
     name = ListQuery.value(nameField).toString();
     ListThisNote (notesIndex, id, name);
   }
+}
+
+void
+NotesDisplay::FillNotesList ( QListWidget * notesIndex, 
+                              NoteIdSetType & idset)
+{
+  notesIndex->clear ();
+  QString qryPattern ("select  usergivenid from 'notes' where noteid=%1");
+  NoteIdSetType::iterator idit;
+  QSqlQuery query (db);
+  QString name;
+  QString qryStr;
+  for (idit = idset.begin(); idit != idset.end(); idit++) {
+    qryStr = qryPattern.arg(*idit);
+    query.exec (qryStr);
+    if (query.next()) {
+      name = query.value(0).toString();
+      ListThisNote (notesIndex, *idit, name);
+    }
+  }
+}
+
+void
+NotesDisplay::SelectionMade (NoteIdSetType & idset)
+{
+  ShowNothing();
+  FillNotesList (notesIndex, idset);
+}
+
+void
+NotesDisplay::SelectionMade ()
+{
+  FillNotesList (notesIndex, contentMenu.SelectedNotes());
 }
 
 QListWidgetItem *
