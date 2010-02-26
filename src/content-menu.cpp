@@ -112,6 +112,7 @@ ContentMenu::SelectAllNotes (bool doemit)
 void
 ContentMenu::NotagNotes ()
 {
+  #if 0
   SelectAllNotes (false);
   QString qryStr ("select distinct noteid from 'tagrefs' where 1");
   QSqlQuery taggedquery (*pDB);
@@ -120,6 +121,17 @@ ContentMenu::NotagNotes ()
   while (taggedquery.next()) {
     noteid = taggedquery.value(0).toLongLong();
     noteSet.remove (noteid);
+  }
+  #endif
+  noteSet.clear ();
+  QString qryStr ("select noteid from notes where 1 "
+                  " except select distinct noteid from tagrefs where 1");
+  QSqlQuery notagquery (*pDB);
+  notagquery.exec (qryStr);
+  qint64 noteid;
+  while (notagquery.next()) {
+    noteid = notagquery.value(0).toLongLong();
+    noteSet.insert (noteid);
   }
   emit Selected (noteSet);
 }
