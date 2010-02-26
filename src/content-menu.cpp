@@ -23,7 +23,8 @@ ContentMenu::ContentMenu (QWidget *parent)
 :QWidget(parent),
  pConf (0),
  pDB (0),
- tagSearch (this)
+ tagSearch (this),
+ bookPick (this)
 {
   tagsAction = new QAction (tr("Find by Tag"), this);
   menu.addAction (tagsAction);
@@ -38,6 +39,7 @@ ContentMenu::ContentMenu (QWidget *parent)
   
   connect (tagsAction, SIGNAL (triggered()), this, SLOT (TagSearchExec()));
   connect (notagAction, SIGNAL (triggered()), this, SLOT (NotagNotes()));
+  connect (bookAction, SIGNAL (triggered()), this, SLOT (Books ()));
   connect (allAction, SIGNAL (triggered()), this, SLOT (SelectAllNotes()));
 }
 
@@ -46,6 +48,7 @@ ContentMenu::SetDB (QSqlDatabase & db)
 {
   pDB = &db;
   tagSearch.SetDB (db);
+  bookPick.SetDB (db);
 }
 
 NoteIdSetType &
@@ -70,6 +73,16 @@ ContentMenu::TagSearchExec ()
     //emit DoneSelection ();
   } else {
     noteSet.clear ();
+  }
+}
+
+void
+ContentMenu::Books ()
+{
+  bookPick.Exec ();
+  if (bookPick.SelectedBook()) {
+    FindNotesByBook (bookPick.TitleSelected());
+    emit Selected (noteSet);
   }
 }
 
@@ -134,6 +147,23 @@ ContentMenu::NotagNotes ()
     noteSet.insert (noteid);
   }
   emit Selected (noteSet);
+}
+
+
+void
+ContentMenu::FindNotesByBook (QString booktitle)
+{
+  QString qryPattern 
+    ("select distinct noteid from bookrefs where bookname ='%1'");
+  QString qryStr = qryPattern.arg(booktitle);
+  QSqlQuery query (*pDB);
+  query.exec (qryStr);
+  noteSet.clear();
+  qint64  noteid;
+  while (query.next()) {
+    noteid = query.value(0).toLongLong();
+    noteSet.insert (noteid);
+  }
 }
 
 

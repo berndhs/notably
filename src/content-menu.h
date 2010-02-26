@@ -15,6 +15,7 @@
 #include "deliberate.h"
 #include "notaconf.h"
 #include "tagsearch.h"
+#include "book-pick.h"
 #include <QSqlDatabase>
 #include <QWidget>
 #include <QMenu>
@@ -42,6 +43,7 @@ public slots:
   void TagSearchExec ();
   void SelectAllNotes (bool doemit = true);
   void NotagNotes ();
+  void Books ();
 
 signals:
 
@@ -52,6 +54,7 @@ private:
 
   void FindSelectedNotes (NoteIdSetType & results,
                           QStringList & tagnames);
+  void FindNotesByBook (QString booktitle);
 
   NotaConf   *pConf;
   QSqlDatabase *pDB;
@@ -65,6 +68,8 @@ private:
   QAction   *allAction;
   
   TagSearch  tagSearch ;
+  
+  BookPick   bookPick;
   
   NoteIdSetType   noteSet;
   

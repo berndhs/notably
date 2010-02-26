@@ -27,6 +27,7 @@
 int 
 main (int argc, char* argv[])
 {
+
   QCoreApplication::setApplicationName ("notably");
   QCoreApplication::setOrganizationName ("BerndStramm");
   QCoreApplication::setOrganizationDomain ("bernd-stramm.com");
