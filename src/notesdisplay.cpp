@@ -65,6 +65,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
   for (int t=0; t<maxTags; t++) {
     tagLabel[t].setParent(this);
     tagLabel[t].hide();
+    tagPix[t].load (":img/notag.png");
   }
   ShowNothing ();
   if (pApp) {
@@ -429,7 +430,7 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
 
 
 void
-NotesDisplay::GetTagPix (const QString tagname, QPixmap & pix)
+NotesDisplay::GetTagPix (const QString tagname, int t)
 {
   OpenDB ();
   QString qryPattern ("select icon from tags where tagname = '%1'");
@@ -437,11 +438,12 @@ NotesDisplay::GetTagPix (const QString tagname, QPixmap & pix)
   QSqlQuery query (db);
   query.exec (qryStr);
   if (query.next()) {
-    int index = query.record().indexOf ("icon");
-    QByteArray bytes = query.value(index).toByteArray();
-    pix.loadFromData (bytes);
+    QByteArray bytes = query.value(0).toByteArray();
+    QPixmap localpix;
+    localpix.loadFromData (bytes);
+    tagPix[t] = localpix;
   } else {
-    pix = noTagPix;
+    tagPix[t] = noTagPix;
   }
 }
 
@@ -457,18 +459,20 @@ NotesDisplay::ListTags (const qint64 noteid)
   topleft += offset;
   int ntags = tagnames.size();
   if (tagnames.size() < 1) {
-    QPoint tagPos (topleft);
-    noLabel.move (tagPos);
-    noLabel.show ();
-    noLabel.raise ();
-    noLabel.clearFocus ();
+    noLabel.hide();
+    tagLabel[0].setPixmap (noTagPix);
+    tagLabel[0].resize (noTagPix.size());
+    tagLabel[0].move (topleft);
+    tagLabel[0].show ();
+    tagLabel[0].raise ();
+    tagLabel[0].clearFocus();
     numTags = 1;
   } else {
     noLabel.hide ();
     if (ntags > maxTags) { ntags = maxTags; }
     QPoint  here = topleft;
     for (int t=0; t<ntags; t++) {
-      GetTagPix (tagnames[t], tagPix[t]);
+      GetTagPix (tagnames[t], t);
       tagLabel[t].setPixmap (tagPix[t]);
       tagLabel[t].resize (tagPix[t].size());
       tagLabel[t].move (here);
@@ -479,7 +483,7 @@ NotesDisplay::ListTags (const qint64 noteid)
     }
     numTags = ntags;
   }
-  for (int mt=ntags; mt<maxTags; mt++) {
+  for (int mt=numTags; mt<maxTags; mt++) {
     tagLabel[mt].hide();
   }
 }

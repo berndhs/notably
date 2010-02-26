@@ -40,7 +40,8 @@ public:
 public slots:
 
   void TagSearchExec ();
-  void SelectAllNotes ();
+  void SelectAllNotes (bool doemit = true);
+  void NotagNotes ();
 
 signals:
 
@@ -60,6 +61,7 @@ private:
   QAction   *searchAction;
   QAction   *bookAction;
   QAction   *tagsAction;
+  QAction   *notagAction;
   QAction   *allAction;
   
   TagSearch  tagSearch ;

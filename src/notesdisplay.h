@@ -114,7 +114,7 @@ private:
                  const QString & name);
   
   void ListTags (const qint64 noteid);
-  void GetTagPix (const QString tagname, QPixmap & pix);
+  void GetTagPix (const QString tagname, int t);
   void CopyPageImages (const qint64 notesid, 
                    const QString srcdir,
                    const QString destdir);

@@ -27,6 +27,8 @@ ContentMenu::ContentMenu (QWidget *parent)
 {
   tagsAction = new QAction (tr("Find by Tag"), this);
   menu.addAction (tagsAction);
+  notagAction = new QAction (tr("Select untagged Notes"), this);
+  menu.addAction (notagAction);
   bookAction = new QAction (tr("Select a Book"), this);
   menu.addAction (bookAction);
   searchAction = new QAction (tr("Search..."), this);
@@ -35,6 +37,7 @@ ContentMenu::ContentMenu (QWidget *parent)
   menu.addAction (allAction);
   
   connect (tagsAction, SIGNAL (triggered()), this, SLOT (TagSearchExec()));
+  connect (notagAction, SIGNAL (triggered()), this, SLOT (NotagNotes()));
   connect (allAction, SIGNAL (triggered()), this, SLOT (SelectAllNotes()));
 }
 
@@ -81,8 +84,7 @@ ContentMenu::FindSelectedNotes (NoteIdSetType & results,
   results.clear();
   for (tagit = tagnames.begin(); tagit != tagnames.end(); tagit++) {
     QString qryStr = qryPattern.arg (*tagit);
-    bool ok = refquery.exec (qryStr);
-    
+    refquery.exec (qryStr);
     while (refquery.next()) {
       noteid = refquery.value(0).toLongLong();
       results.insert (noteid);
@@ -91,7 +93,7 @@ ContentMenu::FindSelectedNotes (NoteIdSetType & results,
 }
 
 void
-ContentMenu::SelectAllNotes ()
+ContentMenu::SelectAllNotes (bool doemit)
 {
   QString qryStr ("select noteid from 'notes' where 1");
   QSqlQuery allquery (*pDB);
@@ -101,6 +103,23 @@ ContentMenu::SelectAllNotes ()
   while (allquery.next()) {
     noteid = allquery.value(0).toLongLong();
     noteSet.insert (noteid);
+  }
+  if (doemit ) {
+    emit Selected (noteSet);
+  }
+}
+
+void
+ContentMenu::NotagNotes ()
+{
+  SelectAllNotes (false);
+  QString qryStr ("select distinct noteid from 'tagrefs' where 1");
+  QSqlQuery taggedquery (*pDB);
+  taggedquery.exec (qryStr);
+  qint64 noteid;
+  while (taggedquery.next()) {
+    noteid = taggedquery.value(0).toLongLong();
+    noteSet.remove (noteid);
   }
   emit Selected (noteSet);
 }
