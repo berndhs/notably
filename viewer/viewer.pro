@@ -37,7 +37,8 @@ FORMS = \
 	../ui/helpwin.ui \
 	../ui/helpbox.ui \
 	../ui/changefile.ui \
-	../ui/notetags.ui
+	../ui/notetags.ui \
+	../ui/tagsearch.ui 
 
 
 SOURCES = \
@@ -51,13 +52,16 @@ SOURCES = \
 	../src/editmenu.cpp \
 	../src/managemenu.cpp \
 	../src/db-manage.cpp \
+	../src/content-menu.cpp \
 	../src/nota-help.cpp \
 	../src/helpbox.cpp \
 	../src/notetag-edit.cpp \
+	../src/tagsearch.cpp \
 	../src/notably.cpp
 
 HEADERS = \
         ../src/deliberate.h \
+	../src/utility-types.h \
 	../src/notesdisplay.h \
 	../src/delib-debug.h \
 	../src/nota-editbox.h \
@@ -66,9 +70,11 @@ HEADERS = \
 	../src/editmenu.h \
 	../src/managemenu.h \
 	../src/db-manage.h \
+	../src/content-menu.h \
 	../src/notaconf.h \
 	../src/nota-help.h \
 	../src/notetag-edit.h \
+	../src/tagsearch.h \
 	../src/helpbox.h 
 	
 
