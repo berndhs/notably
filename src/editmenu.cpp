@@ -53,6 +53,9 @@ EditMenu::Init ()
   linkAction = new QAction (tr("Make Selection a Link"), this);
   menu.addAction (linkAction);
   connect (linkAction, SIGNAL (triggered ()), this, SLOT (GrabLink()));
+  searchAction = new QAction (tr("Find..."), this);
+  menu.addAction (searchAction);
+  connect (searchAction, SIGNAL (triggered()), this, SLOT (Search()));
 }
 
 void
@@ -77,6 +80,12 @@ void
 EditMenu::GrabHtml ()
 {
   emit SigGrabSelection ();
+}
+
+void
+EditMenu::Search ()
+{
+  emit SigLocalSearch ();
 }
 
 void

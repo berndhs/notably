@@ -40,6 +40,7 @@ private slots:
   void WholeScreenShot ();
   void GrabHtml ();
   void GrabLink ();
+  void Search ();
 
 signals:
 
@@ -47,6 +48,7 @@ signals:
   void SigShootScreen (const bool whole);
   void SigGrabSelection ();
   void SigGrabLink ();
+  void SigLocalSearch ();
 
 private:
 
@@ -61,6 +63,7 @@ private:
   QAction  *shootAllAction;
   QAction  *htmlAction;
   QAction  *linkAction;
+  QAction  *searchAction;
 
 };
 

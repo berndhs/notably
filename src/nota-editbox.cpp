@@ -26,8 +26,10 @@ namespace nota {
 EditBox::EditBox (QWidget * parent)
 :QTextEdit(parent),
  pConf (0),
- pDB(0)
+ pDB(0),
+ searchBox (this)
 {
+  SetupSearchbox ();
 }
 
 void
@@ -188,12 +190,6 @@ EditBox::InsertImage (QImage & img)
 void
 EditBox::insertFromMimeData ( const QMimeData * source )
 {
-#if 0
-  qDebug () << " inserting from mime data " << source;
-  qDebug () << " urls " << source->urls();
-  qDebug () << " text " << source->text ();
-  qDebug () << " html " << source->html();
-  #endif
   if (source->hasImage()) {
     QImage img = qvariant_cast<QImage> (source->imageData());
     InsertImage (img);
@@ -202,4 +198,31 @@ EditBox::insertFromMimeData ( const QMimeData * source )
   QTextEdit::insertFromMimeData (source);
 }
 
+
+void
+EditBox::SetupSearchbox ()
+{
+  searchUi.setupUi (&searchBox);
+  searchBox.hide();
+  connect (searchUi.searchButton, SIGNAL (clicked()), 
+           this, SLOT (DoSearch()));
+  connect (searchUi.cancelButton, SIGNAL (clicked()),
+           &searchBox, SLOT (reject()));
 }
+
+void
+EditBox::DoSearch ()
+{
+  QString lookforthis = searchUi.searchWord->text();
+  find (lookforthis);
+}
+
+void
+EditBox::LocalSearch ()
+{
+  //searchBox.show();
+  searchBox.exec ();
+}
+
+} // namespace
+

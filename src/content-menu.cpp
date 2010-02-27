@@ -16,6 +16,9 @@
 #include "delib-debug.h"
 #include <QSqlQuery>
 #include <QSqlResult>
+#include <QSqlRecord>
+#include <QTextEdit>
+#include <QMessageBox>
 
 namespace nota {
 
@@ -24,8 +27,12 @@ ContentMenu::ContentMenu (QWidget *parent)
  pConf (0),
  pDB (0),
  tagSearch (this),
- bookPick (this)
+ bookPick (this),
+ searchBox (this)
 {
+
+  SetupSearchbox ();
+  
   tagsAction = new QAction (tr("Find by Tag"), this);
   menu.addAction (tagsAction);
   notagAction = new QAction (tr("Select untagged Notes"), this);
@@ -39,6 +46,7 @@ ContentMenu::ContentMenu (QWidget *parent)
   
   connect (tagsAction, SIGNAL (triggered()), this, SLOT (TagSearchExec()));
   connect (notagAction, SIGNAL (triggered()), this, SLOT (NotagNotes()));
+  connect (searchAction, SIGNAL (triggered()), this, SLOT (MultiSearch()));
   connect (bookAction, SIGNAL (triggered()), this, SLOT (Books ()));
   connect (allAction, SIGNAL (triggered()), this, SLOT (SelectAllNotes()));
 }
@@ -163,6 +171,79 @@ ContentMenu::FindNotesByBook (QString booktitle)
   while (query.next()) {
     noteid = query.value(0).toLongLong();
     noteSet.insert (noteid);
+  }
+}
+
+void
+ContentMenu::SetupSearchbox ()
+{
+  searchUi.setupUi (&searchBox);
+  searchBox.setWindowTitle (tr("Notes with ALL these words"));
+  searchBox.hide();
+  connect (searchUi.searchButton, SIGNAL (clicked()), 
+           this, SLOT (DoSearch()));
+  connect (searchUi.cancelButton, SIGNAL (clicked()),
+           &searchBox, SLOT (reject()));
+}
+
+
+void
+ContentMenu::MultiSearch ()
+{
+  searchBox.exec ();
+}
+
+void
+ContentMenu::DoSearch ()
+{
+  QString findthis = searchUi.searchWord->text();
+  QStringList findWords = findthis.split (" ", QString::SkipEmptyParts);
+  if (findWords.count () < 1) {
+    searchBox.reject();
+    return;
+  }
+  NoteIdSetType  tmpSet;
+  QString allNotes ("select noteid, notetext from notes where 1");
+  QSqlQuery query (*pDB);
+  bool ok = query.exec (allNotes);
+  int  idndx = query.record().indexOf ("noteid");
+  int  textndx = query.record().indexOf ("notetext");
+  QTextEdit  editBuf;
+  editBuf.setHidden (true);
+  int      hits (0);
+  QString  text;
+  qint64   id;
+  bool     isthere(false);
+  QString word;
+  QStringList::iterator fit;
+  while (ok && query.next ()) {
+    id = query.value(idndx).toLongLong ();
+    text = query.value(textndx).toString ();
+    editBuf.setHtml (text);
+    isthere = true;
+    for (fit = findWords.begin(); fit != findWords.end(); fit++) {
+      word = *fit;
+      isthere &= editBuf.find (word);
+      if (!isthere) {
+        break;
+      }
+    }
+    if (isthere) {
+      tmpSet.insert (id);
+      hits++;
+    }
+  }
+  if (hits > 0) {
+    noteSet = tmpSet;
+    searchBox.accept();
+    emit Selected (noteSet);
+  } else {
+    QMessageBox box (this);
+    box.setText (tr("No Matching Notes"));
+    Qt::WindowFlags flags = box.windowFlags();
+    flags |= Qt::FramelessWindowHint;
+    box.setWindowFlags (flags);
+    box.exec ();
   }
 }
 

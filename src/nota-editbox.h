@@ -18,6 +18,7 @@
 #include <QImage>
 #include <QSqlDatabase>
 #include "notaconf.h"
+#include "ui_getstring.h"
 
 namespace nota {
 
@@ -44,6 +45,8 @@ public:
 public slots:
 
   void paste ();
+  void LocalSearch ();
+  void DoSearch ();
 
 signals:
 
@@ -55,9 +58,13 @@ private:
   void IsolateUrls (QDropEvent *event);
   QString ImgFilename (QImage & img);
   QString FindUsergivenId (qint64 noteid);
+  void SetupSearchbox ();
   
   NotaConf *pConf;
   QSqlDatabase  *pDB;
+  
+  QDialog searchBox;
+  Ui_GetStringDialog   searchUi;
   
 };
 

@@ -40,6 +40,7 @@ FORMS = \
 	../ui/notetags.ui \
 	../ui/bookdialog.ui \
 	../ui/bookrefs.ui \
+	../ui/getstring.ui \
 	../ui/tagsearch.ui 
 
 

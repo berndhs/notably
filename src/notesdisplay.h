@@ -40,6 +40,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QResizeEvent>
+#include <QStack>
 
 /** @brief NotesDisplay class for the Notably note taker program
 */
@@ -92,7 +93,9 @@ public slots:
   void ImageInserted (QString imgname);
   void SelectionMade (NoteIdSetType & idset);
   void SelectionMade ();
-  void InterNoteLink (qint64 nextnote);
+  void InterNoteLink (qint64 nextnote, bool forward = true);
+  void Back ();
+  void EditBoxChanged ();
   
   void ReloadDB ();
   
@@ -156,6 +159,8 @@ private:
   QString    currentName;
   QString    newName;
   QListWidgetItem  *curItem;
+  QStack<qint64>    idStack;
+  bool       isChanged;
   
   QPoint     corner1;
   QPoint     corner2;
@@ -173,7 +178,6 @@ private:
   bool       fontProperty[FP_max];
   
   QAction    *exitAction;
-  QAction    *saveAction;
   QAction    *noteMenuAction;
   QAction    *helpAction;
   QAction    *editAction;

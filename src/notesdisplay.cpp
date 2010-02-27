@@ -85,7 +85,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
            this, SLOT (ImageInserted (QString)));
   connect (editBox, SIGNAL (LinkToNote (qint64)),
            this, SLOT (InterNoteLink (qint64)));
-// debugTimer.start (1000);
+  //debugTimer.start (3000);
 }
 
 void
@@ -95,8 +95,6 @@ NotesDisplay::SetupMenu ()
   if (!deliberate::IsMaemo ()) {
     menubar->addAction (exitAction);
   }
-  saveAction = new QAction (tr("&Save Note"), this);
-  menubar->addAction (saveAction);
   noteMenuAction = new QAction (tr("&Note..."), this);
   menubar->addAction (noteMenuAction);
   editAction = new QAction (tr("&Edit..."), this);
@@ -125,13 +123,15 @@ NotesDisplay::SetupMenu ()
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
  
-  connect (saveAction, SIGNAL (triggered()), this, SLOT (SaveCurrent()));
+  connect (saveButton, SIGNAL (clicked()), this, SLOT (SaveCurrent()));
   
   connect (noteMenuAction, SIGNAL (triggered()), this, SLOT (ShowNoteMenu()));
   connect (editAction, SIGNAL (triggered()), this, SLOT (ScheduleEdit()));
   connect (manageAction, SIGNAL (triggered()), this, SLOT (ScheduleManage()));
   connect (contentAction, SIGNAL (triggered()), this, SLOT (ScheduleContent()));
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
+  
+  connect (backButton, SIGNAL (clicked()), this, SLOT (Back()));
   
   connect (&noteMenu, SIGNAL (SaveNote()), this, SLOT (SaveCurrent()));
   connect (&noteMenu, SIGNAL (PublishNote()), this, SLOT (PublishCurrent()));
@@ -150,6 +150,8 @@ NotesDisplay::SetupMenu ()
 
   connect (&helpBox, SIGNAL (WantHelp()), this, SLOT (HelpHelp ()));
   connect (&helpBox, SIGNAL (WantLicense()), this, SLOT (LicenseHelp()));
+  
+  connect (editBox, SIGNAL (textChanged()), this, SLOT (EditBoxChanged()));
 }
 
 void
@@ -163,6 +165,8 @@ NotesDisplay::SetupEdit ()
             this, SLOT (GrabHtml()));
   connect (&editMenu, SIGNAL (SigGrabLink()), 
             this, SLOT (GrabLink ()));
+  connect (&editMenu, SIGNAL (SigLocalSearch ()), 
+           editBox, SLOT (LocalSearch()));
 }
 
 void
@@ -304,6 +308,12 @@ NotesDisplay::Help ()
 }
 
 void
+NotesDisplay::EditBoxChanged ()
+{
+  isChanged = true;
+}
+
+void
 NotesDisplay::HelpHelp ()
 {
   helpBrowser.ShowPage ("qrc:qrcfiles/userman.html");
@@ -434,11 +444,12 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
     nameChanged = false;
     isNew = false;
     ListTags (currentId);
+    isChanged = false;
   }
 }
 
 void
-NotesDisplay::InterNoteLink (qint64 nextnote)
+NotesDisplay::InterNoteLink (qint64 nextnote, bool forward)
 {
   QString qryPattern 
          ("select usergivenid from 'notes' where noteid=%1");
@@ -446,8 +457,23 @@ NotesDisplay::InterNoteLink (qint64 nextnote)
   QSqlQuery query (db);
   bool ok = query.exec (qryStr);
   if (ok && query.next()) {
+    if (forward) {
+      idStack.push (currentId);
+    }
     QString name = query.value(0).toString();
+    if (isChanged) {
+      SaveCurrent ();
+    }
     ShowNote (0,nextnote,name);
+  }
+}
+
+void
+NotesDisplay::Back ()
+{
+  if (!idStack.isEmpty()) {
+    qint64 newid = idStack.pop();
+    InterNoteLink (newid, false);
   }
 }
 
@@ -519,6 +545,7 @@ NotesDisplay::ShowNothing ()
   currentName = "";
   newName = "";
   nameChanged = false;
+  isChanged = false;
   noteName ->setText ("");
   editBox->setHtml ("");
   noLabel.hide();
@@ -796,7 +823,8 @@ NotesDisplay::WriteNote (const qint64 id,
   bool worked = InsertQuery.exec ();
   QString result;
   if (worked) {
-    result = QString(tr("saved"));
+    QString pat (tr("saved as \"%1\""));
+    result = QString(pat.arg(name));
   } else {
     result = QString(tr("save failed!"));
   }
@@ -870,6 +898,7 @@ NotesDisplay::DebugCheck ()
 {
 #ifndef _WIN32
   qDebug () << " debug timer check " << time (0);
+  qDebug () << " editbox modified " << isChanged;
 #endif
 }
 
