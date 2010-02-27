@@ -39,6 +39,7 @@ FORMS = \
 	../ui/changefile.ui \
 	../ui/notetags.ui \
 	../ui/bookdialog.ui \
+	../ui/bookrefs.ui \
 	../ui/tagsearch.ui 
 
 
@@ -57,6 +58,7 @@ SOURCES = \
 	../src/nota-help.cpp \
 	../src/helpbox.cpp \
 	../src/notetag-edit.cpp \
+	../src/note-book-edit.cpp \
 	../src/tagsearch.cpp \
 	../src/book-pick.cpp \
 	../src/notably.cpp
@@ -76,6 +78,7 @@ HEADERS = \
 	../src/notaconf.h \
 	../src/nota-help.h \
 	../src/notetag-edit.h \
+	../src/note-book-edit.h \
 	../src/tagsearch.h \
 	../src/book-pick.h \
 	../src/helpbox.h 

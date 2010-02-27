@@ -18,6 +18,7 @@
 #include "utility-types.h"
 #include "nota-editbox.h"
 #include "notetag-edit.h"
+#include "note-book-edit.h"
 #include "ui_mainwin.h"
 #include "notaconf.h"
 #include "notemenu.h"
@@ -87,6 +88,7 @@ public slots:
   void GrabHtml ();
   void GrabLink ();
   void DoNoteTags ();
+  void DoNoteBooks ();
   void ImageInserted (QString imgname);
   void SelectionMade (NoteIdSetType & idset);
   void SelectionMade ();
@@ -143,6 +145,7 @@ private:
   HelpBox       helpBox;
   NotaHelp      helpBrowser;
   NoteTagEdit   noteTagEditor;
+  NoteBookEdit  noteBookEditor;
   
   DBManage      dbManager;
   QSqlDatabase  db;

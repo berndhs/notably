@@ -35,6 +35,7 @@ public slots:
   void MakeNewNote ();
   void CancelCurrent ();
   void Tags ();
+  void Books ();
   
 signals:
 
@@ -44,6 +45,7 @@ signals:
   void NewNote ();
   void CancelNote ();
   void ChangeTags ();
+  void ChangeBooks ();
   
 private:
 
@@ -55,6 +57,7 @@ private:
   QAction  *newAction;
   QAction  *cancelAction;
   QAction  *tagsAction;
+  QAction  *booksAction;
   
 };
 

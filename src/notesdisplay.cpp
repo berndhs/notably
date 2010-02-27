@@ -43,6 +43,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
  contentMenu (this),
  helpBox (this),
  noteTagEditor (this),
+ noteBookEditor (this),
  dbManager (db),
  mConName ("nota_dbcon"),
  noLabel (this),
@@ -58,6 +59,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
   contentMenu.SetConf (pConf);
   contentMenu.SetDB (db);
   noteTagEditor.SetDB (db);
+  noteBookEditor.SetDB (db);
   noTagPix.load (":img/notag.png");
   noLabel.hide();
   noLabel.setPixmap (noTagPix);
@@ -134,6 +136,7 @@ NotesDisplay::SetupMenu ()
   connect (&noteMenu, SIGNAL (NewNote()), this, SLOT (NewNote()));
   connect (&noteMenu, SIGNAL (CancelNote()), this, SLOT (ShowNothing()));
   connect (&noteMenu, SIGNAL (ChangeTags()), this, SLOT (DoNoteTags()));
+  connect (&noteMenu, SIGNAL (ChangeBooks()), this, SLOT (DoNoteBooks()));
   
   connect (&manageMenu, SIGNAL (SigReload()), this, SLOT (ReloadDB()));
   
@@ -214,6 +217,12 @@ NotesDisplay::DoNoteTags ()
 {
   noteTagEditor.ManageTags (currentId, currentName);
   ListTags (currentId);
+}
+
+void
+NotesDisplay::DoNoteBooks ()
+{
+  noteBookEditor.ManageBooks (currentId, currentName);
 }
 
 void

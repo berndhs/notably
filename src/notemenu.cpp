@@ -25,14 +25,17 @@ NoteMenu::NoteMenu (QWidget * parent)
   newAction = new QAction (tr("New Note"), this);
   cancelAction = new QAction (tr("Cancel Note"), this);
   tagsAction = new QAction (tr("Note Tags..."), this);
+  booksAction = new QAction (tr("Note Books..."), this);
   menu.addAction (saveAction);
   menu.addAction (tagsAction);
+  menu.addAction (booksAction);
   menu.addAction (publishAction);
   menu.addAction (deleteAction);
   menu.addAction (newAction);
   menu.addAction (cancelAction);
   connect (saveAction, SIGNAL (triggered()), this, SLOT(SaveCurrent()));
   connect (tagsAction, SIGNAL (triggered()), this, SLOT (Tags()));
+  connect (booksAction, SIGNAL (triggered()), this, SLOT (Books()));
   connect (publishAction, SIGNAL (triggered()), this, SLOT (PublishCurrent()));
   connect (deleteAction, SIGNAL (triggered()), this, SLOT(DeleteCurrent()));
   connect (newAction, SIGNAL (triggered()), this, SLOT(MakeNewNote()));
@@ -57,6 +60,12 @@ void
 NoteMenu::Tags ()
 {
   emit ChangeTags ();
+}
+
+void
+NoteMenu::Books ()
+{
+  emit ChangeBooks ();
 }
 
 void
