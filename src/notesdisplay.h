@@ -92,6 +92,7 @@ public slots:
   void ImageInserted (QString imgname);
   void SelectionMade (NoteIdSetType & idset);
   void SelectionMade ();
+  void InterNoteLink (qint64 nextnote);
   
   void ReloadDB ();
   

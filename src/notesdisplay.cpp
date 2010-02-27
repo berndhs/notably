@@ -54,6 +54,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
   SetupMenu ();
   SetupEdit ();
   editBox->SetConf (pConf);
+  editBox->SetDB (db);
   editMenu.SetConf (pConf);
   manageMenu.SetConf (pConf);
   contentMenu.SetConf (pConf);
@@ -82,6 +83,8 @@ NotesDisplay::NotesDisplay (QApplication & app)
   
   connect (editBox, SIGNAL (NewImage (QString)), 
            this, SLOT (ImageInserted (QString)));
+  connect (editBox, SIGNAL (LinkToNote (qint64)),
+           this, SLOT (InterNoteLink (qint64)));
 // debugTimer.start (1000);
 }
 
@@ -418,23 +421,34 @@ NotesDisplay::ShowNote (QListWidgetItem *item,
   OpenDB ();
   QSqlQuery query (db);
   bool ok = query.exec (qstr);
-  if (ok) {
-    if (query.next()) {
-      int textindex = query.record().indexOf("notetext");
-      textbody = query.value(textindex).toString ();
-      noteName->setText (name);
-      editBox->setHtml (textbody);
-      showingNote = true;
-      curItem = item;
-      currentId = id;
-      currentName = name;
-      newName = currentName;
-      nameChanged = false;
-      isNew = false;
-      ListTags (currentId);
-    }
+  if (ok && query.next()) {
+    int textindex = query.record().indexOf("notetext");
+    textbody = query.value(textindex).toString ();
+    noteName->setText (name);
+    editBox->setHtml (textbody);
+    showingNote = true;
+    curItem = item;
+    currentId = id;
+    currentName = name;
+    newName = currentName;
+    nameChanged = false;
+    isNew = false;
+    ListTags (currentId);
   }
-  
+}
+
+void
+NotesDisplay::InterNoteLink (qint64 nextnote)
+{
+  QString qryPattern 
+         ("select usergivenid from 'notes' where noteid=%1");
+  QString qryStr = qryPattern.arg(QString::number(nextnote));
+  QSqlQuery query (db);
+  bool ok = query.exec (qryStr);
+  if (ok && query.next()) {
+    QString name = query.value(0).toString();
+    ShowNote (0,nextnote,name);
+  }
 }
 
 
@@ -792,7 +806,7 @@ NotesDisplay::WriteNote (const qint64 id,
   box.setWindowFlags (flags);
   
   box.setText (result);
-  int delay = (worked ? 2000 : 15000);
+  int delay = (worked ? 1500 : 15000);
   QTimer::singleShot (delay, &box, SLOT (accept()));
   box.exec ();
 }

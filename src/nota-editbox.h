@@ -16,6 +16,7 @@
 #include <QTextEdit>
 #include <QDropEvent>
 #include <QImage>
+#include <QSqlDatabase>
 #include "notaconf.h"
 
 namespace nota {
@@ -27,6 +28,7 @@ public:
   EditBox (QWidget *parent);
   
   void SetConf (NotaConf *pc) { pConf = pc; }
+  void SetDB   (QSqlDatabase &db) { pDB = &db; }
 
   void dropEvent (QDropEvent * event);
   void dragEnterEvent (QDragEnterEvent *event);
@@ -46,13 +48,16 @@ public slots:
 signals:
 
   void NewImage (QString filename);
+  void LinkToNote (qint64 noteid);
   
 private:
 
   void IsolateUrls (QDropEvent *event);
   QString ImgFilename (QImage & img);
+  QString FindUsergivenId (qint64 noteid);
   
   NotaConf *pConf;
+  QSqlDatabase  *pDB;
   
 };
 

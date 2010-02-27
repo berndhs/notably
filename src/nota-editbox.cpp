@@ -6,6 +6,8 @@
 #include <QDateTime>
 #include <QTime>
 #include <QDesktopServices>
+#include <QSqlQuery>
+#include <QSqlResult>
 #include <QDir>
 
 //
@@ -23,7 +25,8 @@ namespace nota {
 
 EditBox::EditBox (QWidget * parent)
 :QTextEdit(parent),
- pConf (0)
+ pConf (0),
+ pDB(0)
 {
 }
 
@@ -46,6 +49,24 @@ EditBox::paste ()
   QTextEdit::paste ();
 }
 
+QString
+EditBox::FindUsergivenId (qint64 noteid)
+{
+  QString result ("");
+  qDebug () << " look for name for " << noteid;
+  if (pDB) {
+    QString qryPattern ("select usergivenid from notes where noteid=%1");
+    QString qryStr = qryPattern.arg(QString::number(noteid));
+    QSqlQuery query (*pDB);
+    bool ok = query.exec (qryStr);
+    qDebug () << " query " << qryStr << " was " << ok;
+    if (ok && query.next()) {
+      result = query.value(0).toString();
+    }
+  }
+  return result;
+}
+
 void
 EditBox::GrabHtml ()
 {
@@ -61,8 +82,20 @@ EditBox::GrabLink ()
   QTextCursor curse = textCursor();
   QString text = curse.selectedText ();
   curse.removeSelectedText ();
-  QString linkpattern (" <a href=\"%1\">%1</a> ");
-  QString linkhtml = linkpattern.arg(text);
+  QString linkpattern (" <a href=\"%1\">%2</a> ");
+  QUrl url(text);
+  QString linkhtml;
+  qDebug () << " grabbed url " << url;
+  qDebug () << " scheme " << url.scheme();
+  if (url.isValid() && url.scheme() == "ntbly") {
+    QString longname = FindUsergivenId (url.authority().toLongLong());
+    if (longname == QString("")) {
+      longname = text;
+    }
+    linkhtml = linkpattern.arg(text).arg(longname);
+  } else {
+    linkhtml = linkpattern.arg(text).arg(text);
+  }
   curse.insertHtml (linkhtml);
 }
 
@@ -74,7 +107,12 @@ EditBox::mousePressEvent (QMouseEvent * event)
     if (anch.length () > 0) {
       QUrl url (anch);
       if (url.isValid()) {
-        QDesktopServices::openUrl (url);
+        if (url.scheme() == "ntbly") {
+          qint64 newnote = url.authority().toLongLong();
+          emit LinkToNote (newnote);
+        } else {
+          QDesktopServices::openUrl (url);
+        }
         return;
       }
     }
