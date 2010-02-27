@@ -33,7 +33,11 @@ DBManage::DBManage (QSqlDatabase & db)
                  << "tags"
                  << "tagrefs"
                  << "imagerefs"
+                 << "books"
+                 << "bookrefs"
                  << "identndx"
+                 << "uniquepairs"
+                 << "uniquebooktitle"
                  << "uniquetags";
 }
 
