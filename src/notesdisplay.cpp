@@ -734,6 +734,19 @@ NotesDisplay::DBExists ()
   if (!inf.isWritable()) {
     return false;
   }
+  QString tableQuery ("select name from sqlite_master where type='table'");
+  QSqlQuery askTables (db);
+  bool ok = askTables.exec (tableQuery);
+  int numtables (0);
+  if (!ok) {
+    return false;
+  }
+  while (askTables.next()) {
+    numtables ++;
+  }
+  if (numtables < 1) {
+    return false;
+  }
   return true;
 }
 

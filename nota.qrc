@@ -7,6 +7,10 @@
   <file>qrcfiles/schema-identndx.sql</file>
   <file>qrcfiles/schema-uniquetags.sql</file>
   <file>qrcfiles/schema-imagerefs.sql</file>
+  <file>qrcfiles/schema-uniquebooktitle.sql</file>
+  <file>qrcfiles/schema-uniquepairs.sql</file>
+  <file>qrcfiles/schema-books.sql</file>
+  <file>qrcfiles/schema-bookrefs.sql</file>
   <file>img/nb.png</file>
   <file>img/notag.png</file>
   <file>img/dead.png</file>
