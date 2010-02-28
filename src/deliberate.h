@@ -28,6 +28,8 @@ QSettings & Settings ();
 
 bool IsMaemo ();
 
+bool IsFingerInterface ();
+
 }
 
 

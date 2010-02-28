@@ -16,9 +16,11 @@
 #include <QWidget>
 #include <QMenu>
 #include <QFileDialog>
+#include <QSqlDatabase>
 #include "delib-debug.h"
 #include "notaconf.h"
 #include "ui_changefile.h"
+#include "book-edit.h"
 
 namespace nota {
 
@@ -30,6 +32,7 @@ public:
   ManageMenu (QWidget *parent);
   
   void SetConf (NotaConf * pC) { pConf = pC; }
+  void SetDB (QSqlDatabase &db);
   
   void Exec (QPoint here);
   
@@ -40,6 +43,7 @@ public slots:
   void CancelLoc ();
   void DoExport ();
   void ExportAll ();
+  void EditBooks ();
   
 signals:
 
@@ -48,16 +52,18 @@ signals:
 private:
 
   void ConnectDialogs ();
-
   QMenu   menu;
   Ui_ChangeFile   fileUI;
   QDialog         fileDialog;
+  
+  BookEdit        bookEditor;
   
   
   NotaConf  *pConf;
   
   QAction  *fileNameAction;
   QAction  *exportAction;
+  QAction  *bookAction;
   
 };
 

@@ -66,6 +66,7 @@ BookPick::TitleSelected ()
 void
 BookPick::ListBooks ()
 {
+  bookTable->clearContents ();
   QString qryStr ("select bookname, description from books where 1");
   QSqlQuery query (*pDB);
   query.exec (qryStr);

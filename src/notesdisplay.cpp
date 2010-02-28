@@ -57,6 +57,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
   editBox->SetDB (db);
   editMenu.SetConf (pConf);
   manageMenu.SetConf (pConf);
+  manageMenu.SetDB (db);
   contentMenu.SetConf (pConf);
   contentMenu.SetDB (db);
   noteTagEditor.SetDB (db);

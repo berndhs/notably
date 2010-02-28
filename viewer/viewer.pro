@@ -41,6 +41,7 @@ FORMS = \
 	../ui/bookdialog.ui \
 	../ui/bookrefs.ui \
 	../ui/getstring.ui \
+	../ui/bookeditor.ui \
 	../ui/tagsearch.ui 
 
 
@@ -62,6 +63,7 @@ SOURCES = \
 	../src/note-book-edit.cpp \
 	../src/tagsearch.cpp \
 	../src/book-pick.cpp \
+	../src/book-edit.cpp \
 	../src/notably.cpp
 
 HEADERS = \
@@ -82,6 +84,7 @@ HEADERS = \
 	../src/note-book-edit.h \
 	../src/tagsearch.h \
 	../src/book-pick.h \
+	../src/book-edit.h \
 	../src/helpbox.h 
 	
 

@@ -215,6 +215,9 @@ EditBox::DoSearch ()
 {
   QString lookforthis = searchUi.searchWord->text();
   find (lookforthis);
+  if (deliberate::IsMaemo()) {
+    searchBox.accept ();
+  }
 }
 
 void

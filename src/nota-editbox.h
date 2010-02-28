@@ -13,6 +13,7 @@
 // of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 //
 
+#include "deliberate.h"
 #include <QTextEdit>
 #include <QDropEvent>
 #include <QImage>

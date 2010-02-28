@@ -55,5 +55,11 @@ IsMaemo ()
   #endif
 }
 
+bool
+IsFingerInterface ()
+{
+  return IsMaemo ();
+}
+
 
 }

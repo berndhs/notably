@@ -21,7 +21,8 @@ namespace nota {
 
 ManageMenu::ManageMenu (QWidget * parent)
 :QWidget(parent),
- fileDialog (this)
+ fileDialog (this),
+ bookEditor (this)
 {
   fileUI.setupUi (&fileDialog);
   fileDialog.setWindowTitle (tr("Change Data Location"));
@@ -33,7 +34,17 @@ ManageMenu::ManageMenu (QWidget * parent)
   menu.addAction (exportAction);
   connect (exportAction, SIGNAL (triggered()), this, SLOT (ExportAll()));
   
+  bookAction = new QAction (tr("Book Editor"), this);
+  menu.addAction (bookAction);
+  connect (bookAction, SIGNAL (triggered()), this, SLOT (EditBooks()));
+  
   ConnectDialogs ();
+}
+
+void
+ManageMenu::SetDB (QSqlDatabase & db)
+{
+  bookEditor.SetDB (db);
 }
 
 void
@@ -117,6 +128,12 @@ void
 ManageMenu::DoExport ()
 {
   qDebug () << " do export called";
+}
+
+void
+ManageMenu::EditBooks ()
+{
+  bookEditor.Exec ();
 }
 
 } // namespace
