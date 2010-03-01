@@ -37,8 +37,10 @@ ContentMenu::ContentMenu (QWidget *parent)
   menu.addAction (tagsAction);
   notagAction = new QAction (tr("Select untagged Notes"), this);
   menu.addAction (notagAction);
-  bookAction = new QAction (tr("Select a Book"), this);
+  bookAction = new QAction (tr("Select by Book"), this);
   menu.addAction (bookAction);
+  nobookAction = new QAction (tr("Select unbooked Notes"), this);
+  menu.addAction (nobookAction);
   searchAction = new QAction (tr("Search..."), this);
   menu.addAction (searchAction);
   allAction = new QAction (tr("Select All Notes"), this);
@@ -48,6 +50,7 @@ ContentMenu::ContentMenu (QWidget *parent)
   connect (notagAction, SIGNAL (triggered()), this, SLOT (NotagNotes()));
   connect (searchAction, SIGNAL (triggered()), this, SLOT (MultiSearch()));
   connect (bookAction, SIGNAL (triggered()), this, SLOT (Books ()));
+  connect (nobookAction, SIGNAL (triggered()), this, SLOT (NobookNotes()));
   connect (allAction, SIGNAL (triggered()), this, SLOT (SelectAllNotes()));
 }
 
@@ -133,25 +136,27 @@ ContentMenu::SelectAllNotes (bool doemit)
 void
 ContentMenu::NotagNotes ()
 {
-  #if 0
-  SelectAllNotes (false);
-  QString qryStr ("select distinct noteid from 'tagrefs' where 1");
-  QSqlQuery taggedquery (*pDB);
-  taggedquery.exec (qryStr);
+  ExceptNotes ("tagrefs");
+}
+
+void
+ContentMenu::NobookNotes ()
+{
+  ExceptNotes ("bookrefs");
+}
+
+void
+ContentMenu::ExceptNotes (QString exceptTable)
+{
+  noteSet.clear();
+  QString qryPattern ("select noteid from notes where 1"
+                     " except select distinct noteid from %1 where 1");
+  QString qryStr = qryPattern.arg(exceptTable);
+  QSqlQuery nobookquery (*pDB);
+  nobookquery.exec (qryStr);
   qint64 noteid;
-  while (taggedquery.next()) {
-    noteid = taggedquery.value(0).toLongLong();
-    noteSet.remove (noteid);
-  }
-  #endif
-  noteSet.clear ();
-  QString qryStr ("select noteid from notes where 1 "
-                  " except select distinct noteid from tagrefs where 1");
-  QSqlQuery notagquery (*pDB);
-  notagquery.exec (qryStr);
-  qint64 noteid;
-  while (notagquery.next()) {
-    noteid = notagquery.value(0).toLongLong();
+  while (nobookquery.next()) {
+    noteid = nobookquery.value(0).toLongLong();
     noteSet.insert (noteid);
   }
   emit Selected (noteSet);

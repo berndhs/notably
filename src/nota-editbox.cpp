@@ -83,6 +83,7 @@ EditBox::GrabLink ()
 {
   QTextCursor curse = textCursor();
   QString text = curse.selectedText ();
+  curse.removeSelectedText ();
   InsertLink (curse, text);
   
 }
@@ -90,7 +91,6 @@ EditBox::GrabLink ()
 void
 EditBox::InsertLink (QTextCursor & curse, QString text)
 {
-  curse.removeSelectedText ();
   QString linkpattern (" <a href=\"%1\">%2</a> ");
   QUrl url(text);
   QString linkhtml;

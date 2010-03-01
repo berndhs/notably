@@ -45,6 +45,7 @@ public slots:
   void TagSearchExec ();
   void SelectAllNotes (bool doemit = true);
   void NotagNotes ();
+  void NobookNotes ();
   void Books ();
   void MultiSearch ();
   void DoSearch ();
@@ -60,6 +61,7 @@ private:
                           QStringList & tagnames);
   void FindNotesByBook (QString booktitle);
   void SetupSearchbox ();
+  void ExceptNotes (QString exceptTable);
 
   NotaConf   *pConf;
   QSqlDatabase *pDB;
@@ -68,6 +70,7 @@ private:
   
   QAction   *searchAction;
   QAction   *bookAction;
+  QAction   *nobookAction;
   QAction   *tagsAction;
   QAction   *notagAction;
   QAction   *allAction;
