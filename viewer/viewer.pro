@@ -55,6 +55,7 @@ SOURCES = \
 	../src/version.cpp \
 	../src/notemenu.cpp \
 	../src/editmenu.cpp \
+	../src/special-menu.cpp \
 	../src/managemenu.cpp \
 	../src/db-manage.cpp \
 	../src/content-menu.cpp \
@@ -77,6 +78,7 @@ HEADERS = \
 	../src/version.h \
 	../src/notemenu.h \
 	../src/editmenu.h \
+	../src/special-menu.h \
 	../src/managemenu.h \
 	../src/db-manage.h \
 	../src/content-menu.h \
