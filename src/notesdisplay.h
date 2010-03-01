@@ -23,6 +23,7 @@
 #include "notaconf.h"
 #include "notemenu.h"
 #include "editmenu.h"
+#include "special-menu.h"
 #include "managemenu.h"
 #include "db-manage.h"
 #include "content-menu.h"
@@ -80,6 +81,8 @@ public slots:
   void ShowNoteMenu ();
   void ScheduleManage ();
   void ScheduleContent ();
+  void ScheduleSpecial ();
+  void DoSpecial ();
   void DoContent ();
   void ShowManage ();
   void DebugCheck ();
@@ -96,6 +99,8 @@ public slots:
   void InterNoteLink (qint64 nextnote, bool forward = true);
   void Back ();
   void EditBoxChanged ();
+  void CopyNoteLink ();
+  void PasteNoteLink ();
   
   void ReloadDB ();
   
@@ -144,6 +149,7 @@ private:
   NotaConf     *pConf; 
   NoteMenu      noteMenu;
   EditMenu      editMenu;
+  SpecialMenu   specialMenu;
   ManageMenu    manageMenu;
   ContentMenu   contentMenu;
   HelpBox       helpBox;
@@ -161,6 +167,7 @@ private:
   QListWidgetItem  *curItem;
   QStack<qint64>    idStack;
   bool       isChanged;
+  QString    noteLinkCopy;
   
   QPoint     corner1;
   QPoint     corner2;
@@ -181,12 +188,14 @@ private:
   QAction    *noteMenuAction;
   QAction    *helpAction;
   QAction    *editAction;
+  QAction    *specialAction;
   QAction    *manageAction;
   QAction    *contentAction;
   
   QShortcut  *exitShort;
   QShortcut  *noteMenuShort;
   QShortcut  *editShort;
+  QShortcut  *specialShort;
   QShortcut  *saveShort;
   QShortcut  *manageShort;
   QShortcut  *helpShort;

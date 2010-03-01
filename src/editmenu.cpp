@@ -37,22 +37,6 @@ EditMenu::Init ()
   menu.addAction (underlineAction);
   connect (underlineAction, SIGNAL (triggered()), 
                this, SLOT (Underline()));
-  if (pConf) {
-    if (pConf->SupportPartScreenShot()) {
-      shootAction = new QAction (tr("Part Screen Shot"), this);
-      menu.addAction (shootAction);
-      connect (shootAction, SIGNAL (triggered()), this, SLOT (ScreenShot ()));
-    }
-  }
-  shootAllAction = new QAction (tr("Whole Screen Shot"), this);
-  menu.addAction (shootAllAction);
-  connect (shootAllAction, SIGNAL (triggered()), this, SLOT (WholeScreenShot()));
-  htmlAction = new QAction (tr("Insert Selection as Html"), this);
-  menu.addAction (htmlAction);
-  connect (htmlAction, SIGNAL (triggered()), this, SLOT (GrabHtml()));
-  linkAction = new QAction (tr("Make Selection a Link"), this);
-  menu.addAction (linkAction);
-  connect (linkAction, SIGNAL (triggered ()), this, SLOT (GrabLink()));
   searchAction = new QAction (tr("Find..."), this);
   menu.addAction (searchAction);
   connect (searchAction, SIGNAL (triggered()), this, SLOT (Search()));
@@ -77,58 +61,9 @@ EditMenu::Underline ()
 }
 
 void
-EditMenu::GrabHtml ()
-{
-  emit SigGrabSelection ();
-}
-
-void
 EditMenu::Search ()
 {
   emit SigLocalSearch ();
-}
-
-void
-EditMenu::GrabLink ()
-{
-  emit SigGrabLink ();
-}
-
-void
-EditMenu::EmitScreenShot (const QString msg, const bool whole)
-{
-  QMessageBox box(this);
-  Qt::WindowFlags flags = box.windowFlags();
-  flags |= Qt::FramelessWindowHint;
-  box.setWindowFlags (flags);
-  box.setText (msg);
-  box.addButton (QMessageBox::Cancel);
-  box.addButton (QMessageBox::Ok);
-  QTimer::singleShot (20000, &box, SLOT (reject()));
-  int result = box.exec ();
-  if (result == QMessageBox::Ok) {
-    emit SigShootScreen (whole);
-  }
-}
-
-void
-EditMenu::ScreenShot ()
-{
-  EmitScreenShot (
-  tr("Click OK, then wait 5 seconds\n"
-     "Grab Screen Section to Capture\n"
-     "Screenshot taken in those 5 seconds"),
-                  false);
-}
-
-void
-EditMenu::WholeScreenShot ()
-{
-  EmitScreenShot (
-  tr("Click OK, then wait 5 seconds\n"
-      "Notably window will hide for 5 seconds\n"
-      "Entire Screen captured in those 5 seconds")
-      , true  );
 }
 
 void

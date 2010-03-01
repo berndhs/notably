@@ -39,6 +39,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
  pConf(0),
  noteMenu(this),
  editMenu(this),
+ specialMenu (this),
  manageMenu (this),
  contentMenu (this),
  helpBox (this),
@@ -100,6 +101,8 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (noteMenuAction);
   editAction = new QAction (tr("&Edit..."), this);
   menubar->addAction (editAction);
+  specialAction = new QAction (tr("Spec&ial..."), this);
+  menubar->addAction (specialAction);
   manageAction = new QAction (tr("M&anage..."), this);
   menubar->addAction (manageAction);
   contentAction = new QAction (tr("Con&tent..."), this);
@@ -121,6 +124,8 @@ NotesDisplay::SetupMenu ()
   connect (manageShort, SIGNAL (activated()), this, SLOT (ScheduleManage()));
   contentShort = new QShortcut (QKeySequence (tr("Ctrl+T")), this);
   connect (contentShort, SIGNAL (activated()), this, SLOT (ScheduleContent()));
+  specialShort = new QShortcut (QKeySequence (tr("Ctrl+I")), this);
+  connect (specialShort, SIGNAL (activated()), this, SLOT (ScheduleSpecial()));
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
  
@@ -128,6 +133,7 @@ NotesDisplay::SetupMenu ()
   
   connect (noteMenuAction, SIGNAL (triggered()), this, SLOT (ShowNoteMenu()));
   connect (editAction, SIGNAL (triggered()), this, SLOT (ScheduleEdit()));
+  connect (specialAction, SIGNAL (triggered()), this, SLOT (ScheduleSpecial()));
   connect (manageAction, SIGNAL (triggered()), this, SLOT (ScheduleManage()));
   connect (contentAction, SIGNAL (triggered()), this, SLOT (ScheduleContent()));
   connect (helpAction, SIGNAL (triggered()), this, SLOT (Help()));
@@ -160,14 +166,18 @@ NotesDisplay::SetupEdit ()
 {
   connect (&editMenu, SIGNAL (SigFontToggle (const FontProperty)),
             this, SLOT (ToggleFont (const FontProperty)));
-  connect (&editMenu , SIGNAL (SigShootScreen (const bool)),
-            this, SLOT (ShootScreen (const bool)));
-  connect (&editMenu, SIGNAL (SigGrabSelection ()),
-            this, SLOT (GrabHtml()));
-  connect (&editMenu, SIGNAL (SigGrabLink()), 
-            this, SLOT (GrabLink ()));
   connect (&editMenu, SIGNAL (SigLocalSearch ()), 
            editBox, SLOT (LocalSearch()));
+  connect (&specialMenu , SIGNAL (SigShootScreen (const bool)),
+            this, SLOT (ShootScreen (const bool)));
+  connect (&specialMenu, SIGNAL (SigGrabSelection ()),
+            this, SLOT (GrabHtml()));
+  connect (&specialMenu, SIGNAL (SigGrabLink()), 
+            this, SLOT (GrabLink ()));
+  connect (&specialMenu, SIGNAL (SigCopyNoteLink ()),
+            this, SLOT (CopyNoteLink()));
+  connect (&specialMenu, SIGNAL (SigPasteNoteLink ()),
+            this, SLOT (PasteNoteLink()));
 }
 
 void
@@ -182,6 +192,7 @@ NotesDisplay::SetConf (NotaConf & conf)
   pConf = &conf;
   editBox->SetConf (pConf);
   editMenu.SetConf (pConf);
+  specialMenu.SetConf (pConf);
   manageMenu.SetConf (pConf);
   contentMenu.SetConf (pConf);
   dbManager.SetConf (pConf);
@@ -191,6 +202,7 @@ void
 NotesDisplay::Start ()
 {
   editMenu.Init ();
+  specialMenu.Init ();
   if (Settings().contains("size")) {
     QSize defaultSize = size();
     QSize newsize = Settings().value ("size", defaultSize).toSize();
@@ -279,6 +291,32 @@ NotesDisplay::GrabLink ()
 }
 
 void
+NotesDisplay::CopyNoteLink ()
+{
+  if (showingNote) {
+    QString idstring = QString::number (currentId);
+    noteLinkCopy = QString ("notably://%1").arg(idstring);
+  } else {
+     // complain that there is no current saved note
+    QMessageBox box(this);
+    Qt::WindowFlags flags = box.windowFlags();
+    flags |= Qt::FramelessWindowHint;
+    box.setWindowFlags (flags);
+  
+    box.setText (tr("This Note has no identifier, Save it first!"));
+    int delay = 10000;
+    QTimer::singleShot (delay, &box, SLOT (accept()));
+    box.exec ();
+  }
+}
+
+void
+NotesDisplay::PasteNoteLink ()
+{
+  editBox->PasteLink (noteLinkCopy);
+}
+
+void
 NotesDisplay::ToggleFont (const FontProperty prop)
 {
   if (prop <= FP_none || prop >= FP_max) {
@@ -342,6 +380,19 @@ void
 NotesDisplay::ScheduleManage ()
 {
   QTimer::singleShot (50, this, SLOT (ShowManage()));
+}
+
+void
+NotesDisplay::ScheduleSpecial ()
+{
+  QTimer::singleShot (50, this, SLOT (DoSpecial()));
+}
+
+void
+NotesDisplay::DoSpecial ()
+{
+qDebug () << " dospecial";
+  specialMenu.Exec (editBox->mapToGlobal (QPoint(0,0)));
 }
 
 void

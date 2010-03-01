@@ -83,13 +83,18 @@ EditBox::GrabLink ()
 {
   QTextCursor curse = textCursor();
   QString text = curse.selectedText ();
+  InsertLink (curse, text);
+  
+}
+
+void
+EditBox::InsertLink (QTextCursor & curse, QString text)
+{
   curse.removeSelectedText ();
   QString linkpattern (" <a href=\"%1\">%2</a> ");
   QUrl url(text);
   QString linkhtml;
-  qDebug () << " grabbed url " << url;
-  qDebug () << " scheme " << url.scheme();
-  if (url.isValid() && url.scheme() == "ntbly") {
+  if (url.isValid() && url.scheme() == "notably") {
     QString longname = FindUsergivenId (url.authority().toLongLong());
     if (longname == QString("")) {
       longname = text;
@@ -102,6 +107,13 @@ EditBox::GrabLink ()
 }
 
 void
+EditBox::PasteLink (QString urlstring)
+{
+  QTextCursor  curse = textCursor();
+  InsertLink (curse, urlstring);
+}
+
+void
 EditBox::mousePressEvent (QMouseEvent * event)
 {
   if (event) {
@@ -109,7 +121,7 @@ EditBox::mousePressEvent (QMouseEvent * event)
     if (anch.length () > 0) {
       QUrl url (anch);
       if (url.isValid()) {
-        if (url.scheme() == "ntbly") {
+        if (url.scheme() == "notably") {
           qint64 newnote = url.authority().toLongLong();
           emit LinkToNote (newnote);
         } else {

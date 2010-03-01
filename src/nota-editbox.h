@@ -43,6 +43,8 @@ public:
   void GrabHtml ();
   void GrabLink ();
   
+  void PasteLink (QString urlstring);
+  
 public slots:
 
   void paste ();
@@ -60,6 +62,8 @@ private:
   QString ImgFilename (QImage & img);
   QString FindUsergivenId (qint64 noteid);
   void SetupSearchbox ();
+  
+  void  InsertLink (QTextCursor & curse, QString text);
   
   NotaConf *pConf;
   QSqlDatabase  *pDB;

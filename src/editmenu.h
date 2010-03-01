@@ -36,33 +36,20 @@ private slots:
   void Bold ();
   void Italic ();
   void Underline ();
-  void ScreenShot ();
-  void WholeScreenShot ();
-  void GrabHtml ();
-  void GrabLink ();
   void Search ();
 
 signals:
 
   void SigFontToggle (const FontProperty);
-  void SigShootScreen (const bool whole);
-  void SigGrabSelection ();
-  void SigGrabLink ();
   void SigLocalSearch ();
 
 private:
-
-  void EmitScreenShot (const QString msg, const bool whole);
 
   NotaConf *pConf;
   QMenu    menu;
   QAction  *boldAction;
   QAction  *italicAction;
   QAction  *underlineAction;
-  QAction  *shootAction;
-  QAction  *shootAllAction;
-  QAction  *htmlAction;
-  QAction  *linkAction;
   QAction  *searchAction;
 
 };
