@@ -59,6 +59,7 @@ void
 BookEdit::GetAllBooks ()
 {
   bookTable->clearContents ();
+  bookTable->setRowCount (0);
   if (pDB) {
     QString bookQry ("select bookname, description from books where 1");
     QSqlQuery query (*pDB);

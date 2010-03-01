@@ -21,6 +21,7 @@
 #include "notaconf.h"
 #include "ui_changefile.h"
 #include "book-edit.h"
+#include "tag-edit.h"
 
 namespace nota {
 
@@ -44,6 +45,7 @@ public slots:
   void DoExport ();
   void ExportAll ();
   void EditBooks ();
+  void EditTags ();
   
 signals:
 
@@ -57,6 +59,7 @@ private:
   QDialog         fileDialog;
   
   BookEdit        bookEditor;
+  TagEdit         tagEditor;
   
   
   NotaConf  *pConf;
@@ -64,6 +67,7 @@ private:
   QAction  *fileNameAction;
   QAction  *exportAction;
   QAction  *bookAction;
+  QAction  *tagAction;
   
 };
 

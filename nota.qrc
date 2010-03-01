@@ -16,6 +16,7 @@
   <file>img/dead.png</file>
   <file>img/important.png</file>
   <file>img/done.png</file>
+  <file>img/default.png</file>
   <file>qrcfiles/userman.html</file>
   <file>qrcfiles/LICENSE.txt</file>
 </qresource>
