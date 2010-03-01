@@ -104,7 +104,8 @@ NoteBookEdit::GetAllBooks ()
   QString desc;
   allbooks.clear ();
   QTableWidgetItem *item;
-  bookTable->clear ();
+  bookTable->clearContents ();
+  bookTable->setRowCount (0);
   int row=0;
   int nrows = bookTable->rowCount();
   while (query.next () ) {

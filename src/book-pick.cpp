@@ -67,6 +67,7 @@ void
 BookPick::ListBooks ()
 {
   bookTable->clearContents ();
+  bookTable->setRowCount (0);
   QString qryStr ("select bookname, description from books where 1");
   QSqlQuery query (*pDB);
   query.exec (qryStr);
