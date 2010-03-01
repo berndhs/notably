@@ -92,7 +92,10 @@ ContentMenu::Books ()
 {
   bookPick.Exec ();
   if (bookPick.SelectedBook()) {
-    FindNotesByBook (bookPick.TitleSelected());
+    QString qryPattern 
+      ("select distinct noteid from bookrefs where bookname ='%1'");
+    QString qryStr = qryPattern.arg(bookPick.TitleSelected());
+    SingleIdQuery (noteSet, qryStr);
     emit Selected (noteSet);
   }
 }
@@ -120,14 +123,7 @@ void
 ContentMenu::SelectAllNotes (bool doemit)
 {
   QString qryStr ("select noteid from 'notes' where 1");
-  QSqlQuery allquery (*pDB);
-  qint64 noteid;
-  noteSet.clear();
-  allquery.exec (qryStr);
-  while (allquery.next()) {
-    noteid = allquery.value(0).toLongLong();
-    noteSet.insert (noteid);
-  }
+  SingleIdQuery (noteSet, qryStr);
   if (doemit ) {
     emit Selected (noteSet);
   }
@@ -136,48 +132,34 @@ ContentMenu::SelectAllNotes (bool doemit)
 void
 ContentMenu::NotagNotes ()
 {
-  ExceptNotes ("tagrefs");
+  QString qryStr ("select noteid from notes where 1"
+                     " except select distinct noteid from bookrefs where 1");
+  SingleIdQuery (noteSet, qryStr);
+  emit Selected (noteSet);
 }
 
 void
 ContentMenu::NobookNotes ()
 {
-  ExceptNotes ("bookrefs");
-}
-
-void
-ContentMenu::ExceptNotes (QString exceptTable)
-{
-  noteSet.clear();
-  QString qryPattern ("select noteid from notes where 1"
-                     " except select distinct noteid from %1 where 1");
-  QString qryStr = qryPattern.arg(exceptTable);
-  QSqlQuery nobookquery (*pDB);
-  nobookquery.exec (qryStr);
-  qint64 noteid;
-  while (nobookquery.next()) {
-    noteid = nobookquery.value(0).toLongLong();
-    noteSet.insert (noteid);
-  }
+  QString qryStr ("select noteid from notes where 1"
+                     " except select distinct noteid from bookrefs where 1");
+  SingleIdQuery (noteSet, qryStr);
   emit Selected (noteSet);
 }
 
-
 void
-ContentMenu::FindNotesByBook (QString booktitle)
+ContentMenu::SingleIdQuery (NoteIdSetType & theNoteSet, QString qryStr)
 {
-  QString qryPattern 
-    ("select distinct noteid from bookrefs where bookname ='%1'");
-  QString qryStr = qryPattern.arg(booktitle);
+  theNoteSet.clear();
   QSqlQuery query (*pDB);
   query.exec (qryStr);
-  noteSet.clear();
-  qint64  noteid;
+  qint64 noteid;
   while (query.next()) {
     noteid = query.value(0).toLongLong();
-    noteSet.insert (noteid);
+    theNoteSet.insert (noteid);
   }
 }
+
 
 void
 ContentMenu::SetupSearchbox ()

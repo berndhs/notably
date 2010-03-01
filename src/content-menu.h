@@ -59,9 +59,8 @@ private:
 
   void FindSelectedNotes (NoteIdSetType & results,
                           QStringList & tagnames);
-  void FindNotesByBook (QString booktitle);
   void SetupSearchbox ();
-  void ExceptNotes (QString exceptTable);
+  void SingleIdQuery (NoteIdSetType & theNoteSet, QString exceptTable);
 
   NotaConf   *pConf;
   QSqlDatabase *pDB;
