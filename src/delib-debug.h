@@ -15,6 +15,7 @@
 #include "deliberate.h"
 
 #if DELIBERATE_DEBUG
+#define DELIBERATE_TEST 1
 #include <QDebug>
 #else
 #include <QDebug>

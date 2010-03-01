@@ -124,7 +124,6 @@ SpecialMenu::PasteNoteLink ()
 void
 SpecialMenu::Exec (QPoint here)
 {
-qDebug () << " special menu exec";
   menu.popup (here);
 }
 

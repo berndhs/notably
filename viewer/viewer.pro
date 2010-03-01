@@ -19,6 +19,7 @@ INCLUDEPATH += ../src
 
 CONFIG(debug, debug|release) {
   DEFINES += DELIBERATE_DEBUG=1
+  DEFIENS += DELIBERATE_TEST=1
   TARGET = notablyd
 }
 
@@ -26,6 +27,7 @@ CONFIG(release, debug|release) {
   DEFINES += DELIBERATE_DEBUG=0
   TARGET = notably
 }
+
 
 QT += gui core sql webkit
 

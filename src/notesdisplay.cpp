@@ -14,6 +14,11 @@
 #include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QCursor>
+#if DELIBERATE_TEST
+#include <QWebElementCollection>
+#include <QWebElement>
+#include <QWebFrame>
+#endif
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -109,6 +114,10 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (contentAction);
   helpAction = new QAction (tr("&Help"), this);
   menubar->addAction (helpAction);
+  #if DELIBERATE_TEST
+  testingAction = new QAction (tr("Test New Feature"), this);
+  menubar->addAction (testingAction);
+  #endif
   
   saveShort = new QShortcut (QKeySequence(tr("Ctrl+S")),this);
   connect (saveShort, SIGNAL(activated()), this, SLOT (SaveCurrent()));
@@ -128,6 +137,9 @@ NotesDisplay::SetupMenu ()
   connect (specialShort, SIGNAL (activated()), this, SLOT (ScheduleSpecial()));
   
   connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
+  #if DELIBERATE_TEST
+  connect (testingAction, SIGNAL (triggered()), this, SLOT (TestingNew()));
+  #endif
  
   connect (saveButton, SIGNAL (clicked()), this, SLOT (SaveCurrent()));
   
@@ -391,7 +403,6 @@ NotesDisplay::ScheduleSpecial ()
 void
 NotesDisplay::DoSpecial ()
 {
-qDebug () << " dospecial";
   specialMenu.Exec (editBox->mapToGlobal (QPoint(0,0)));
 }
 
@@ -966,5 +977,89 @@ NotesDisplay::DebugCheck ()
   qDebug () << " editbox modified " << isChanged;
 #endif
 }
+
+#if DELIBERATE_TEST
+
+void
+NotesDisplay::TestingNew ()
+{
+  exportSet.clear();
+  exportNames.clear();
+  exportSet.insert (currentId);
+  exportNames [currentId] = GetNoteTitle(currentId);
+  FillNoteIdSet (currentId);
+  qDebug () << " note set has " << exportSet.size() << " items";
+  qDebug () << " note set is " << exportSet;
+  std::map<qint64,QString>::iterator mit;
+  for (mit=exportNames.begin(); mit!= exportNames.end(); mit++) {
+    qDebug () << " name [" << mit->first << "] = \"" << 
+                 mit->second << "\"";
+  }
+  
+}
+
+QString 
+NotesDisplay::GetNoteTitle (qint64 noteId)
+{
+   QString pat ("select usergivenid from notes where noteid =%1");
+   QString qryStr = pat.arg(noteId);
+   QSqlQuery query (db);
+   QString name("");
+   bool ok = query.exec (qryStr);
+   if (ok && query.next()) {
+     name = query.value(0).toString();
+   } 
+   return name;
+}
+
+
+void
+NotesDisplay::FillNoteIdSet (qint64 startId)
+{
+  qint64 id = startId;
+  QSqlQuery query (db);
+  QString pat ("select notetext from notes where noteid=%1");
+  QString qstr = pat.arg(QString::number(id));
+  query.exec (qstr);
+  QString fulltext;
+  if (query.next()) {
+    fulltext = query.value(0).toString();
+    qDebug () << " string is " << fulltext.size() << " in size";
+    QWebView view;
+    view.setHtml (fulltext);
+    QWebPage *pg = view.page();
+    qDebug() << " page at " << pg;
+    QWebElementCollection allElements = pg->mainFrame()->findAllElements("*");
+    qDebug () << " number elements " << allElements.count();
+    int elnum(0);
+    QString tag;
+    QString ref;
+    foreach (QWebElement elt, allElements) {
+      tag = elt.tagName().toUpper();
+      if (tag == "A") {
+         QUrl url (elt.attribute("href"));
+         QString sch = url.scheme();
+         qDebug () << " anchor scheme " << sch;
+         if (sch == "notably") {
+           qint64 newid = url.authority().toLongLong();
+           if (newid != 0) {
+             if (!exportSet.contains (newid)) {
+               exportSet.insert (newid);
+               exportNames [newid] = GetNoteTitle (newid);
+               FillNoteIdSet (newid);
+             }
+           }
+         }
+         
+      } else if (tag == "IMG") {
+         qDebug () << " img src " << elt.attribute ("src");
+         QUrl url (elt.attribute("src"));
+         qDebug () << " img src scheme " << url.scheme();
+      }
+     
+    }
+  }
+}
+#endif
 
 }

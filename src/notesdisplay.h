@@ -13,6 +13,7 @@
 //
 //
 
+#include "delib-debug.h"
 #include <QMainWindow>
 #include <QApplication>
 #include "utility-types.h"
@@ -102,6 +103,10 @@ public slots:
   void CopyNoteLink ();
   void PasteNoteLink ();
   
+  #if DELIBERATE_TEST
+  void TestingNew ();
+  #endif
+  
   void ReloadDB ();
   
   void ToggleFont (const FontProperty);
@@ -110,6 +115,11 @@ public slots:
   void DoShootScreen ();
 
 private:
+
+  #if DELIBERATE_TEST
+  void FillNoteIdSet (qint64 startId);
+  QString GetNoteTitle (qint64 noteId);
+  #endif
 
   void SetupMenu ();
   void SetupEdit ();
@@ -191,6 +201,12 @@ private:
   QAction    *specialAction;
   QAction    *manageAction;
   QAction    *contentAction;
+  #if DELIBERATE_TEST
+  QAction    *testingAction;
+  QSet <qint64> exportSet;
+  std::map <qint64, QString> exportNames;
+  
+  #endif
   
   QShortcut  *exitShort;
   QShortcut  *noteMenuShort;

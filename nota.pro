@@ -21,6 +21,7 @@ INCLUDEPATH += src
 
 CONFIG(debug, debug|release) {
   DEFINES += DELIBERATE_DEBUG=1
+  DEFINES += DELIBERATE_TEST=1
 }
 
 CONFIG(release, debug|release) {
