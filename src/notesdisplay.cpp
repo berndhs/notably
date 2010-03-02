@@ -988,14 +988,17 @@ NotesDisplay::TestingNew ()
   exportSet.insert (currentId);
   exportNames [currentId] = GetNoteTitle(currentId);
   FillNoteIdSet (currentId);
-  qDebug () << " note set has " << exportSet.size() << " items";
-  qDebug () << " note set is " << exportSet;
-  std::map<qint64,QString>::iterator mit;
-  for (mit=exportNames.begin(); mit!= exportNames.end(); mit++) {
-    qDebug () << " name [" << mit->first << "] = \"" << 
-                 mit->second << "\"";
+  QString saveFile = 
+           QFileDialog::getSaveFileName 
+                      (this, "File Name for HTML page",
+            QDesktopServices::storageLocation (QDesktopServices::HomeLocation)
+            + QDir::separator() + "index.html",
+            tr ("Web pages (*.html);;All Files (*.*)"));
+  if (saveFile.length() > 0) {
+    ConstructPages (saveFile, exportSet, exportNames);
   }
-  
+  QUrl newurl (saveFile);
+  QDesktopServices::openUrl (newurl);
 }
 
 QString 
@@ -1024,14 +1027,10 @@ NotesDisplay::FillNoteIdSet (qint64 startId)
   QString fulltext;
   if (query.next()) {
     fulltext = query.value(0).toString();
-    qDebug () << " string is " << fulltext.size() << " in size";
     QWebView view;
     view.setHtml (fulltext);
     QWebPage *pg = view.page();
-    qDebug() << " page at " << pg;
     QWebElementCollection allElements = pg->mainFrame()->findAllElements("*");
-    qDebug () << " number elements " << allElements.count();
-    int elnum(0);
     QString tag;
     QString ref;
     foreach (QWebElement elt, allElements) {
@@ -1039,7 +1038,6 @@ NotesDisplay::FillNoteIdSet (qint64 startId)
       if (tag == "A") {
          QUrl url (elt.attribute("href"));
          QString sch = url.scheme();
-         qDebug () << " anchor scheme " << sch;
          if (sch == "notably") {
            qint64 newid = url.authority().toLongLong();
            if (newid != 0) {
@@ -1052,12 +1050,93 @@ NotesDisplay::FillNoteIdSet (qint64 startId)
          }
          
       } else if (tag == "IMG") {
-         qDebug () << " img src " << elt.attribute ("src");
          QUrl url (elt.attribute("src"));
-         qDebug () << " img src scheme " << url.scheme();
       }
      
     }
+  }
+}
+
+void
+NotesDisplay::ConstructPages (QString indexname, 
+                          QSet<qint64> &idSet,
+                          std::map<qint64,QString> & nameTable)
+{
+  QFileInfo info (indexname);
+  ConstructIndexpage (info.baseName(), idSet, nameTable, indexname);
+  QSet<qint64>::iterator pg;
+  for (pg = idSet.begin(); pg != idSet.end(); pg++) {
+    ConstructWebpage (*pg, info.path());
+  }
+}
+
+QString
+NotesDisplay::LinkFileName (qint64 id)
+{
+  QString pat ("Note%1.html");
+  return pat.arg(QString::number(id));
+}
+
+void
+NotesDisplay::ConstructIndexpage (QString pagename,
+                               QSet<qint64> & idSet,
+                               std::map<qint64,QString> & nameTable,
+                               QString completeName)
+{
+  QString pagePat ("<html><head><title>%1</title></head>\n"
+           "<body>\n<h1>%2</h1>\n%3\n</body>\n</html>\n");
+  QString linkPat ("<a href=\"%1\">%2</a><br>\n");
+  QSet<qint64>::iterator nit;
+  QString body;
+  for (nit = idSet.begin(); nit != idSet.end(); nit++) {
+    body.append (linkPat.arg(LinkFileName(*nit)).arg(nameTable[*nit]));
+  }
+  QString page = pagePat.arg(pagename).arg(pagename).arg(body);
+  QTextEdit htmlPage;
+  htmlPage.setVisible (false);
+  htmlPage.setHtml (page);
+  QFile dest (completeName);
+  dest.open (QFile::WriteOnly);
+  dest.write (htmlPage.toHtml().toLocal8Bit());
+  dest.close ();
+  
+}
+
+void
+NotesDisplay::ConstructWebpage (qint64 noteid, QString path)
+{
+  QString pat ("select notetext from notes where noteid=%1");
+  QString qryStr = pat.arg(QString::number(noteid));
+  QSqlQuery query (db);
+  bool ok = query.exec (qryStr);
+  if (ok && query.next()) {
+    QWebView view;
+    view.setHtml (query.value(0).toString());
+    QWebPage *pg = view.page();
+    QWebElementCollection allElements = pg->mainFrame()->findAllElements("*");
+    QString tag;
+    QString ref;
+    foreach (QWebElement elt, allElements) {
+      tag = elt.tagName().toUpper();
+      if (tag == "A") {
+        ref = elt.attribute ("href");
+        QUrl url(ref);
+        QString sch = url.scheme();
+        if (sch == "notably") {
+          qint64 target = url.authority().toLongLong();
+          if (target != 0) {
+            elt.setAttribute ("href",LinkFileName(target));
+          }
+        }
+      }
+    }
+    QString newpage = pg->mainFrame()->toHtml();
+    QString filename = LinkFileName (noteid);
+    QFile dest (path + QDir::separator() + filename);
+    dest.open (QFile::WriteOnly);
+    dest.write (newpage.toLocal8Bit());
+    dest.close ();
+    
   }
 }
 #endif

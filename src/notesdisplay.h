@@ -119,6 +119,15 @@ private:
   #if DELIBERATE_TEST
   void FillNoteIdSet (qint64 startId);
   QString GetNoteTitle (qint64 noteId);
+  void    ConstructPages (QString indexname, 
+                          QSet<qint64> & idSet,
+                          std::map<qint64,QString> & nameTable);
+  void  ConstructIndexpage (QString pagename,
+                           QSet<qint64> &idSet,
+                          std::map<qint64,QString> & nameTable,
+                          QString completeName);
+  void ConstructWebpage (qint64, QString path);
+  QString LinkFileName (qint64 id);
   #endif
 
   void SetupMenu ();
