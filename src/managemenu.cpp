@@ -122,10 +122,20 @@ ManageMenu::ExportAll ()
 
 void
 ManageMenu::ExportBook ()
-{
-  int wantExport = bookPicker.Exec ();
-  if (wantExport) {
-    emit SigExportBook (bookPicker.TitleSelected());
+{ 
+  if (ExportHtml::IsImplemented()) {
+    int wantExport = bookPicker.Exec ();
+    if (wantExport) {
+      emit SigExportBook (bookPicker.TitleSelected());
+    }
+  } else {
+    QMessageBox box (this);
+    Qt::WindowFlags flags = box.windowFlags();
+    flags |= Qt::FramelessWindowHint;
+    box.setWindowFlags (flags);
+    box.setText (tr("Not Implemented with this Qt Version"));
+    QTimer::singleShot (10000, &box, SLOT (accept()));
+    box.exec ();
   }
 }
 

@@ -23,6 +23,7 @@
 #include "book-edit.h"
 #include "book-pick.h"
 #include "tag-edit.h"
+#include "export-html.h"
 
 namespace nota {
 
