@@ -14,11 +14,6 @@
 #include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QCursor>
-#if DELIBERATE_TEST
-#include <QWebElementCollection>
-#include <QWebElement>
-#include <QWebFrame>
-#endif
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -50,6 +45,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
  helpBox (this),
  noteTagEditor (this),
  noteBookEditor (this),
+ htmlExporter (this,db),
  dbManager (db),
  mConName ("nota_dbcon"),
  noLabel (this),
@@ -114,10 +110,7 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (contentAction);
   helpAction = new QAction (tr("&Help"), this);
   menubar->addAction (helpAction);
-  #if DELIBERATE_TEST
-  testingAction = new QAction (tr("Test New Feature"), this);
-  menubar->addAction (testingAction);
-  #endif
+  
   
   saveShort = new QShortcut (QKeySequence(tr("Ctrl+S")),this);
   connect (saveShort, SIGNAL(activated()), this, SLOT (SaveCurrent()));
@@ -136,10 +129,7 @@ NotesDisplay::SetupMenu ()
   specialShort = new QShortcut (QKeySequence (tr("Ctrl+I")), this);
   connect (specialShort, SIGNAL (activated()), this, SLOT (ScheduleSpecial()));
   
-  connect (exitAction, SIGNAL (triggered()), this, SLOT (quit()));
-  #if DELIBERATE_TEST
-  connect (testingAction, SIGNAL (triggered()), this, SLOT (TestingNew()));
-  #endif
+  connect (exitAction, SIGNAL (triggered()), this, SLOT (quit())); 
  
   connect (saveButton, SIGNAL (clicked()), this, SLOT (SaveCurrent()));
   
@@ -161,6 +151,8 @@ NotesDisplay::SetupMenu ()
   connect (&noteMenu, SIGNAL (ChangeBooks()), this, SLOT (DoNoteBooks()));
   
   connect (&manageMenu, SIGNAL (SigReload()), this, SLOT (ReloadDB()));
+  connect (&manageMenu, SIGNAL (SigExportBook (QString)),
+             this, SLOT (ExportBook (QString)));
   
   connect (&contentMenu, SIGNAL (Selected (NoteIdSetType &)),
            this, SLOT (SelectionMade (NoteIdSetType &)));
@@ -970,6 +962,12 @@ NotesDisplay::mouseReleaseEvent (QMouseEvent *event)
 }
 
 void
+NotesDisplay::ExportBook (QString bookname)
+{
+  htmlExporter.ExportBook (bookname);
+}
+
+void
 NotesDisplay::DebugCheck ()
 {
 #ifndef _WIN32
@@ -977,168 +975,5 @@ NotesDisplay::DebugCheck ()
   qDebug () << " editbox modified " << isChanged;
 #endif
 }
-
-#if DELIBERATE_TEST
-
-void
-NotesDisplay::TestingNew ()
-{
-  exportSet.clear();
-  exportNames.clear();
-  exportSet.insert (currentId);
-  exportNames [currentId] = GetNoteTitle(currentId);
-  FillNoteIdSet (currentId);
-  QString saveFile = 
-           QFileDialog::getSaveFileName 
-                      (this, "File Name for HTML page",
-            QDesktopServices::storageLocation (QDesktopServices::HomeLocation)
-            + QDir::separator() + "index.html",
-            tr ("Web pages (*.html);;All Files (*.*)"));
-  if (saveFile.length() > 0) {
-    ConstructPages (saveFile, exportSet, exportNames);
-  }
-  QUrl newurl (saveFile);
-  QDesktopServices::openUrl (newurl);
-}
-
-QString 
-NotesDisplay::GetNoteTitle (qint64 noteId)
-{
-   QString pat ("select usergivenid from notes where noteid =%1");
-   QString qryStr = pat.arg(noteId);
-   QSqlQuery query (db);
-   QString name("");
-   bool ok = query.exec (qryStr);
-   if (ok && query.next()) {
-     name = query.value(0).toString();
-   } 
-   return name;
-}
-
-
-void
-NotesDisplay::FillNoteIdSet (qint64 startId)
-{
-  qint64 id = startId;
-  QSqlQuery query (db);
-  QString pat ("select notetext from notes where noteid=%1");
-  QString qstr = pat.arg(QString::number(id));
-  query.exec (qstr);
-  QString fulltext;
-  if (query.next()) {
-    fulltext = query.value(0).toString();
-    QWebView view;
-    view.setHtml (fulltext);
-    QWebPage *pg = view.page();
-    QWebElementCollection allElements = pg->mainFrame()->findAllElements("*");
-    QString tag;
-    QString ref;
-    foreach (QWebElement elt, allElements) {
-      tag = elt.tagName().toUpper();
-      if (tag == "A") {
-         QUrl url (elt.attribute("href"));
-         QString sch = url.scheme();
-         if (sch == "notably") {
-           qint64 newid = url.authority().toLongLong();
-           if (newid != 0) {
-             if (!exportSet.contains (newid)) {
-               exportSet.insert (newid);
-               exportNames [newid] = GetNoteTitle (newid);
-               FillNoteIdSet (newid);
-             }
-           }
-         }
-         
-      } else if (tag == "IMG") {
-         QUrl url (elt.attribute("src"));
-      }
-     
-    }
-  }
-}
-
-void
-NotesDisplay::ConstructPages (QString indexname, 
-                          QSet<qint64> &idSet,
-                          std::map<qint64,QString> & nameTable)
-{
-  QFileInfo info (indexname);
-  ConstructIndexpage (info.baseName(), idSet, nameTable, indexname);
-  QSet<qint64>::iterator pg;
-  for (pg = idSet.begin(); pg != idSet.end(); pg++) {
-    ConstructWebpage (*pg, info.path());
-  }
-}
-
-QString
-NotesDisplay::LinkFileName (qint64 id)
-{
-  QString pat ("Note%1.html");
-  return pat.arg(QString::number(id));
-}
-
-void
-NotesDisplay::ConstructIndexpage (QString pagename,
-                               QSet<qint64> & idSet,
-                               std::map<qint64,QString> & nameTable,
-                               QString completeName)
-{
-  QString pagePat ("<html><head><title>%1</title></head>\n"
-           "<body>\n<h1>%2</h1>\n%3\n</body>\n</html>\n");
-  QString linkPat ("<a href=\"%1\">%2</a><br>\n");
-  QSet<qint64>::iterator nit;
-  QString body;
-  for (nit = idSet.begin(); nit != idSet.end(); nit++) {
-    body.append (linkPat.arg(LinkFileName(*nit)).arg(nameTable[*nit]));
-  }
-  QString page = pagePat.arg(pagename).arg(pagename).arg(body);
-  QTextEdit htmlPage;
-  htmlPage.setVisible (false);
-  htmlPage.setHtml (page);
-  QFile dest (completeName);
-  dest.open (QFile::WriteOnly);
-  dest.write (htmlPage.toHtml().toLocal8Bit());
-  dest.close ();
-  
-}
-
-void
-NotesDisplay::ConstructWebpage (qint64 noteid, QString path)
-{
-  QString pat ("select notetext from notes where noteid=%1");
-  QString qryStr = pat.arg(QString::number(noteid));
-  QSqlQuery query (db);
-  bool ok = query.exec (qryStr);
-  if (ok && query.next()) {
-    QWebView view;
-    view.setHtml (query.value(0).toString());
-    QWebPage *pg = view.page();
-    QWebElementCollection allElements = pg->mainFrame()->findAllElements("*");
-    QString tag;
-    QString ref;
-    foreach (QWebElement elt, allElements) {
-      tag = elt.tagName().toUpper();
-      if (tag == "A") {
-        ref = elt.attribute ("href");
-        QUrl url(ref);
-        QString sch = url.scheme();
-        if (sch == "notably") {
-          qint64 target = url.authority().toLongLong();
-          if (target != 0) {
-            elt.setAttribute ("href",LinkFileName(target));
-          }
-        }
-      }
-    }
-    QString newpage = pg->mainFrame()->toHtml();
-    QString filename = LinkFileName (noteid);
-    QFile dest (path + QDir::separator() + filename);
-    dest.open (QFile::WriteOnly);
-    dest.write (newpage.toLocal8Bit());
-    dest.close ();
-    
-  }
-}
-#endif
 
 }

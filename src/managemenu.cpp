@@ -23,7 +23,8 @@ ManageMenu::ManageMenu (QWidget * parent)
 :QWidget(parent),
  fileDialog (this),
  bookEditor (this),
- tagEditor (this)
+ tagEditor (this),
+ bookPicker (this)
 {
   fileUI.setupUi (&fileDialog);
   fileDialog.setWindowTitle (tr("Change Data Location"));
@@ -34,6 +35,10 @@ ManageMenu::ManageMenu (QWidget * parent)
   exportAction = new QAction (tr("Export All"), this);
   menu.addAction (exportAction);
   connect (exportAction, SIGNAL (triggered()), this, SLOT (ExportAll()));
+  
+  htmlAction = new QAction (tr("Export Book as HTML"), this);
+  menu.addAction (htmlAction);
+  connect (htmlAction, SIGNAL (triggered()), this, SLOT (ExportBook()));
   
   bookAction = new QAction (tr("Book Editor"), this);
   menu.addAction (bookAction);
@@ -51,6 +56,7 @@ ManageMenu::SetDB (QSqlDatabase & db)
 {
   bookEditor.SetDB (db);
   tagEditor.SetDB (db);
+  bookPicker.SetDB (db);
 }
 
 void
@@ -111,6 +117,15 @@ ManageMenu::ExportAll ()
     box.setText (status);
     QTimer::singleShot (30000,&box,SLOT(accept()));
     box.exec ();
+  }
+}
+
+void
+ManageMenu::ExportBook ()
+{
+  int wantExport = bookPicker.Exec ();
+  if (wantExport) {
+    emit SigExportBook (bookPicker.TitleSelected());
   }
 }
 

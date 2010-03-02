@@ -17,9 +17,12 @@ CONFIG += qt debug_and_release
 
 INCLUDEPATH += ../src
 
+DEFINES += DELIBERATE_QTM1=$$QT_MAJOR_VERSION
+DEFINES += DELIBERATE_QTM2=$$QT_MINOR_VERSION
+DEFINES += DELIBERATE_QTP=$$QT_PATCH_VERSION
+
 CONFIG(debug, debug|release) {
   DEFINES += DELIBERATE_DEBUG=1
-  DEFIENS += DELIBERATE_TEST=1
   TARGET = notablyd
 }
 
@@ -69,6 +72,7 @@ SOURCES = \
 	../src/book-pick.cpp \
 	../src/book-edit.cpp \
 	../src/tag-edit.cpp \
+	../src/export-html.cpp \
 	../src/notably.cpp
 
 HEADERS = \
@@ -92,6 +96,7 @@ HEADERS = \
 	../src/book-pick.h \
 	../src/book-edit.h \
 	../src/tag-edit.h \
+	../src/export-html.h \
 	../src/helpbox.h 
 	
 

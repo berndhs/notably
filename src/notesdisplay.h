@@ -31,6 +31,7 @@
 #include "version.h"
 #include "helpbox.h"
 #include "nota-help.h"
+#include "export-html.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -102,10 +103,8 @@ public slots:
   void EditBoxChanged ();
   void CopyNoteLink ();
   void PasteNoteLink ();
+  void ExportBook (QString bookname);
   
-  #if DELIBERATE_TEST
-  void TestingNew ();
-  #endif
   
   void ReloadDB ();
   
@@ -115,20 +114,6 @@ public slots:
   void DoShootScreen ();
 
 private:
-
-  #if DELIBERATE_TEST
-  void FillNoteIdSet (qint64 startId);
-  QString GetNoteTitle (qint64 noteId);
-  void    ConstructPages (QString indexname, 
-                          QSet<qint64> & idSet,
-                          std::map<qint64,QString> & nameTable);
-  void  ConstructIndexpage (QString pagename,
-                           QSet<qint64> &idSet,
-                          std::map<qint64,QString> & nameTable,
-                          QString completeName);
-  void ConstructWebpage (qint64, QString path);
-  QString LinkFileName (qint64 id);
-  #endif
 
   void SetupMenu ();
   void SetupEdit ();
@@ -175,6 +160,7 @@ private:
   NotaHelp      helpBrowser;
   NoteTagEdit   noteTagEditor;
   NoteBookEdit  noteBookEditor;
+  ExportHtml    htmlExporter;
   
   DBManage      dbManager;
   QSqlDatabase  db;
@@ -210,12 +196,6 @@ private:
   QAction    *specialAction;
   QAction    *manageAction;
   QAction    *contentAction;
-  #if DELIBERATE_TEST
-  QAction    *testingAction;
-  QSet <qint64> exportSet;
-  std::map <qint64, QString> exportNames;
-  
-  #endif
   
   QShortcut  *exitShort;
   QShortcut  *noteMenuShort;
