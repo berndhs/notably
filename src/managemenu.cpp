@@ -133,7 +133,7 @@ ManageMenu::ExportBook ()
     Qt::WindowFlags flags = box.windowFlags();
     flags |= Qt::FramelessWindowHint;
     box.setWindowFlags (flags);
-    box.setText (tr("Not Implemented with this Qt Version"));
+    box.setText (tr("Not Implemented for Qt Version less than 4.6.1"));
     QTimer::singleShot (10000, &box, SLOT (accept()));
     box.exec ();
   }

@@ -12,7 +12,7 @@
 // of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 //
 //
-
+#include <QDebug>
 
 namespace nota {
 
@@ -48,17 +48,21 @@ ExportHtml::ExportBook (QString bookname)
 bool
 ExportHtml::PrivateExportBook (QString bookname)
 {
+  pageTitle = bookname;
   QString saveFile = 
            QFileDialog::getSaveFileName 
                       (this, "File Name for Index page",
             QDesktopServices::storageLocation (QDesktopServices::HomeLocation)
-            + QDir::separator() + bookname + "_index.html",
+            + QDir::separator() + pageTitle + "_index.html",
             QObject::tr ("Web pages (*.html);;All Files (*.*)"));
   if (saveFile.length() == 0) {
     return false; // nevermind
   }
   exportSet.clear();
   exportNames.clear();
+  imageCounter = 0;
+  imageDir = pageTitle + "_images";
+  MakePaths (saveFile);
   QSet<qint64>  initialNotes;
   GetBookNotes (bookname, initialNotes);
   qint64 noteid;
@@ -70,6 +74,7 @@ ExportHtml::PrivateExportBook (QString bookname)
     FillNoteIdSet (noteid);
   }
   ConstructPages (saveFile, exportSet, exportNames);
+ 
   QUrl newurl (saveFile);
   QDesktopServices::openUrl (newurl);
   return true;
@@ -136,11 +141,10 @@ ExportHtml::FillNoteIdSet (qint64 startId)
              }
            }
          }
-         
       } else if (tag == "IMG") {
-         QUrl url (elt.attribute("src"));
-      }
-     
+        QUrl url (elt.attribute("src"));
+        TranslateImageLoc (url);
+      }     
     }
   }
 }
@@ -151,7 +155,11 @@ ExportHtml::ConstructPages (QString indexname,
                           std::map<qint64,QString> & nameTable)
 {
   QFileInfo info (indexname);
-  ConstructIndexpage (info.baseName(), idSet, nameTable, indexname);
+  ConstructIndexpage (pageTitle, idSet, nameTable, indexname);
+  if (imgNameTranslate.size() > 0 ) {
+    MakeImageDir ();
+    CopyImages ();
+  }
   QSet<qint64>::iterator pg;
   for (pg = idSet.begin(); pg != idSet.end(); pg++) {
     ConstructWebpage (*pg, info.path());
@@ -216,6 +224,11 @@ ExportHtml::ConstructWebpage (qint64 noteid, QString path)
             elt.setAttribute ("href",LinkFileName(target));
           }
         }
+      } else if (tag == "IMG") {
+        ref = elt.attribute ("src");
+        if (imgNameTranslate.count(ref) > 0) {
+          elt.setAttribute ("src",imgNameTranslate[ref].newFile);
+        }
       }
     }
     QString newpage = pg->mainFrame()->toHtml();
@@ -227,6 +240,67 @@ ExportHtml::ConstructWebpage (qint64 noteid, QString path)
     
   }
 }
+
+void
+ExportHtml::TranslateImageLoc (QUrl url)
+{
+  QString whole = url.toString();
+  if (imgNameTranslate.count(whole) > 0) { // seen it, use old translation
+    return;
+  }
+  if (url.scheme().isEmpty()) {
+    QString newref (NewImagename(whole));
+    imgNameTranslate[whole] = ImageNameTranslate (whole, newref);
+  } else {
+    // it is a real URL, not a file name, so we just keep it
+    imgNameTranslate[whole] = ImageNameTranslate (whole, whole);
+  }
+}
+
+
+void 
+ExportHtml::MakeImageDir ()
+{
+  QDir imgdir (imagePath);
+  imgdir.mkpath (imagePath);
+}
+
+QString
+ExportHtml::NewImagename (QString oldname)
+{
+  imageCounter++;
+  QFileInfo info(oldname);
+  
+  return imageDir + QDir::separator() +
+           imageStem + QString::number(imageCounter) + 
+            "." + info.suffix();
+}
+
+void 
+ExportHtml::CopyImages ()
+{
+  ImgTranslateMap::iterator nit;
+  for (nit = imgNameTranslate.begin(); nit != imgNameTranslate.end(); nit++) {
+    QFile imgFile (nit->second.origFile);
+    QString newname = indexPath + QDir::separator() + nit->second.newFile;
+    QFile newFile (newname);
+    if (newFile.exists()) {
+      newFile.remove();
+    }
+    imgFile.copy (newname);
+  }
+}
+
+void
+ExportHtml::MakePaths (QString wholeIndexName)
+{
+  imageStem = pageTitle + "_image_";
+  QFileInfo info (wholeIndexName);
+  QString path = info.path();
+  imagePath = path + QDir::separator() + imageDir;
+  indexPath = path;
+}
+
 #endif
 
 

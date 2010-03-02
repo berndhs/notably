@@ -32,6 +32,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include <map>
 #endif
 
 #include <QString>
@@ -39,6 +40,32 @@
 #include <QWidget>
 
 namespace nota {
+
+#if DELIBERATE_HAVE_WEBELT
+
+class ImageNameTranslate {
+
+public:
+
+   ImageNameTranslate (QString old) :copied(false),origFile(old){}
+   ImageNameTranslate (QString o, QString n):copied(false),
+                                             origFile(o),
+                                             newFile(n){}
+   ImageNameTranslate ():copied(false){}
+   ImageNameTranslate (const ImageNameTranslate & orig)
+                       :copied (orig.copied),
+                        origFile(orig.origFile),
+                        newFile(orig.newFile){}
+
+   bool     copied;
+   QString  origFile;
+   QString  newFile;
+
+};
+
+typedef std::map <QString,ImageNameTranslate> ImgTranslateMap;
+
+#endif
 
 class ExportHtml : public QWidget {
 Q_OBJECT
@@ -69,14 +96,28 @@ private:
                           QString completeName);
   void ConstructWebpage (qint64, QString path);
   QString LinkFileName (qint64 id);
+  
+  void TranslateImageLoc (QUrl iamgeUrl);
+  void MakeImageDir ();
+  void MakePaths (QString wholeIndexName);
+  void CopyImages ();
+  
+  QString NewImagename (QString oldname);
   #endif
   
   QSqlDatabase  *pDB;
 
   #if DELIBERATE_HAVE_WEBELT
-  QAction    *testingAction;
-  QSet <qint64> exportSet;
-  std::map <qint64, QString> exportNames;
+  QAction                     *testingAction;
+  QSet <qint64>                exportSet;
+  std::map <qint64, QString>   exportNames;
+  QString                      imagePath;
+  QString                      imageStem;
+  QString                      imageDir;
+  QString                      indexPath;
+  QString                      pageTitle;
+  int                          imageCounter;
+  ImgTranslateMap              imgNameTranslate;
   
   #endif
 
