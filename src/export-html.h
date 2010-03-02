@@ -36,6 +36,7 @@
 
 #include <QString>
 #include <QSqlDatabase>
+#include <QWidget>
 
 namespace nota {
 
