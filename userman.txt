@@ -18,6 +18,16 @@ provided (web links, mailto links) as far as the platform allows.
 The basic focus of *Notably* are Notes. These are small documents written
 by the user.
 
+[[Books]]
+== Books
+
+[[Tags]]
+== Tags
+
+[[Exporting]]
+== Exporting
+
+[[Build]]
 == Prerequisits
 
 To build and run *Notably*, the current version uses:
