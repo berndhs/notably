@@ -37,11 +37,15 @@ private slots:
   void Italic ();
   void Underline ();
   void Search ();
+  void DoCopy ();
+  void DoPaste ();
 
 signals:
 
   void SigFontToggle (const FontProperty);
   void SigLocalSearch ();
+  void SigCopy ();
+  void SigPaste ();
 
 private:
 
@@ -51,6 +55,8 @@ private:
   QAction  *italicAction;
   QAction  *underlineAction;
   QAction  *searchAction;
+  QAction  *copyAction;
+  QAction  *pasteAction;
 
 };
 

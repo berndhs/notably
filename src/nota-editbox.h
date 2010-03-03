@@ -47,9 +47,10 @@ public:
   
 public slots:
 
-  void paste ();
   void LocalSearch ();
   void DoSearch ();
+  void DoCopy ();
+  void DoPaste ();
 
 signals:
 

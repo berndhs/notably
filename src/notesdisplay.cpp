@@ -172,6 +172,8 @@ NotesDisplay::SetupEdit ()
             this, SLOT (ToggleFont (const FontProperty)));
   connect (&editMenu, SIGNAL (SigLocalSearch ()), 
            editBox, SLOT (LocalSearch()));
+  connect (&editMenu, SIGNAL (SigCopy()), editBox, SLOT (DoCopy()));
+  connect (&editMenu, SIGNAL (SigPaste()), editBox, SLOT (DoPaste()));
   connect (&specialMenu , SIGNAL (SigShootScreen (const bool)),
             this, SLOT (ShootScreen (const bool)));
   connect (&specialMenu, SIGNAL (SigGrabSelection ()),

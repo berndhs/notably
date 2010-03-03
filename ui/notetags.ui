@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Note Tags</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../nota.qrc">
+    <normaloff>:/img/nb.png</normaloff>:/img/nb.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0" columnstretch="0,0,0">
    <item row="0" column="0" rowspan="2" colspan="2">
     <widget class="QLineEdit" name="noteName">
@@ -86,6 +90,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../nota.qrc"/>
+ </resources>
  <connections/>
 </ui>

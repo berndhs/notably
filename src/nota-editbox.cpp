@@ -46,7 +46,13 @@ EditBox::dropEvent (QDropEvent * event)
 }
 
 void
-EditBox::paste ()
+EditBox::DoCopy ()
+{
+  QTextEdit::copy ();
+}
+
+void
+EditBox::DoPaste ()
 {
   QTextEdit::paste ();
 }

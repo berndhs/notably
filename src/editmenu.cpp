@@ -27,6 +27,13 @@ EditMenu::EditMenu (QWidget * parent)
 void
 EditMenu::Init ()
 {
+
+  copyAction = new QAction (tr("Copy"), this);
+  menu.addAction (copyAction);
+  connect (copyAction, SIGNAL (triggered()), this, SLOT (DoCopy()));
+  pasteAction = new QAction (tr("Paste"), this);
+  menu.addAction (pasteAction);
+  connect (pasteAction, SIGNAL (triggered()), this, SLOT (DoPaste()));
   boldAction = new QAction (tr("Bold"),this);
   menu.addAction (boldAction);
   connect (boldAction, SIGNAL (triggered()), this, SLOT (Bold()));
@@ -40,6 +47,18 @@ EditMenu::Init ()
   searchAction = new QAction (tr("Find..."), this);
   menu.addAction (searchAction);
   connect (searchAction, SIGNAL (triggered()), this, SLOT (Search()));
+}
+
+void
+EditMenu::DoCopy ()
+{
+  emit SigCopy ();
+}
+
+void
+EditMenu::DoPaste ()
+{
+  emit SigPaste ();
 }
 
 void
