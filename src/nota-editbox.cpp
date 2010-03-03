@@ -61,7 +61,6 @@ QString
 EditBox::FindUsergivenId (qint64 noteid)
 {
   QString result ("");
-  qDebug () << " look for name for " << noteid;
   if (pDB) {
     QString qryPattern ("select usergivenid from notes where noteid=%1");
     QString qryStr = qryPattern.arg(QString::number(noteid));
