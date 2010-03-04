@@ -51,6 +51,7 @@ public slots:
   void DoSearch ();
   void DoCopy ();
   void DoPaste ();
+  void DoUndo ();
 
 signals:
 

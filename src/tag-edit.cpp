@@ -33,6 +33,7 @@ TagEdit::TagEdit (QWidget *parent)
  nameCol(1),
  descCol(3),
  iconCol(2),
+ loading (false),
  maxIconSize (QSize(64,64))
 {
   setupUi (this);
@@ -45,6 +46,8 @@ TagEdit::TagEdit (QWidget *parent)
             this, SLOT (PickedCell (int,int)));
   connect (tagTable, SIGNAL (cellDoubleClicked(int,int)),
             this, SLOT (DoubleClick (int,int)));
+  connect (tagTable, SIGNAL (cellChanged (int, int)),
+            this, SLOT (ChangedCell (int,int)));
 }
 
 TagEdit::~TagEdit ()
@@ -59,6 +62,7 @@ TagEdit::Setup ()
   tagStatus[Tag_None] = tr("bad status");
   tagStatus[Tag_Old]  = tr("present");
   tagStatus[Tag_New]  = tr("new");
+  tagStatus[Tag_Changed] = tr("changed");
   tagStatus[Tag_Delete] = tr("delete");
 }
 
@@ -74,6 +78,7 @@ TagEdit::GetAllTags ()
 {
   tagTable->clearContents ();
   tagTable->setRowCount (0);
+  loading = true;
   if (pDB) {
     QString tagQry ("select tagname, description, icon from tags where 1");
     QSqlQuery query (*pDB);
@@ -104,6 +109,7 @@ TagEdit::GetAllTags ()
       tagicon = QIcon(pix);
       iconItem = new QTableWidgetItem (tagicon,"");
       SetNoEdit (iconItem);
+      iconItem->setData (Qt::UserRole, iconBytes);
       if (row >= nrows) {
         tagTable->insertRow(row);
         nrows = tagTable->rowCount();
@@ -115,6 +121,7 @@ TagEdit::GetAllTags ()
       row++;
     }
   }
+  loading = false;
 }
 
 void
@@ -145,11 +152,21 @@ TagEdit::PickedCell (int row, int col)
 void
 TagEdit::DoubleClick (int row, int col)
 {
-
   if (col == iconCol) {
     QTableWidgetItem *item = tagTable->item (row, col);
     if (item) {
       ImageLoader (item);
+    }
+  }
+}
+
+void
+TagEdit::ChangedCell (int row, int col)
+{
+  if (!loading) {
+    QTableWidgetItem *item = tagTable->item (row,col);
+    if (item) {
+      SetTagState (row, Tag_Changed);
     }
   }
 }
@@ -248,6 +265,8 @@ TagEdit::Save ()
   for (row = 0; row < tagTable->rowCount(); row++) {
     state = GetTagState (row);
     if (state == Tag_New) {
+      AddToDB (row);
+    } else if (state == Tag_Changed) {
       AddToDB (row);
     }
   }

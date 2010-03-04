@@ -27,7 +27,8 @@ BookEdit::BookEdit (QWidget *parent)
  pDB (0),
  statusCol(0),
  nameCol(1),
- descCol(2)
+ descCol(2),
+ loading (false)
 {
   setupUi (this);
   Setup ();
@@ -37,6 +38,8 @@ BookEdit::BookEdit (QWidget *parent)
   connect (saveButton, SIGNAL (clicked()), this, SLOT (Save()));
   connect (bookTable, SIGNAL (cellActivated(int,int)),
             this, SLOT (PickedCell (int,int)));
+  connect (bookTable, SIGNAL (cellChanged (int, int)),
+            this, SLOT (ChangedCell (int,int)));
 }
 
 void
@@ -45,6 +48,7 @@ BookEdit::Setup ()
   bookStatus[Book_None] = tr("bad status");
   bookStatus[Book_Old]  = tr("present");
   bookStatus[Book_New]  = tr("new");
+  bookStatus[Book_Changed] = tr("changed");
   bookStatus[Book_Delete] = tr("delete");
 }
 
@@ -58,6 +62,7 @@ BookEdit::Exec ()
 void
 BookEdit::GetAllBooks ()
 {
+  loading = true;
   bookTable->clearContents ();
   bookTable->setRowCount (0);
   if (pDB) {
@@ -88,6 +93,7 @@ BookEdit::GetAllBooks ()
       row++;
     }
   }
+  loading = false;
 }
 
 void
@@ -111,6 +117,17 @@ BookEdit::PickedCell (int row, int col)
       deleteButton->setText (tr("Un-Delete"));
     } else {
       deleteButton->setText (tr("Delete"));
+    }
+  }
+}
+
+void
+BookEdit::ChangedCell (int row, int col)
+{
+  if (!loading) {
+    QTableWidgetItem * item = bookTable->item (row, col);
+    if (item) {
+      SetBookState (row, Book_Changed);
     }
   }
 }
@@ -197,7 +214,7 @@ BookEdit::Save ()
   }
   for (row = 0; row < bookTable->rowCount(); row++) {
     state = GetBookState (row);
-    if (state == Book_New) {
+    if (state == Book_New || state == Book_Changed) {
       AddToDB (row);
     }
   }

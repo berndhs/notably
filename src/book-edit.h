@@ -24,6 +24,7 @@ namespace nota {
 enum BookState { Book_None = 0, 
                  Book_Old, 
                  Book_New, 
+                 Book_Changed,
                  Book_Delete, 
                  Book_High
                 };
@@ -44,6 +45,7 @@ public:
 public slots:
 
   void PickedCell (int row, int col);
+  void ChangedCell (int row, int col);
   void Delete ();
   void Add ();
   void Save ();
@@ -64,6 +66,8 @@ private:
   int statusCol;
   int nameCol;
   int descCol;
+  
+  bool loading;
   
   QString bookStatus[Book_High];
 

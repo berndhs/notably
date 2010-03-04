@@ -39,6 +39,7 @@ private slots:
   void Search ();
   void DoCopy ();
   void DoPaste ();
+  void DoUndo ();
 
 signals:
 
@@ -46,6 +47,7 @@ signals:
   void SigLocalSearch ();
   void SigCopy ();
   void SigPaste ();
+  void SigUndo ();
 
 private:
 
@@ -57,6 +59,7 @@ private:
   QAction  *searchAction;
   QAction  *copyAction;
   QAction  *pasteAction;
+  QAction  *undoAction;
 
 };
 

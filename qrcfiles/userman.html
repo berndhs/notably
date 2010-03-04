@@ -387,8 +387,8 @@ div#toc a:visited { color: blue; }
 <h1>Notably Manual</h1>
 <span id="author">Bernd Stramm</span><br />
 <span id="email"><tt>&lt;<a href="mailto:bernd.stramm@gmail.com">bernd.stramm@gmail.com</a>&gt;</tt></span><br />
-<span id="revnumber">version 0.1,</span>
-<span id="revdate">February 2010</span>
+<span id="revnumber">version 0.2,</span>
+<span id="revdate">March 2010</span>
 </div>
 <div id="preamble">
 <div class="sectionbody">
@@ -397,19 +397,114 @@ div#toc a:visited { color: blue; }
 stored in rich text with html-like format. The format supports functional
 links and html, as well as images. Integration with normal desktop services is
 provided (web links, mailto links) as far as the platform allows.</p></div>
-<div class="paragraph"><p><strong>Notably</strong> works on Linux and Windows, and has been pre-tested on Maemo.</p></div>
+<div class="paragraph"><p><strong>Notably</strong> works on Linux and Windows, and should work reasonably on Maemo.</p></div>
 </div>
 </div>
 <h2 id="Notes">Notes</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>The basic focus of <strong>Notably</strong> are Notes. These are small documents written
-by the user.</p></div>
+<div class="paragraph"><p><strong>Notes</strong> are the basic focus of <strong>Notably</strong>. These Notes can be grouped
+into <strong>Books</strong>, and they can be marked with <strong>Tags</strong>.</p></div>
+<h3 id="Starting">Starting a New Note</h3><div style="clear:left"></div>
+<div class="paragraph"><p>You can start a new Note just by typing in the Note display of the main window.
+If you save the Note without giving it a title, a title will be made
+automatically. The title is made up of the data and time when you save the Note.
+You can change the Note title any time you want.</p></div>
+<div class="paragraph"><p>You can also create a new Note by selecting <strong>Note&#8230;&#8594;New Note</strong>. This will
+make a Note title, and insert the words "New Note" as the Note text.</p></div>
+<h3 id="EnterText">Entering Text to a Note</h3><div style="clear:left"></div>
+<h3 id="InsertImages">Inserting Images to a Note</h3><div style="clear:left"></div>
+<h3 id="ScreenShots">Screen Shots</h3><div style="clear:left"></div>
+<h3 id="LinkFunctions">Links in a Note</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Notes can contain hyper text links, like most web documents. Clicking
+on these links causes different actions, depending on the type of
+link. Links can be:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Links to Web sites. These are the familiar <tt>http:</tt> links.
+Clicking on a link to a web site causes <strong>Notably</strong> to
+try to bring up your web browser, and get the browser to display
+the site linked to.
+</p>
+</li>
+<li>
+<p>
+Mail addresses. Clicking on a <tt>mailto:</tt> link causes <strong>Notably</strong> to try to bring
+up your email program, and start an email to the address in the link.
+</p>
+</li>
+<li>
+<p>
+Links to other Notes. Clicking on a link to another <strong>Notably</strong> Note will
+bring up that Note in the viewer.
+</p>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">Before bringing up the other Note, <strong>Notably</strong> may save the current
+Note automatically if you have made changes to it.</td>
+</tr></table>
+</div>
+<h3 id="Inter-Note-Link">Linking Between Notes</h3><div style="clear:left"></div>
+<div class="paragraph"><p>It can be useful to refer to a Note from another Note. You can insert
+clickable links using the <strong>Special&#8230;</strong> menu from the main window.</p></div>
+<div class="paragraph"><p><strong>Special&#8230;</strong>&#8594;<strong>Copy Inter-Note Link</strong> makes the program remember
+the current Note identifier. <strong>Special&#8230;&#8594;Paste Inter-Note Link</strong>
+will insert a link to that Note in a second Note later. The title of
+the first Note will be inserted as the link text. Be aware that if you
+change the title of the first Note later on, this change will <em>not</em> be
+reflected in the second Note. The link will still work, but the link
+text will be the old one.</p></div>
 </div>
 <h2 id="Books">Books</h2>
 <div class="sectionbody">
+<div class="paragraph"><p><strong>Notes</strong> can be collected into <strong>Books</strong> in the database. All of the Notes
+marked as part of a Book can then be selected. A <strong>Book</strong> can be exported,
+meaning that all Notes in the Book are converted to HTML files,
+and linked together with an index. The index is written as
+an HTML file (web page) to wherever you want. All Notes are written
+to the same directory as the index, and all images are copied to the same
+area.</p></div>
+<h3 id="Exporting">Exporting Books</h3><div style="clear:left"></div>
+<div class="paragraph"><p>To export all Notes in a Book to HTML format, select <strong>Manage&#8230;</strong>
+from the main window. Then select <strong>Export Book as HTML</strong>.</p></div>
+<div class="paragraph"><p>This will bring up a dialog asking where you want to save the index file.
+Be careful to remember which directory (folder) you put this in. You can
+export the book wherever you can write files.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">The book will contain all Notes marked as part of it, <em>and all Notes
+that are linked to by these Notes</em>.</td>
+</tr></table>
+</div>
 </div>
 <h2 id="Tags">Tags</h2>
 <div class="sectionbody">
+<div class="paragraph"><p>Tags are useful to show the status of a Note. For example, a Note may be marked
+as <em>important</em>, or <em>done</em>, or as anyting you want. You can add tags to Notes, or
+remove tags from Notes. You can also add and remove your own tags to your databse.</p></div>
+<h3 id="_adding_removing_tags_on_notes">Adding/Removing Tags on Notes</h3><div style="clear:left"></div>
+<div class="paragraph"><p>To change the tags on a particular Note, select and view the Note. Then
+go to the <strong>Note&#8230;</strong> menu, and select <strong>Note Tags&#8230;</strong>. This will give you
+a pop-up dialog showing the tags already on the Note, and all available Tags.</p></div>
+<div class="paragraph"><p>Click on an available Tag to add it to the Note. Click on a Tag already on a Note
+to remove it.</p></div>
+<h3 id="_adding_removing_tags_on_strong_notably_strong">Adding/Removing Tags on <strong>Notably</strong></h3><div style="clear:left"></div>
+<div class="paragraph"><p>From the main <strong>Notably</strong> window, select <strong>Manage&#8230;</strong>. Then select
+the <strong>Tag Editor</strong>. You will get a popup dialog that lets you add, remove
+of change Tags. The Tag name cannot be changed.</p></div>
+<div class="paragraph"><p>You can change the Tag description, and the Tag icon. Clicking on the icon
+brings up a dialog to load a new icon file.</p></div>
+<div class="paragraph"><p>If you delete a Tag, and re-create a new Tag with the same name, <em>all references
+to the old Tag will be lost</em>. The tagged Notes will still be there, but
+<strong>Notably</strong> will forget about the deleted Tag references.</p></div>
 </div>
 <h2 id="Exporting">Exporting</h2>
 <div class="sectionbody">
@@ -458,6 +553,10 @@ WebKit
 </ol></div>
 </li>
 </ol></div>
+<div class="paragraph"><p>For all features of <strong>Notably</strong> to work properly, you need Qt4.6.1 or better,
+although most features work with Qt4.4 or better. This only affects you
+when you build the program from source code. If you downloaded a Windows
+installer package, you don&#8217;t have to worry about this.</p></div>
 <h3 id="_how_to_build">How to Build</h3><div style="clear:left"></div>
 <div class="paragraph"><p>It&#8217;s pretty straightforward. Please read the INSTALL file that comes with
 the source code.</p></div>
@@ -486,8 +585,8 @@ of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p></div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1<br />
-Last updated 2010-03-02 20:39:28 EDT
+Version 0.2<br />
+Last updated 2010-03-03 20:39:13 EDT
 </div>
 </div>
 </body>

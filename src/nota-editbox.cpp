@@ -57,6 +57,12 @@ EditBox::DoPaste ()
   QTextEdit::paste ();
 }
 
+void
+EditBox::DoUndo ()
+{
+  QTextEdit::undo ();
+}
+
 QString
 EditBox::FindUsergivenId (qint64 noteid)
 {

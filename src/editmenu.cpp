@@ -34,6 +34,9 @@ EditMenu::Init ()
   pasteAction = new QAction (tr("Paste"), this);
   menu.addAction (pasteAction);
   connect (pasteAction, SIGNAL (triggered()), this, SLOT (DoPaste()));
+  undoAction = new QAction (tr("Undo"), this);
+  menu.addAction (undoAction);
+  connect (undoAction, SIGNAL (triggered()), this, SLOT(DoUndo()));
   boldAction = new QAction (tr("Bold"),this);
   menu.addAction (boldAction);
   connect (boldAction, SIGNAL (triggered()), this, SLOT (Bold()));
@@ -59,6 +62,12 @@ void
 EditMenu::DoPaste ()
 {
   emit SigPaste ();
+}
+
+void
+EditMenu::DoUndo ()
+{
+  emit SigUndo ();
 }
 
 void

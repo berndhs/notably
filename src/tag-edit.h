@@ -24,6 +24,7 @@ namespace nota {
 enum TagState { Tag_None = 0, 
                  Tag_Old, 
                  Tag_New, 
+                 Tag_Changed,
                  Tag_Delete, 
                  Tag_High
                 };
@@ -46,6 +47,7 @@ public slots:
 
   void PickedCell (int row, int col);
   void DoubleClick (int row, int col);
+  void ChangedCell (int row, int col);
   void Delete ();
   void Add ();
   void Save ();
@@ -68,6 +70,8 @@ private:
   int nameCol;
   int descCol;
   int iconCol;
+  
+  bool loading;
   
   QSize maxIconSize;
   
