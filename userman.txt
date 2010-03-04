@@ -1,7 +1,7 @@
 Notably Manual
 ==============
 Bernd Stramm <bernd.stramm@gmail.com>
-v0.1, February 2010
+v0.2, March 2010
 
 *Notably* is a note taker program. *Notably* focuses on simplicity and quick usage. 
 
@@ -10,19 +10,115 @@ stored in rich text with html-like format. The format supports functional
 links and html, as well as images. Integration with normal desktop services is
 provided (web links, mailto links) as far as the platform allows.
 
-*Notably* works on Linux and Windows, and has been pre-tested on Maemo.
+*Notably* works on Linux and Windows, and should work reasonably on Maemo.
 
 [[Notes]]
 == Notes
 
-The basic focus of *Notably* are Notes. These are small documents written
-by the user.
+*Notes* are the basic focus of *Notably*. These Notes can be grouped 
+into *Books*, and they can be marked with *Tags*.
+
+[[Starting]]
+=== Starting a New Note
+You can start a new Note just by typing in the Note display of the main window.
+If you save the Note without giving it a title, a title will be made
+automatically. The title is made up of the data and time when you save the Note.
+You can change the Note title any time you want.
+
+You can also create a new Note by selecting *Note...->New Note*. This will
+make a Note title, and insert the words "New Note" as the Note text.
+
+[[EnterText]]
+=== Entering Text to a Note
+
+[[InsertImages]]
+=== Inserting Images to a Note
+
+[[ScreenShots]]
+=== Screen Shots
+
+[[LinkFunctions]]
+=== Links in a Note
+Notes can contain hyper text links, like most web documents. Clicking
+on these links causes different actions, depending on the type of
+link. Links can be:
+
+* Links to Web sites. These are the familiar +http:+ links.
+Clicking on a link to a web site causes *Notably* to
+try to bring up your web browser, and get the browser to display 
+the site linked to.
+
+* Mail addresses. Clicking on a +mailto:+ link causes *Notably* to try to bring
+up your email program, and start an email to the address in the link.
+
+* Links to other Notes. Clicking on a link to another *Notably* Note will
+bring up that Note in the viewer.
+
+CAUTION: Before bringing up the other Note, *Notably* may save the current
+Note automatically if you have made changes to it. 
+
+[[Inter-Note-Link]]
+=== Linking Between Notes
+It can be useful to refer to a Note from another Note. You can insert 
+clickable links using the *Special...* menu from the main window.
+
+*Special...*->*Copy Inter-Note Link* makes the program remember
+the current Note identifier. *Special...->Paste Inter-Note Link*
+will insert a link to that Note in a second Note later. The title of 
+the first Note will be inserted as the link text. Be aware that if you
+change the title of the first Note later on, this change will _not_ be
+reflected in the second Note. The link will still work, but the link
+text will be the old one.
+
 
 [[Books]]
 == Books
+*Notes* can be collected into *Books* in the database. All of the Notes
+marked as part of a Book can then be selected. A *Book* can be exported,
+meaning that all Notes in the Book are converted to HTML files,
+and linked together with an index. The index is written as
+an HTML file (web page) to wherever you want. All Notes are written
+to the same directory as the index, and all images are copied to the same
+area.
+
+[[Exporting]]
+=== Exporting Books
+To export all Notes in a Book to HTML format, select *Manage...*
+from the main window. Then select *Export Book as HTML*.
+
+This will bring up a dialog asking where you want to save the index file.
+Be careful to remember which directory (folder) you put this in. You can
+export the book wherever you can write files.
+
+IMPORTANT: The book will contain all Notes marked as part of it, _and all Notes 
+that are linked to by these Notes_.
 
 [[Tags]]
 == Tags
+Tags are useful to show the status of a Note. For example, a Note may be marked
+as _important_, or _done_, or as anyting you want. You can add tags to Notes, or 
+remove tags from Notes. You can also add and remove your own tags to your databse.
+
+=== Adding/Removing Tags on Notes
+To change the tags on a particular Note, select and view the Note. Then
+go to the *Note...* menu, and select *Note Tags...*. This will give you
+a pop-up dialog showing the tags already on the Note, and all available Tags.
+
+Click on an available Tag to add it to the Note. Click on a Tag already on a Note
+to remove it.
+
+=== Adding/Removing Tags on *Notably*
+From the main *Notably* window, select *Manage...*. Then select 
+the *Tag Editor*. You will get a popup dialog that lets you add, remove 
+of change Tags. The Tag name cannot be changed. 
+
+You can change the Tag description, and the Tag icon. Clicking on the icon
+brings up a dialog to load a new icon file. 
+
+If you delete a Tag, and re-create a new Tag with the same name, _all references 
+to the old Tag will be lost_. The tagged Notes will still be there, but
+*Notably* will forget about the deleted Tag references.
+
 
 [[Exporting]]
 == Exporting
@@ -39,6 +135,11 @@ To build and run *Notably*, the current version uses:
 .. Gui
 .. Sql
 .. WebKit
+
+For all features of *Notably* to work properly, you need Qt4.6.1 or better,
+although most features work with Qt4.4 or better. This only affects you 
+when you build the program from source code. If you downloaded a Windows
+installer package, you don't have to worry about this.
 
 === How to Build
 
