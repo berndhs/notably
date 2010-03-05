@@ -16,7 +16,7 @@
 
 DIR_BIN=./bin
 SYS_DEST_DIR=/usr/local/bin
-INSTALL_SYS=no
+INSTALL_SYS=yes
 
 install_item () {
   ITEM=$1
@@ -26,6 +26,7 @@ install_item () {
     if [ $INSTALL_SYS == "yes" ]
     then
       install $ITEM $SYS_DEST_DIR
+      echo install $ITEM $SYS_DEST_DIR
     fi
   else
     echo "cannot find " $ITEM " to install"

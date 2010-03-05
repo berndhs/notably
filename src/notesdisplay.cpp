@@ -88,7 +88,9 @@ NotesDisplay::NotesDisplay (QApplication & app)
            this, SLOT (ImageInserted (QString)));
   connect (editBox, SIGNAL (LinkToNote (qint64)),
            this, SLOT (InterNoteLink (qint64)));
-  //debugTimer.start (3000);
+  #if DELIBERATE_DEBUG && 0
+  debugTimer.start (3000);
+  #endif
 }
 
 void
@@ -689,6 +691,7 @@ NotesDisplay::SaveCurrent ()
   }
   isNew = false;
   nameChanged = false;
+  showingNote = true;
 }
 
 void
@@ -976,6 +979,12 @@ NotesDisplay::DebugCheck ()
 #ifndef _WIN32
   qDebug () << " debug timer check " << time (0);
   qDebug () << " editbox modified " << isChanged;
+  qDebug () << " isNew " << isNew;
+  qDebug () << " nameChanged " << nameChanged;
+  qDebug () << " showingNote " << showingNote;
+  qDebug () << " currentId " << currentId;
+  qDebug () << " currentName " << currentName;
+  qDebug () << " newName " << newName;
 #endif
 }
 

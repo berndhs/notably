@@ -1,5 +1,6 @@
 
 #include "notemenu.h"
+#include "deliberate.h"
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -13,6 +14,7 @@
 //
 //
 
+using namespace deliberate;
 
 namespace nota {
 
@@ -20,19 +22,25 @@ NoteMenu::NoteMenu (QWidget * parent)
 :QWidget(parent)
 {
   saveAction = new QAction (tr("Save Note"),this);
-  publishAction = new QAction (tr("Publish Note"), this);
   deleteAction = new QAction (tr("Delete Note"), this);
   newAction = new QAction (tr("New Note"), this);
   cancelAction = new QAction (tr("Cancel Note"), this);
   tagsAction = new QAction (tr("Note Tags..."), this);
   booksAction = new QAction (tr("Note Books..."), this);
+  publishAction = new QAction (tr("Publish Note..."), this);
   menu.addAction (saveAction);
-  menu.addAction (tagsAction);
-  menu.addAction (booksAction);
-  menu.addAction (publishAction);
+  if (!IsFingerInterface ()) {
+    menu.addSeparator();
+  }
   menu.addAction (deleteAction);
   menu.addAction (newAction);
   menu.addAction (cancelAction);
+  if (!IsFingerInterface()) {
+    menu.addSeparator();
+  }
+  menu.addAction (tagsAction);
+  menu.addAction (booksAction);
+  menu.addAction (publishAction);
   connect (saveAction, SIGNAL (triggered()), this, SLOT(SaveCurrent()));
   connect (tagsAction, SIGNAL (triggered()), this, SLOT (Tags()));
   connect (booksAction, SIGNAL (triggered()), this, SLOT (Books()));

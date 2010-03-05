@@ -18,50 +18,52 @@
     <normaloff>:/img/nb.png</normaloff>:/img/nb.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="3">
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="directoryLabel">
-       <property name="text">
-        <string>Directory</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="directoryEdit">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>48</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="notesFileLabel">
-       <property name="text">
-        <string>Notes File</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="notesFileEdit">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>48</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="0" column="0">
+    <widget class="QLabel" name="directoryLabel">
+     <property name="text">
+      <string>Directory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="2">
+    <widget class="QLineEdit" name="directoryEdit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>6</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>48</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
+    <widget class="QLabel" name="notesFileLabel">
+     <property name="text">
+      <string>Notes File</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="notesFileEdit">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>48</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
     <widget class="QPushButton" name="saveButton">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>2</horstretch>
-       <verstretch>2</verstretch>
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="text">
@@ -69,20 +71,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="2">
+   <item row="2" column="2">
     <widget class="QPushButton" name="cancelButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">

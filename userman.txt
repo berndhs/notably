@@ -16,7 +16,9 @@ provided (web links, mailto links) as far as the platform allows.
 == Notes
 
 *Notes* are the basic focus of *Notably*. These Notes can be grouped 
-into *Books*, and they can be marked with *Tags*.
+into *Books*, and they can be marked with *Tags*. You can enter text into Notes
+by typing, or by copy/paste. You can paste images into Notes. You can
+link Notes to other Notes, and to web pages and email addresses.
 
 [[Starting]]
 === Starting a New Note
@@ -30,12 +32,32 @@ make a Note title, and insert the words "New Note" as the Note text.
 
 [[EnterText]]
 === Entering Text to a Note
+You can type in the editor window part of the main window. You can copy
+test in other application, and paste into the editor.
+
+To paste, select *Edit->Paste* from the main window. Or use the shortcut 
+keys of your platform (often this is Ctrl-V, but this may be different
+on your computer or device, or in your locale).
 
 [[InsertImages]]
 === Inserting Images to a Note
+You can insert an image by copying the image in another application,
+and selecting *Edit->Paste* in the *Notably* main window. Your normal shortcut
+keys should also work, depending on your platform.
 
 [[ScreenShots]]
 === Screen Shots
+You can insert screen shot images into a Note by selecting *Special->Part Screen Shot*
+or *Special->Whole Screen Shot*. A pop-up message informs you that the screen (or
+the part you select) will be copied a few seconds (normally 5) after
+you click on the OK button.  You can use this delay time to
+make sure the screen looks the way you can it captured. For example,
+if you had to minimize another application to run *Notably*, you
+can maximize that other application to capture its image.
+
+CAUTION: For *Whole Screen Shots*, the *Notably* window will disappear 
+completely from some windowing system. This is normal, it has 
+not crashed. It will re-appear after a few seconds.
 
 [[LinkFunctions]]
 === Links in a Note
@@ -48,7 +70,7 @@ Clicking on a link to a web site causes *Notably* to
 try to bring up your web browser, and get the browser to display 
 the site linked to.
 
-* Mail addresses. Clicking on a +mailto:+ link causes *Notably* to try to bring
+* E-Mail addresses. Clicking on a +mailto:+ link causes *Notably* to try to bring
 up your email program, and start an email to the address in the link.
 
 * Links to other Notes. Clicking on a link to another *Notably* Note will
@@ -62,7 +84,7 @@ Note automatically if you have made changes to it.
 It can be useful to refer to a Note from another Note. You can insert 
 clickable links using the *Special...* menu from the main window.
 
-*Special...*->*Copy Inter-Note Link* makes the program remember
+*Special...->Copy Inter-Note Link* makes *Notably* remember
 the current Note identifier. *Special...->Paste Inter-Note Link*
 will insert a link to that Note in a second Note later. The title of 
 the first Note will be inserted as the link text. Be aware that if you
@@ -119,9 +141,6 @@ If you delete a Tag, and re-create a new Tag with the same name, _all references
 to the old Tag will be lost_. The tagged Notes will still be there, but
 *Notably* will forget about the deleted Tag references.
 
-
-[[Exporting]]
-== Exporting
 
 [[Build]]
 == Prerequisits

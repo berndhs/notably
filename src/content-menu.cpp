@@ -14,11 +14,14 @@
 //
 
 #include "delib-debug.h"
+#include "deliberate.h"
 #include <QSqlQuery>
 #include <QSqlResult>
 #include <QSqlRecord>
 #include <QTextEdit>
 #include <QMessageBox>
+
+using namespace deliberate;
 
 namespace nota {
 
@@ -33,16 +36,25 @@ ContentMenu::ContentMenu (QWidget *parent)
 
   SetupSearchbox ();
   
-  tagsAction = new QAction (tr("Find by Tag"), this);
+  tagsAction = new QAction (tr("Select by Tag"), this);
   menu.addAction (tagsAction);
   notagAction = new QAction (tr("Select untagged Notes"), this);
   menu.addAction (notagAction);
+  if (!IsFingerInterface()) {
+    menu.addSeparator();
+  }
   bookAction = new QAction (tr("Select by Book"), this);
   menu.addAction (bookAction);
   nobookAction = new QAction (tr("Select unbooked Notes"), this);
   menu.addAction (nobookAction);
+  if (!IsFingerInterface()) {
+    menu.addSeparator ();
+  }
   searchAction = new QAction (tr("Search..."), this);
   menu.addAction (searchAction);
+  if (!IsFingerInterface ()) {
+    menu.addSeparator ();
+  }
   allAction = new QAction (tr("Select All Notes"), this);
   menu.addAction (allAction);
   

@@ -3,6 +3,7 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QTimer>
+#include "deliberate.h"
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -16,6 +17,7 @@
 //
 //
 
+using namespace deliberate;
 
 namespace nota {
 
@@ -27,26 +29,30 @@ ManageMenu::ManageMenu (QWidget * parent)
  bookPicker (this)
 {
   fileUI.setupUi (&fileDialog);
-  fileDialog.setWindowTitle (tr("Change Data Location"));
-  fileNameAction = new QAction (tr("Data Location"),this);
-  menu.addAction (fileNameAction);
-  connect (fileNameAction, SIGNAL (triggered()), this, SLOT(ChangeFilename()));
+  fileDialog.setWindowTitle (tr("Database Location"));
 
   exportAction = new QAction (tr("Export All"), this);
   menu.addAction (exportAction);
-  connect (exportAction, SIGNAL (triggered()), this, SLOT (ExportAll()));
-  
   htmlAction = new QAction (tr("Export Book as HTML"), this);
   menu.addAction (htmlAction);
-  connect (htmlAction, SIGNAL (triggered()), this, SLOT (ExportBook()));
-  
+  if (!IsFingerInterface()) {
+    menu.addSeparator ();
+  }
   bookAction = new QAction (tr("Book Editor"), this);
   menu.addAction (bookAction);
-  connect (bookAction, SIGNAL (triggered()), this, SLOT (EditBooks()));
-  
   tagAction = new QAction (tr("Tag Editor"), this);
   menu.addAction (tagAction);
+  if (!IsFingerInterface()) {
+    menu.addSeparator ();
+  }
+  fileNameAction = new QAction (tr("Preferences..."),this);
+  menu.addAction (fileNameAction);
+  
+  connect (exportAction, SIGNAL (triggered()), this, SLOT (ExportAll()));
+  connect (htmlAction, SIGNAL (triggered()), this, SLOT (ExportBook()));
+  connect (bookAction, SIGNAL (triggered()), this, SLOT (EditBooks()));
   connect (tagAction, SIGNAL (triggered()), this, SLOT (EditTags()));
+  connect (fileNameAction, SIGNAL (triggered()), this, SLOT(ChangeFilename()));
   
   ConnectDialogs ();
 }

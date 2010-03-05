@@ -1,0 +1,53 @@
+
+
+Installation Instructions for Notably on Linux-like Systems
+===========================================================
+
+To build the Notably program from source code, you
+must already have unpacked the archive.
+
+By building and installing Notably, you agree to
+the licensing conditions in LINCENSE.txt, and
+you agree that you respect all Copyrights involved.
+
+
+Requirements
+============
+
+You need:
+
+* a C++ compiler
+* make (Gnu make will work)
+* Qt 4.6.1 or later (NOTE: Qt GUI Framework Edition will NOT work!)
+  - qmake (or qmake-qt4)
+* sh-compatible shell, such as bash
+
+Build
+=====
+
+as any user, run:
+
+$ sh build.sh
+
+This will tell you whether the build worked or not.
+
+
+Install Executable
+==================
+
+Depending on where you want to install the executable program,
+you may need to have administrative privileges to do this:
+
+# sh install.sh
+
+will install into /usr/local/bin
+
+or 
+
+# sh install.sh /your/choice/of/directory/for/executable
+
+will install where you tell it to. 
+
+In either case, the destination directory must already exist.
+
+

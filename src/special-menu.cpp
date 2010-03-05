@@ -12,8 +12,11 @@
 //
 //
 
+#include "deliberate.h"
 #include <QMessageBox>
 #include <QTimer>
+
+using namespace deliberate;
 
 namespace nota {
 
@@ -42,6 +45,9 @@ SpecialMenu::Init ()
   }
   shootAllAction = new QAction (tr("Whole Screen Shot"), this);
   menu.addAction (shootAllAction);
+  if (!IsFingerInterface()) {
+    menu.addSeparator ();
+  }
   connect (shootAllAction, SIGNAL (triggered()), this, SLOT (WholeScreenShot()));
   htmlAction = new QAction (tr("Insert Selection as Html"), this);
   menu.addAction (htmlAction);
@@ -49,7 +55,9 @@ SpecialMenu::Init ()
   linkAction = new QAction (tr("Make Selection a Link"), this);
   menu.addAction (linkAction);
   connect (linkAction, SIGNAL (triggered ()), this, SLOT (GrabLink()));
-  
+  if (!IsFingerInterface()) {
+    menu.addSeparator ();
+  }
   copyLinkAction = new QAction (tr("Copy Inter-Note Link"), this);
   menu.addAction (copyLinkAction);
   connect (copyLinkAction, SIGNAL (triggered ()), this, SLOT (GrabNoteLink()));
