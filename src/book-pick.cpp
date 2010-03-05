@@ -31,6 +31,8 @@ BookPick::BookPick (QWidget *parent)
   
   connect (bookTable, SIGNAL (cellActivated(int,int)),
             this, SLOT (PickedCell (int,int)));
+  connect (bookTable, SIGNAL (cellClicked (int,int)),
+            this, SLOT (PickedCell (int,int)));
 }
 
 void
@@ -54,7 +56,7 @@ BookPick::Exec ()
 bool
 BookPick::SelectedBook ()
 {
-  return selectedSomething;
+  return selectedSomething && selectedTitle.length() > 0;
 }
 
 QString
@@ -93,7 +95,9 @@ BookPick::ListBooks ()
     bookTable->setItem (row,1,item);
     row++;
   }
-  
+  if (nrows > 0) {
+    bookTable->selectRow (0);
+  }
 }
 
 void
