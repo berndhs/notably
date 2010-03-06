@@ -774,7 +774,14 @@ NotesDisplay::OpenDB ()
   }
   db = QSqlDatabase::addDatabase ("QSQLITE",mConName);
   db.setDatabaseName (pConf->CompleteDBName());
-  db.open ();
+  bool ok = db.open ();
+  if (!ok) {
+    ok = QSqlDatabase::isDriverAvailable ("QSQLITE");
+    QString msg = (ok ? "Sqlite driver ok" : "No QSQLITE Driver");
+    QMessageBox box(this);
+    box.setText (msg);
+    box.exec ();
+  }
 }
 
 void
