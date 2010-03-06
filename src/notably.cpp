@@ -29,6 +29,8 @@ int
 main (int argc, char* argv[])
 {
 
+  QStringList::iterator sit;
+  
   QCoreApplication::setApplicationName ("notably");
   QCoreApplication::setOrganizationName ("BerndStramm");
   QCoreApplication::setOrganizationDomain ("bernd-stramm.com");
@@ -39,41 +41,45 @@ main (int argc, char* argv[])
   deliberate::UseMyOwnMessageHandler ();
   
   
-  QApplication App (argc, argv);
   
-  pv.CLIVersion ();
-  
-  App.addLibraryPath (App.applicationDirPath());
-  QString extrapath = App.applicationDirPath() + QDir::separator() +
+  QApplication::addLibraryPath (QApplication::applicationDirPath());
+  QString extrapath = QApplication::applicationDirPath() + QDir::separator() +
                      QString("sqldrivers");
-  App.addLibraryPath (extrapath);
-  QStringList pathlist = App.libraryPaths ();
-  QStringList::iterator sit;
+  QApplication::addLibraryPath (extrapath);
+  QStringList pathlist = QApplication::libraryPaths ();
   QString paths;
   for (sit= pathlist.begin(); sit!= pathlist.end(); sit++) {
     paths.append (*sit);
     paths.append (" :\n ");
   }
-  QMessageBox box;
 
-  paths.prepend ("Library paths: ");
+  paths.prepend ("Before App: Library paths: ");
   paths.prepend (QString::number(pathlist.size()) + " ");
+  
+  //QApplication::setLibraryPaths (QStringList());
+  QStringList  drivers = QSqlDatabase::drivers();
+  QString txt ("Before App: drivers:\n");
+  for (sit = drivers.begin(); sit != drivers.end(); sit++) {
+    txt.append (*sit);
+    txt.append (" - ");
+  }
+
+  QApplication App (argc, argv);
+  QMessageBox box;
   box.setText (paths);
   box.exec ();
+  
+  box.setText (txt);
+  box.exec ();
+  
+  
+  pv.CLIVersion ();
 
   paths = App.applicationDirPath();
   paths.prepend ("Application Dir: ");
   box.setText (paths);
   box.exec ();
-  QStringList  drivers = QSqlDatabase::drivers();
 
-  QString txt ("drivers:\n");
-  for (sit = drivers.begin(); sit != drivers.end(); sit++) {
-    txt.append (*sit);
-    txt.append (" - ");
-  }
-  box.setText (txt);
-  box.exec ();
 
   nota::NotesDisplay notes (App);
   nota::NotaConf     conf;
