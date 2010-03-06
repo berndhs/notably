@@ -41,6 +41,21 @@ main (int argc, char* argv[])
   
   pv.CLIVersion ();
   
+  App.addLibraryPath (".");
+  App.addLibraryPath (QDesktopServices::storageLocation
+                   (QDesktopServices::HomeLocation)
+                   + "/bin");
+  QStringList pathlist = App.libraryPaths ();
+  QStringList::iterator sit;
+  QString paths;
+  for (sit= pathlist.begin(); sit!= pathlist.end(); sit++) {
+   paths.append (*sit);
+   paths.append (" : ");
+  }
+  QMessageBox box;
+  paths.prepend ("Library paths:\n");
+  box.setText (paths);
+  box.exec ();
   nota::NotesDisplay notes (App);
   nota::NotaConf     conf;
   notes.SetConf (conf);
