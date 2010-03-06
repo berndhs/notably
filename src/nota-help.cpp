@@ -14,7 +14,7 @@
 namespace nota {
 
 NotaHelp::NotaHelp (QWidget *parent)
-:QWidget (parent)
+:QDialog (parent)
 {
   setupUi (this);
   ConnectButtons ();
@@ -63,6 +63,8 @@ NotaHelp::ShowPage (QString urlString)
   QUrl url (urlString);
   box->load (url);
   show ();
+  raise ();
+  box->setFocus();
 }
 
 

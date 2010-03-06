@@ -14,11 +14,12 @@
 //
 #include "delib-debug.h"
 #include <QWidget>
+#include <QDialog>
 #include "ui_helpwin.h"
 
 namespace nota {
 
-class NotaHelp : public QWidget, public Ui_HelpView {
+class NotaHelp : public QDialog, public Ui_HelpView {
 
 Q_OBJECT
 
