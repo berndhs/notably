@@ -39,13 +39,25 @@ main (int argc, char* argv[])
   QSettings  settings;
   deliberate::SetSettings (settings);
   deliberate::UseMyOwnMessageHandler ();
-  
-  
-  
+
+
+  QApplication App (argc, argv);
+#if 0
+  QMessageBox box;
+
+  QString appmsg ("This is ");
+  appmsg.append (QCoreApplication::applicationName());
+  appmsg.append (" by ");
+  appmsg.append (QCoreApplication::organizationName());
+  box.setText (appmsg);
+  box.exec ();
+#endif
+
   QApplication::addLibraryPath (QApplication::applicationDirPath());
   QString extrapath = QApplication::applicationDirPath() + QDir::separator() +
                      QString("sqldrivers");
   QApplication::addLibraryPath (extrapath);
+#if 0
   QStringList pathlist = QApplication::libraryPaths ();
   QString paths;
   for (sit= pathlist.begin(); sit!= pathlist.end(); sit++) {
@@ -64,22 +76,21 @@ main (int argc, char* argv[])
     txt.append (" - ");
   }
 
-  QApplication App (argc, argv);
-  QMessageBox box;
   box.setText (paths);
   box.exec ();
   
   box.setText (txt);
   box.exec ();
-  
+#endif
   
   pv.CLIVersion ();
 
+#if 0
   paths = App.applicationDirPath();
   paths.prepend ("Application Dir: ");
   box.setText (paths);
   box.exec ();
-
+#endif
 
   nota::NotesDisplay notes (App);
   nota::NotaConf     conf;

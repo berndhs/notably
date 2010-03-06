@@ -46,8 +46,7 @@ Source: C:\Qt\2010.02.1\qt\bin\QtXmlPatterns4.dll; DestDir: {app}
 Source: C:\Qt\2010.02.1\qt\bin\QtNetwork4.dll; DestDir: {app}
 Source: C:\Qt\2010.02.1\qt\bin\phonon4.dll; DestDir: {app}
 Source: img\nb.ico; DestDir: {app}
-Source: C:\Qt\2010.02.1\bin\sqldrivers\qsqlite4.dll; DestDir: {app}\sqldrivers
-Source: C:\Program Files\Mozilla Firefox\sqlite3.dll; DestDir: {app}\sqldrivers
+Source: C:\Qt\2010.02.1\qt\plugins\sqldrivers\qsqlite4.dll; DestDir: {app}\sqldrivers
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; IconFilename: {app}\nb.ico
