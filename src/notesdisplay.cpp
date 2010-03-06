@@ -42,7 +42,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
  specialMenu (this),
  manageMenu (this),
  contentMenu (this),
- helpBox (this),
+ helpBox (0),
  noteTagEditor (this),
  noteBookEditor (this),
  htmlExporter (this,db),
