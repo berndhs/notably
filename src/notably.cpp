@@ -22,6 +22,7 @@
 #include "version.h"
 #include <QApplication>
 #include <QDesktopServices>
+#include <QDir>
 
 
 int 
@@ -32,6 +33,7 @@ main (int argc, char* argv[])
   QCoreApplication::setOrganizationName ("BerndStramm");
   QCoreApplication::setOrganizationDomain ("bernd-stramm.com");
   deliberate::ProgramVersion pv ("Notably");
+  QCoreApplication::setApplicationVersion (pv.Version());
   QSettings  settings;
   deliberate::SetSettings (settings);
   deliberate::UseMyOwnMessageHandler ();
@@ -41,21 +43,38 @@ main (int argc, char* argv[])
   
   pv.CLIVersion ();
   
-  App.addLibraryPath (".");
-  App.addLibraryPath (QDesktopServices::storageLocation
-                   (QDesktopServices::HomeLocation)
-                   + "/bin");
+  App.addLibraryPath (App.applicationDirPath());
+  QString extrapath = App.applicationDirPath() + QDir::separator() +
+                     QString("sqldrivers");
+  App.addLibraryPath (extrapath);
   QStringList pathlist = App.libraryPaths ();
   QStringList::iterator sit;
   QString paths;
   for (sit= pathlist.begin(); sit!= pathlist.end(); sit++) {
-   paths.append (*sit);
-   paths.append (" : ");
+    paths.append (*sit);
+    paths.append (" :\n ");
   }
   QMessageBox box;
-  paths.prepend ("Library paths:\n");
+
+  paths.prepend ("Library paths: ");
+  paths.prepend (QString::number(pathlist.size()) + " ");
   box.setText (paths);
   box.exec ();
+
+  paths = App.applicationDirPath();
+  paths.prepend ("Application Dir: ");
+  box.setText (paths);
+  box.exec ();
+  QStringList  drivers = QSqlDatabase::drivers();
+
+  QString txt ("drivers:\n");
+  for (sit = drivers.begin(); sit != drivers.end(); sit++) {
+    txt.append (*sit);
+    txt.append (" - ");
+  }
+  box.setText (txt);
+  box.exec ();
+
   nota::NotesDisplay notes (App);
   nota::NotaConf     conf;
   notes.SetConf (conf);
