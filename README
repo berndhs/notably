@@ -1,3 +1,10 @@
-This is a note taker application. I expect some releasable version, oh,
-maybe at the end of Q1/2010. Or maybe middle of Q2. More then.
+This is the note taker application Notably.
 
+Installation instructions for Linux are in INSTALL.
+
+For Windows, you can build with Qt Creator, the notably.pro
+and viewer/viewer.pro files work for Creator with minGw.
+
+The Windows packaging is done with Inno Setup.
+
+Lincense is in LICENSE.txt.
