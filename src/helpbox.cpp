@@ -33,6 +33,7 @@ HelpBox::Connect ()
 {
   connect (okButton, SIGNAL (clicked()), this, SLOT (DoOk()));
   connect (helpButton, SIGNAL (clicked()), this, SLOT (DoHelp()));
+  connect (onlineButton, SIGNAL (clicked()), this, SLOT (DoOnline()));
   connect (licenseButton, SIGNAL (clicked()),
             this, SLOT (DoLicense ()));
 }
@@ -47,6 +48,13 @@ void
 HelpBox::DoHelp ()
 {
   emit WantHelp ();
+  accept ();
+}
+
+void
+HelpBox::DoOnline ()
+{
+  emit WantOnline ();
   accept ();
 }
 

@@ -79,6 +79,7 @@ public slots:
   void Help ();
   void HelpHelp ();
   void LicenseHelp ();
+  void OnlineHelp ();
   void ShowNothing ();
   void ShowNoteMenu ();
   void ScheduleManage ();

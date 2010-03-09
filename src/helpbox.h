@@ -31,11 +31,13 @@ private slots:
   void DoOk ();
   void DoHelp ();
   void DoLicense ();
+  void DoOnline ();
  
 signals:
 
   void WantLicense ();
   void WantHelp ();
+  void WantOnline ();
 
 private:
 

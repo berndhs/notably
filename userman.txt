@@ -141,6 +141,26 @@ If you delete a Tag, and re-create a new Tag with the same name, _all references
 to the old Tag will be lost_. The tagged Notes will still be there, but
 *Notably* will forget about the deleted Tag references.
 
+[[Searching]]
+== Searching and Selecting
+
+*Notably* provides several ways to find Notes of interest to you. You can
+
+* Select Notes with any of selected Tags
+
+* Select Notes the don't have any tags
+
+* Select Notes that are part of selected books
+
+* Select Notes that are not in any books
+
+* Select Notes based on a combination of membership in books and labeling 
+with tags, or the lack thereof.
+
+* Search for Notes containing words.
+
+* Search for words in a Note.
+
 
 [[Build]]
 == Prerequisits

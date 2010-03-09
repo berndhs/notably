@@ -164,6 +164,7 @@ NotesDisplay::SetupMenu ()
 
   connect (&helpBox, SIGNAL (WantHelp()), this, SLOT (HelpHelp ()));
   connect (&helpBox, SIGNAL (WantLicense()), this, SLOT (LicenseHelp()));
+  connect (&helpBox, SIGNAL (WantOnline()), this, SLOT (OnlineHelp()));
   
   connect (editBox, SIGNAL (textChanged()), this, SLOT (EditBoxChanged()));
 }
@@ -372,6 +373,13 @@ void
 NotesDisplay::LicenseHelp ()
 {
   helpBrowser.ShowPage ("qrc:qrcfiles/LICENSE.txt");
+}
+
+void
+NotesDisplay::OnlineHelp ()
+{
+  QUrl helpUrl ("http://notably.sourceforge.net/notablymanual.php");
+  QDesktopServices::openUrl (helpUrl);
 }
 
 void
