@@ -31,7 +31,8 @@ ContentMenu::ContentMenu (QWidget *parent)
  pDB (0),
  tagSearch (this),
  bookPick (this),
- searchBox (this)
+ searchBox (this),
+ fancySearch (this)
 {
 
   SetupSearchbox ();
@@ -50,8 +51,10 @@ ContentMenu::ContentMenu (QWidget *parent)
   if (!IsFingerInterface()) {
     menu.addSeparator ();
   }
-  searchAction = new QAction (tr("Search..."), this);
+  searchAction = new QAction (tr("Search Words..."), this);
   menu.addAction (searchAction);
+  advancedAction = new QAction (tr("Advanced Search..."), this);
+  menu.addAction (advancedAction);
   if (!IsFingerInterface ()) {
     menu.addSeparator ();
   }
@@ -61,6 +64,7 @@ ContentMenu::ContentMenu (QWidget *parent)
   connect (tagsAction, SIGNAL (triggered()), this, SLOT (TagSearchExec()));
   connect (notagAction, SIGNAL (triggered()), this, SLOT (NotagNotes()));
   connect (searchAction, SIGNAL (triggered()), this, SLOT (MultiSearch()));
+  connect (advancedAction, SIGNAL (triggered()), this, SLOT (DoFancySearch()));
   connect (bookAction, SIGNAL (triggered()), this, SLOT (Books ()));
   connect (nobookAction, SIGNAL (triggered()), this, SLOT (NobookNotes()));
   connect (allAction, SIGNAL (triggered()), this, SLOT (SelectAllNotes()));
@@ -72,6 +76,7 @@ ContentMenu::SetDB (QSqlDatabase & db)
   pDB = &db;
   tagSearch.SetDB (db);
   bookPick.SetDB (db);
+  fancySearch.Setup (pDB);
 }
 
 NoteIdSetType &
@@ -183,6 +188,15 @@ ContentMenu::SetupSearchbox ()
            this, SLOT (DoSearch()));
   connect (searchUi.cancelButton, SIGNAL (clicked()),
            &searchBox, SLOT (reject()));
+}
+
+void
+ContentMenu::DoFancySearch ()
+{
+  fancySearch.Search ();
+  if (fancySearch.DidSearch()) {
+    emit Selected (fancySearch.ResultSet());
+  }
 }
 
 

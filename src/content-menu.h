@@ -16,6 +16,7 @@
 #include "notaconf.h"
 #include "tagsearch.h"
 #include "book-pick.h"
+#include "fancy-search.h"
 #include <QDialog>
 #include "ui_getstring.h"
 #include <QSqlDatabase>
@@ -48,6 +49,7 @@ public slots:
   void NobookNotes ();
   void Books ();
   void MultiSearch ();
+  void DoFancySearch ();
   void DoSearch ();
 
 signals:
@@ -68,6 +70,7 @@ private:
   QMenu    menu;
   
   QAction   *searchAction;
+  QAction   *advancedAction;
   QAction   *bookAction;
   QAction   *nobookAction;
   QAction   *tagsAction;
@@ -82,6 +85,8 @@ private:
   
   QDialog searchBox;
   Ui_GetStringDialog   searchUi;
+  
+  FancySearch  fancySearch;
   
 };
 

@@ -48,6 +48,7 @@ FORMS = \
 	../ui/getstring.ui \
 	../ui/bookeditor.ui \
 	../ui/tageditor.ui \
+	../ui/fancysearch.ui \
 	../ui/tagsearch.ui 
 
 
@@ -73,6 +74,7 @@ SOURCES = \
 	../src/book-edit.cpp \
 	../src/tag-edit.cpp \
 	../src/export-html.cpp \
+	../src/fancy-search.cpp \
 	../src/notably.cpp
 
 HEADERS = \
@@ -97,6 +99,7 @@ HEADERS = \
 	../src/book-edit.h \
 	../src/tag-edit.h \
 	../src/export-html.h \
+	../src/fancy-search.h \
 	../src/helpbox.h 
 	
 
