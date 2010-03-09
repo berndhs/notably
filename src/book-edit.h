@@ -68,6 +68,7 @@ private:
   int descCol;
   
   bool loading;
+  bool changingStatus;
   
   QString bookStatus[Book_High];
 

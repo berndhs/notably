@@ -72,6 +72,7 @@ private:
   int iconCol;
   
   bool loading;
+  bool changingStatus;
   
   QSize maxIconSize;
   

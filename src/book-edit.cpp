@@ -28,7 +28,8 @@ BookEdit::BookEdit (QWidget *parent)
  statusCol(0),
  nameCol(1),
  descCol(2),
- loading (false)
+ loading (false),
+ changingStatus(false)
 {
   setupUi (this);
   Setup ();
@@ -124,7 +125,7 @@ BookEdit::PickedCell (int row, int col)
 void
 BookEdit::ChangedCell (int row, int col)
 {
-  if (!loading) {
+  if (!loading && col != statusCol) {
     QTableWidgetItem * item = bookTable->item (row, col);
     if (item) {
       SetBookState (row, Book_Changed);
@@ -135,13 +136,18 @@ BookEdit::ChangedCell (int row, int col)
 void
 BookEdit::SetBookState (int row, BookState state)
 {
+  if (changingStatus) {
+    return;
+  }
   if (state < Book_None || state > Book_High) {
     return;
   }
+  changingStatus = true;
   QTableWidgetItem *statusItem = bookTable->item(row,statusCol);
   if (statusItem) {
     statusItem->setText (bookStatus[state]);
   }
+  changingStatus = false;
 }
 
 BookState

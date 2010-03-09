@@ -53,6 +53,7 @@ then
   mkdir $DIR_BIN
 fi
 
+echo "Installing in $SYS_DEST_DIR"
 install_item viewer/notably
 
 

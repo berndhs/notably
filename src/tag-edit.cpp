@@ -34,6 +34,7 @@ TagEdit::TagEdit (QWidget *parent)
  descCol(3),
  iconCol(2),
  loading (false),
+ changingStatus (false),
  maxIconSize (QSize(64,64))
 {
   setupUi (this);
@@ -86,7 +87,6 @@ TagEdit::GetAllTags ()
     int       row(0);
     int       nrows = tagTable->rowCount();
     bool ok = query.exec (tagQry);
-    qDebug () << " tag query " << tagQry << " ok "<< ok;
     int       namendx = query.record().indexOf("tagname");
     int       descndx = query.record().indexOf("description");
     int       iconndx = query.record().indexOf("icon");
@@ -163,7 +163,7 @@ TagEdit::DoubleClick (int row, int col)
 void
 TagEdit::ChangedCell (int row, int col)
 {
-  if (!loading) {
+  if (!loading && col != statusCol) {
     QTableWidgetItem *item = tagTable->item (row,col);
     if (item) {
       SetTagState (row, Tag_Changed);
@@ -174,13 +174,18 @@ TagEdit::ChangedCell (int row, int col)
 void
 TagEdit::SetTagState (int row, TagState state)
 {
+  if (changingStatus) {
+    return;
+  }
   if (state < Tag_None || state > Tag_High) {
     return;
   }
+  changingStatus = true;
   QTableWidgetItem *statusItem = tagTable->item(row,statusCol);
   if (statusItem) {
     statusItem->setText (tagStatus[state]);
   }
+  changingStatus = false;
 }
 
 TagState
