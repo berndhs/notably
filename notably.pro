@@ -28,6 +28,8 @@ CONFIG(release, debug|release) {
   DEFINES += DELIBERATE_DEBUG=0
 }
 
+TRANSLATIONS = notablytop_de.ts
+
 SUBDIRS = viewer
 
 RESOURCES += nota.qrc

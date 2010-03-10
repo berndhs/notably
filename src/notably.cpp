@@ -23,6 +23,9 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QDir>
+#include <QTranslator>
+#include <QLocale>
+#include <QLibraryInfo>
 
 
 int 
@@ -82,7 +85,16 @@ main (int argc, char* argv[])
   box.setText (txt);
   box.exec ();
 #endif
+  QTranslator  trans;
+  QString tname = "qt_" + QLocale::system().name();
+  QString loc = QLibraryInfo::location (QLibraryInfo::TranslationsPath);
+  bool langok = trans.load (tname, loc);
+  App.installTranslator (&trans);
   
+  QTranslator  notaTrans;
+  tname = "notably_" +QLocale::system().name();
+  langok = notaTrans.load (tname,":/viewer");
+  App.installTranslator (&notaTrans);
   pv.CLIVersion ();
 
 #if 0

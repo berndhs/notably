@@ -19,6 +19,7 @@
   <file>img/default.png</file>
   <file>qrcfiles/userman.html</file>
   <file>qrcfiles/LICENSE.txt</file>
+  <file>viewer/notably_de.qm</file>
 </qresource>
 </RCC>
 

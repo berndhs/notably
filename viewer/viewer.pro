@@ -34,6 +34,8 @@ CONFIG(release, debug|release) {
 
 QT += gui core sql webkit
 
+TRANSLATIONS = notably_de.ts
+
 RESOURCES += \
 	../nota.qrc
 
