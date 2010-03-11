@@ -85,14 +85,15 @@ main (int argc, char* argv[])
   box.setText (txt);
   box.exec ();
 #endif
+  QString localeName = QLocale::system().name();
   QTranslator  trans;
-  QString tname = "qt_" + QLocale::system().name();
+  QString tname = "qt_" + localeName;
   QString loc = QLibraryInfo::location (QLibraryInfo::TranslationsPath);
   bool langok = trans.load (tname, loc);
   App.installTranslator (&trans);
   
   QTranslator  notaTrans;
-  tname = "notably_" +QLocale::system().name();
+  tname = "notably_" + localeName;
   langok = notaTrans.load (tname,":/viewer");
   App.installTranslator (&notaTrans);
   pv.CLIVersion ();

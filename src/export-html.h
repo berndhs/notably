@@ -19,9 +19,7 @@
 #include <QWebElementCollection>
 #include <QWebElement>
 #include <QWebFrame>
-#include <QWebView>
 #include <QTextEdit>
-#include <QFile>
 #include <QDir>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -30,11 +28,14 @@
 #include <QSet>
 #include <map>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QDesktopServices>
+#include <QWebView>
 #include <map>
 #endif
 
+#include <QByteArray>
+#include <QFile>
+#include <QMessageBox>
 #include <QString>
 #include <QSqlDatabase>
 #include <QWidget>
@@ -75,11 +76,17 @@ public:
   ExportHtml (QWidget *parent, QSqlDatabase &db);
   
   bool ExportBook (QString bookname);
+  bool ExportNote (qint64 id, QString copyToHere, QString oldPath);
   
   static bool IsImplemented ();
 
 
 private:
+
+  void ReadNote (qint64 id, QByteArray & noteView);
+  void CopyPageImages (const qint64 notesid, 
+                   const QString srcdir,
+                   const QString destdir);
 
   #if DELIBERATE_HAVE_WEBELT
   bool PrivateExportBook (QString bookname);

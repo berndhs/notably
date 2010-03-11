@@ -39,7 +39,7 @@
      <item>
       <widget class="QPushButton" name="onlineButton">
        <property name="text">
-        <string>Online Manul</string>
+        <string>Online Manual</string>
        </property>
       </widget>
      </item>

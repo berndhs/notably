@@ -22,7 +22,6 @@
 #include <QStringList>
 #include "utility-types.h"
 
-class X { public: int x; };
 
 namespace nota {
 

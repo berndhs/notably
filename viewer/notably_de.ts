@@ -6,27 +6,27 @@
     <message>
         <location filename="../ui/bookdialog.ui" line="14"/>
         <source>Select Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Buch Auswählen</translation>
     </message>
     <message>
         <location filename="../ui/bookdialog.ui" line="24"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswählen</translation>
     </message>
     <message>
         <location filename="../ui/bookdialog.ui" line="31"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../ui/bookdialog.ui" line="86"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <location filename="../ui/bookdialog.ui" line="91"/>
         <source>Description</source>
-        <translation type="unfinished">Beschreibung</translation>
+        <translation>Beschreibung</translation>
     </message>
 </context>
 <context>
@@ -34,42 +34,42 @@
     <message>
         <location filename="../ui/bookeditor.ui" line="14"/>
         <source>Book Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Buch Editor</translation>
     </message>
     <message>
         <location filename="../ui/bookeditor.ui" line="24"/>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <location filename="../ui/bookeditor.ui" line="31"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../ui/bookeditor.ui" line="38"/>
         <source>Save</source>
-        <translation type="unfinished">Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../ui/bookeditor.ui" line="45"/>
         <source>Done</source>
-        <translation type="unfinished">Fertig</translation>
+        <translation>Fertig</translation>
     </message>
     <message>
         <location filename="../ui/bookeditor.ui" line="62"/>
         <source>Status</source>
-        <translation type="unfinished">Status</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../ui/bookeditor.ui" line="67"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>TItel</translation>
     </message>
     <message>
         <location filename="../ui/bookeditor.ui" line="72"/>
         <source>Description</source>
-        <translation type="unfinished">Beschreibung</translation>
+        <translation>Beschreibung</translation>
     </message>
 </context>
 <context>
@@ -77,37 +77,37 @@
     <message>
         <location filename="../ui/bookrefs.ui" line="14"/>
         <source>Notes Books</source>
-        <translation type="unfinished"></translation>
+        <translation>Notizen / Bücher</translation>
     </message>
     <message>
         <location filename="../ui/bookrefs.ui" line="46"/>
         <source>Done</source>
-        <translation type="unfinished">Fertig</translation>
+        <translation>Fertig</translation>
     </message>
     <message>
         <location filename="../ui/bookrefs.ui" line="53"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../ui/bookrefs.ui" line="60"/>
         <source>Note in these Books</source>
-        <translation type="unfinished"></translation>
+        <translation>Notiz Teil von</translation>
     </message>
     <message>
         <location filename="../ui/bookrefs.ui" line="67"/>
         <source>Books Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorhandene Bücher</translation>
     </message>
     <message>
         <location filename="../ui/bookrefs.ui" line="106"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <location filename="../ui/bookrefs.ui" line="111"/>
         <source>Description</source>
-        <translation type="unfinished">Beschreibung</translation>
+        <translation>Beschreibung</translation>
     </message>
 </context>
 <context>
@@ -115,27 +115,27 @@
     <message>
         <location filename="../ui/changefile.ui" line="14"/>
         <source>NotesFile</source>
-        <translation type="unfinished"></translation>
+        <translation>Notizdatei</translation>
     </message>
     <message>
         <location filename="../ui/changefile.ui" line="24"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis</translation>
     </message>
     <message>
         <location filename="../ui/changefile.ui" line="47"/>
         <source>Notes File</source>
-        <translation type="unfinished"></translation>
+        <translation>Notiz Datei</translation>
     </message>
     <message>
         <location filename="../ui/changefile.ui" line="70"/>
         <source>Save</source>
-        <translation type="unfinished">Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../ui/changefile.ui" line="83"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -143,33 +143,33 @@
     <message>
         <location filename="../ui/fancysearch.ui" line="14"/>
         <source>Advanced Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Kombinierte Auswahl</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="26"/>
         <source>More Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Marken</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="33"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="40"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="47"/>
         <source>More Books</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Bücher</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="54"/>
         <location filename="../ui/fancysearch.ui" line="84"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="60"/>
@@ -181,35 +181,35 @@
         <location filename="../ui/fancysearch.ui" line="67"/>
         <location filename="../ui/fancysearch.ui" line="97"/>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation>Eins</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="77"/>
         <location filename="../ui/fancysearch.ui" line="107"/>
         <source>Except</source>
-        <translation type="unfinished"></translation>
+        <translation>Außer</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="90"/>
         <location filename="../ui/fancysearch.ui" line="100"/>
         <source>bookGroup</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="134"/>
         <source>Or</source>
-        <translation type="unfinished"></translation>
+        <translation>Oder</translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="140"/>
         <location filename="../ui/fancysearch.ui" line="150"/>
         <source>connectGroup</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/fancysearch.ui" line="147"/>
         <source>And</source>
-        <translation type="unfinished"></translation>
+        <translation>Und</translation>
     </message>
 </context>
 <context>
@@ -217,22 +217,22 @@
     <message>
         <location filename="../ui/getstring.ui" line="14"/>
         <source>Find in Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche</translation>
     </message>
     <message>
         <location filename="../ui/getstring.ui" line="36"/>
         <source>Search for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchwort</translation>
     </message>
     <message>
         <location filename="../ui/getstring.ui" line="61"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen</translation>
     </message>
     <message>
         <location filename="../ui/getstring.ui" line="87"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 <context>
@@ -240,27 +240,27 @@
     <message>
         <location filename="../ui/helpbox.ui" line="14"/>
         <source>Notably</source>
-        <translation type="unfinished"></translation>
+        <translation>Notably</translation>
     </message>
     <message>
         <location filename="../ui/helpbox.ui" line="35"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/helpbox.ui" line="42"/>
         <source>Online Manul</source>
-        <translation type="unfinished"></translation>
+        <translation>Web Hilfe</translation>
     </message>
     <message>
         <location filename="../ui/helpbox.ui" line="55"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Handbuch</translation>
     </message>
     <message>
         <location filename="../ui/helpbox.ui" line="68"/>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Lizenz</translation>
     </message>
 </context>
 <context>
@@ -278,12 +278,12 @@
     <message>
         <location filename="../ui/helpwin.ui" line="33"/>
         <source>Back</source>
-        <translation type="unfinished">Zurück</translation>
+        <translation>Zurück</translation>
     </message>
     <message>
         <location filename="../ui/helpwin.ui" line="40"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../ui/helpwin.ui" line="63"/>
@@ -393,27 +393,27 @@
     <message>
         <location filename="../ui/tagsearch.ui" line="14"/>
         <source>Note Tags</source>
-        <translation type="unfinished">Marke</translation>
+        <translation>Marke</translation>
     </message>
     <message>
         <location filename="../ui/tagsearch.ui" line="46"/>
         <source>Done</source>
-        <translation type="unfinished">Fertig</translation>
+        <translation>Fertig</translation>
     </message>
     <message>
         <location filename="../ui/tagsearch.ui" line="53"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../ui/tagsearch.ui" line="60"/>
         <source>Search for Tags</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Marken Suchen</translation>
     </message>
     <message>
         <location filename="../ui/tagsearch.ui" line="67"/>
         <source>Tags Available</source>
-        <translation type="unfinished">Verfügbare Marken</translation>
+        <translation>Verfügbare Marken</translation>
     </message>
 </context>
 <context>
@@ -421,47 +421,47 @@
     <message>
         <location filename="../src/book-edit.cpp" line="49"/>
         <source>bad status</source>
-        <translation type="unfinished">fehlerhaft</translation>
+        <translation>fehlerhaft</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="50"/>
         <source>present</source>
-        <translation type="unfinished"></translation>
+        <translation>vorhanden</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="51"/>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation>neu</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="52"/>
         <source>changed</source>
-        <translation type="unfinished"></translation>
+        <translation>geändert</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="53"/>
         <source>delete</source>
-        <translation type="unfinished"></translation>
+        <translation>löschen</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="118"/>
         <source>Un-Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>ent-löschen</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="120"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="196"/>
         <source>new title</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuer Titel</translation>
     </message>
     <message>
         <location filename="../src/book-edit.cpp" line="197"/>
         <source>new description</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Beschreibung</translation>
     </message>
 </context>
 <context>
@@ -469,47 +469,47 @@
     <message>
         <location filename="../src/content-menu.cpp" line="40"/>
         <source>Select by Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl nach Marke</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="42"/>
         <source>Select untagged Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>unmarkierte Notizen</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="47"/>
         <source>Select by Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl nach Buch</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="49"/>
         <source>Select unbooked Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>ungebuchte Notizen</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="54"/>
         <source>Search Words...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche nach Worten</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="56"/>
         <source>Advanced Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kombinierte Wahl</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="61"/>
         <source>Select All Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>All Notizen</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="185"/>
         <source>Notes with ALL these words</source>
-        <translation type="unfinished"></translation>
+        <translation>Notizen mit diesen Worten</translation>
     </message>
     <message>
         <location filename="../src/content-menu.cpp" line="255"/>
         <source>No Matching Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Nichts gefunden!</translation>
     </message>
 </context>
 <context>
@@ -517,37 +517,37 @@
     <message>
         <location filename="../src/editmenu.cpp" line="31"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <location filename="../src/editmenu.cpp" line="34"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfügen</translation>
     </message>
     <message>
         <location filename="../src/editmenu.cpp" line="37"/>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurück</translation>
     </message>
     <message>
         <location filename="../src/editmenu.cpp" line="40"/>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Fett</translation>
     </message>
     <message>
         <location filename="../src/editmenu.cpp" line="43"/>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>Kursiv</translation>
     </message>
     <message>
         <location filename="../src/editmenu.cpp" line="46"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>Untersteichen</translation>
     </message>
     <message>
         <location filename="../src/editmenu.cpp" line="50"/>
         <source>Find...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche...</translation>
     </message>
 </context>
 <context>
@@ -570,7 +570,7 @@
     <message>
         <location filename="../src/managemenu.cpp" line="41"/>
         <source>Book Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Buch Editor</translation>
     </message>
     <message>
         <location filename="../src/managemenu.cpp" line="43"/>
@@ -869,7 +869,7 @@ Entire Screen captured in those 5 seconds</source>
     <message>
         <location filename="../src/tagsearch.cpp" line="26"/>
         <source>Search for Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Marken Suchen</translation>
     </message>
 </context>
 </TS>

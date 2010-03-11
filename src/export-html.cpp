@@ -14,6 +14,8 @@
 //
 #include <QDebug>
 
+#include <QTimer>
+
 namespace nota {
 
 ExportHtml::ExportHtml (QWidget *parent, QSqlDatabase &db)
@@ -42,6 +44,81 @@ ExportHtml::ExportBook (QString bookname)
    #endif
 }
 
+bool
+ExportHtml::ExportNote (qint64 id, QString copyToHere, QString oldPath)
+{
+  QFile pageFile (copyToHere);
+  pageFile.open (QFile::WriteOnly);
+  QByteArray  noteView;
+  ReadNote (id, noteView);
+  qint64 nbytes = pageFile.write (noteView);
+  pageFile.close();
+  QFileInfo destInfo (copyToHere);
+  QMessageBox report (this);
+  Qt::WindowFlags flags = report.windowFlags();
+  flags |= Qt::FramelessWindowHint;
+  report.setWindowFlags (flags);
+  QString savedMessage;
+  if (nbytes > 0) {
+    savedMessage = QString (tr("Note exported as %1"))
+                            .arg (copyToHere);  
+    if (oldPath != destInfo.path()) {
+      CopyPageImages (id, oldPath, destInfo.path ());
+    }
+  } else {
+    savedMessage = QString (tr("Could not write %1 !"))
+                            .arg (copyToHere);
+  }
+  report.setText (savedMessage);
+  QTimer::singleShot (20000, &report, SLOT(accept()));
+  report.exec ();
+  return true;
+}
+
+void
+ExportHtml::CopyPageImages (const qint64 noteid,
+                              const QString srcdir,
+                              const QString destdir)
+{
+  QString selectPattern ("select imageref from imagerefs where noteid = %1");
+  QString select = selectPattern.arg(QString::number(noteid));
+  QSqlQuery query (*pDB);
+  QString imgname;
+  QString srcfile;
+  QString destfile;
+  QChar    sep = QDir::separator();
+  bool ok = query.exec (select);
+  QDir dest (destdir);
+  if (!dest.exists()) {
+    dest.mkpath (destdir);
+  }
+  while (query.next()) {
+    imgname = query.value(0).toString();
+    srcfile = srcdir + sep + imgname;
+    destfile = destdir + sep + imgname;
+    QFile oldFile (srcfile);
+    QFile newFile (destfile);
+    if (newFile.exists()) {
+      newFile.remove();
+    }
+    ok = oldFile.copy (destfile);
+  }
+  
+}
+
+void
+ExportHtml::ReadNote (qint64 id, QByteArray & noteView)
+{
+  QString pat ("select notetext from notes where noteid=%1");
+  QString qryStr = pat.arg(QString::number(id));
+  QSqlQuery query (*pDB);
+  bool ok = query.exec (qryStr);
+  if (ok && query.next()) {
+    noteView = query.value(0).toByteArray();
+  } else {
+    noteView.clear();
+  }
+}
 
 #if DELIBERATE_HAVE_WEBELT
 
