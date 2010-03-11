@@ -77,6 +77,7 @@ public:
   
   bool ExportBook (QString bookname);
   bool ExportNote (qint64 id, QString copyToHere, QString oldPath);
+  void ExportAllImages (const QString srcpath, const QString destpath);
   
   static bool IsImplemented ();
 

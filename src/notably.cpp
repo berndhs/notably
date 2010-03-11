@@ -105,13 +105,18 @@ main (int argc, char* argv[])
   box.exec ();
 #endif
 
-  nota::NotesDisplay notes (App);
-  nota::NotaConf     conf;
-  notes.SetConf (conf);
-  notes.Start ();
-  notes.show ();
+  bool restart = false;
+  do {
+    nota::NotesDisplay notes (App);
+    nota::NotaConf     conf;
+    notes.SetConf (conf);
+    notes.Start ();
+    notes.show ();
   
+    App.exec ();
+    
+    restart = notes.WantRestart();
+  } while (restart);
   
-  App.exec ();
   return 0;
 }

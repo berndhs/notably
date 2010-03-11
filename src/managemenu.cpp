@@ -112,6 +112,8 @@ ManageMenu::ExportAll ()
     bool copied = oldDB.copy (copyToHere);
     QString status (copyToHere);
     if (copied) {
+      QFileInfo info (copyToHere);
+      emit (SigExportImages (info.path()));
       status.append (QString (tr(" Written OK")));
     } else {
       status.append (QString (tr(" Copy  failed!")));

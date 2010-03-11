@@ -35,6 +35,7 @@ namespace nota {
 
 NotesDisplay::NotesDisplay (QApplication & app)
 :pApp(&app),
+ restart (false),
  didShutdownActions (false),
  pConf(0),
  noteMenu(this),
@@ -156,6 +157,8 @@ NotesDisplay::SetupMenu ()
   connect (&manageMenu, SIGNAL (SigReload()), this, SLOT (ReloadDB()));
   connect (&manageMenu, SIGNAL (SigExportBook (QString)),
              this, SLOT (ExportBook (QString)));
+  connect (&manageMenu, SIGNAL (SigExportImages (QString)),
+             this, SLOT (ExportAllImages (QString)));
   
   connect (&contentMenu, SIGNAL (Selected (NoteIdSetType &)),
            this, SLOT (SelectionMade (NoteIdSetType &)));
@@ -212,6 +215,7 @@ NotesDisplay::SetConf (NotaConf & conf)
 void
 NotesDisplay::Start ()
 {
+  restart = false;
   editMenu.Init ();
   specialMenu.Init ();
   if (Settings().contains("size")) {
@@ -235,12 +239,15 @@ NotesDisplay::resizeEvent (QResizeEvent * event)
 void
 NotesDisplay::ReloadDB ()
 {
+  #if 0
+  restart = true;
+  quit ();
+  #else
   CloseDB ();
-  if (!DBExists()) {
-    dbManager.MakeTables (mConName);
-  }
   OpenDB ();
   FillNotesList (notesIndex);
+  ShowNothing ();
+  #endif
 }
 
 void
@@ -633,7 +640,10 @@ void
 NotesDisplay::MakeNew (qint64 & id, QString &name)
 {
   QDateTime now = QDateTime::currentDateTime ();
-  id = now.toTime_t();
+  QTime time = QTime::currentTime();
+  qint64 sectime = now.toTime_t();
+  id = (sectime * 1000 + time.msec());
+  qDebug () << " new id " << id;
   name = now.toString ("yyyy-MM-dd-hh-mm-ss-Note");
 }
 
@@ -938,6 +948,12 @@ void
 NotesDisplay::ExportBook (QString bookname)
 {
   htmlExporter.ExportBook (bookname);
+}
+
+void
+NotesDisplay::ExportAllImages (QString path)
+{
+  htmlExporter.ExportAllImages (pConf->Directory(), path);
 }
 
 void

@@ -76,6 +76,25 @@ ExportHtml::ExportNote (qint64 id, QString copyToHere, QString oldPath)
 }
 
 void
+ExportHtml::ExportAllImages (const QString srcpath, const QString destpath)
+{
+  QSet<qint64> idSet;
+  QString      allnotes ("select distinct noteid from imagerefs where 1");
+  QSqlQuery    query(*pDB);
+  qint64       id;
+  query.exec (allnotes);
+  while (query.next()) {
+    id = query.value(0).toLongLong();
+    idSet.insert (id);
+  }
+  QSet<qint64>::iterator nit;
+  for (nit = idSet.begin(); nit != idSet.end(); nit++) {
+    id = *nit;
+    CopyPageImages (id, srcpath, destpath);
+  }
+}
+
+void
 ExportHtml::CopyPageImages (const qint64 noteid,
                               const QString srcdir,
                               const QString destdir)

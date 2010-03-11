@@ -54,6 +54,7 @@ signals:
 
   void SigReload ();
   void SigExportBook (QString bookname);
+  void SigExportImages (QString destDBName);
 
 private:
 

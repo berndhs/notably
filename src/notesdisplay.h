@@ -65,6 +65,7 @@ public:
   void mousePressEvent (QMouseEvent *event );
   void mouseReleaseEvent (QMouseEvent *event );
   void resizeEvent ( QResizeEvent * event );
+  bool WantRestart () { return restart; }
   
 public slots:
 
@@ -105,6 +106,7 @@ public slots:
   void CopyNoteLink ();
   void PasteNoteLink ();
   void ExportBook (QString bookname);
+  void ExportAllImages (QString path);
   
   
   void ReloadDB ();
@@ -145,6 +147,8 @@ private:
                                   const QString   &name);
 
   QApplication *pApp;
+  
+  bool          restart;
   
   bool          didShutdownActions;
   
