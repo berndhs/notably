@@ -80,6 +80,7 @@ ExportHtml::CopyPageImages (const qint64 noteid,
                               const QString srcdir,
                               const QString destdir)
 {
+
   QString selectPattern ("select imageref from imagerefs where noteid = %1");
   QString select = selectPattern.arg(QString::number(noteid));
   QSqlQuery query (*pDB);
@@ -88,14 +89,17 @@ ExportHtml::CopyPageImages (const qint64 noteid,
   QString destfile;
   QChar    sep = QDir::separator();
   bool ok = query.exec (select);
-  QDir dest (destdir);
-  if (!dest.exists()) {
-    dest.mkpath (destdir);
-  }
+  QString imgdir;
   while (query.next()) {
     imgname = query.value(0).toString();
     srcfile = srcdir + sep + imgname;
     destfile = destdir + sep + imgname;
+    QFileInfo imginfo (destfile);
+    imgdir = imginfo.path();
+    QDir dest (imgdir);
+    if (!dest.exists()) {
+      dest.mkpath (imgdir);
+    }
     QFile oldFile (srcfile);
     QFile newFile (destfile);
     if (newFile.exists()) {
