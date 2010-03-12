@@ -49,12 +49,14 @@ public slots:
   void EditBooks ();
   void EditTags ();
   void ExportBook ();
+  void MergeOtherDB ();
   
 signals:
 
   void SigReload ();
   void SigExportBook (QString bookname);
   void SigExportImages (QString destDBName);
+  void SigMerge (QString path);
 
 private:
 
@@ -75,6 +77,7 @@ private:
   QAction  *bookAction;
   QAction  *tagAction;
   QAction  *htmlAction;
+  QAction  *mergeAction;
   
 };
 

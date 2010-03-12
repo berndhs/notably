@@ -38,6 +38,11 @@ ManageMenu::ManageMenu (QWidget * parent)
   if (!IsFingerInterface()) {
     menu.addSeparator ();
   }
+  mergeAction = new QAction (tr("Pull In Notes..."), this);
+  menu.addAction (mergeAction);
+  if (!IsFingerInterface()) {
+    menu.addSeparator ();
+  }
   bookAction = new QAction (tr("Book Editor"), this);
   menu.addAction (bookAction);
   tagAction = new QAction (tr("Tag Editor"), this);
@@ -53,6 +58,7 @@ ManageMenu::ManageMenu (QWidget * parent)
   connect (bookAction, SIGNAL (triggered()), this, SLOT (EditBooks()));
   connect (tagAction, SIGNAL (triggered()), this, SLOT (EditTags()));
   connect (fileNameAction, SIGNAL (triggered()), this, SLOT(ChangeFilename()));
+  connect (mergeAction, SIGNAL (triggered()), this, SLOT (MergeOtherDB()));
   
   ConnectDialogs ();
 }
@@ -93,6 +99,20 @@ ManageMenu::ChangeFilename ()
   fileUI.directoryEdit->setText (pConf->Directory());
   fileUI.notesFileEdit->setText (pConf->FileName());
   fileDialog.exec ();
+}
+
+void
+ManageMenu::MergeOtherDB ()
+{
+  QString userHome = QDesktopServices::storageLocation 
+                         (QDesktopServices::HomeLocation);
+  QString mergeFromHere = QFileDialog::getOpenFileName(this, tr("Open File"),
+                            userHome,
+                            tr("SQLite Files (*.sql);; All Files (*.*)"));
+  qDebug () << " they want to merge from " << mergeFromHere;
+  if (mergeFromHere.length() > 0 ) {
+    emit SigMerge (mergeFromHere);
+  }
 }
 
 void

@@ -48,6 +48,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
  noteTagEditor (this),
  noteBookEditor (this),
  htmlExporter (this,db),
+ importer (this, db),
  dbManager (db),
  mConName ("nota_dbcon"),
  noLabel (this),
@@ -159,6 +160,8 @@ NotesDisplay::SetupMenu ()
              this, SLOT (ExportBook (QString)));
   connect (&manageMenu, SIGNAL (SigExportImages (QString)),
              this, SLOT (ExportAllImages (QString)));
+  connect (&manageMenu, SIGNAL (SigMerge (QString)), 
+             &importer, SLOT (MergeFrom (QString)));
   
   connect (&contentMenu, SIGNAL (Selected (NoteIdSetType &)),
            this, SLOT (SelectionMade (NoteIdSetType &)));
