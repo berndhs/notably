@@ -50,6 +50,7 @@ public slots:
   void EditTags ();
   void ExportBook ();
   void MergeOtherDB ();
+  void ImportBusy (bool busy);
   
 signals:
 

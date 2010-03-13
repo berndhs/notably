@@ -16,6 +16,8 @@
 #include <QWidget>
 #include <QString>
 #include <QSqlDatabase>
+#include <QTimer>
+#include <QSqlQuery>
 #include "ui_import.h"
 #include "ui_importlog.h"
 
@@ -29,34 +31,68 @@ public:
 
 Importer (QWidget *parent, QSqlDatabase &mine);
 
+bool IsBusy () { return queryBusy; }
+
 public slots:
 
 void MergeFrom (QString otherPath);
+void update ();
 
 private slots:
 
-void CloseLog ();
+  void CloseLog ();
+  void Update ();
+  void LineLogger (QString line);
+  void CatchResult ();
+  void DoMerge ();
+
+signals:
+ 
+  void LogLine (QString line);
+  void SigResult ();
+  void Busy (bool busy);
 
 private:
 
- void Connect ();
- void InitButtons ();
- void DoMerge ();
-
- QSqlDatabase    * myDB;
- QSqlDatabase    otherDB;
+  void Connect ();
+  void InitButtons ();
  
- QString        otherCon;
+  uint TimeStamp (QSqlDatabase & db, qint64 noteid);
+  bool NoteExists (QSqlDatabase &db, qint64 noteid);
  
- QDialog           importDialog;
- Ui_ImportDialog   importUI;
- QDialog           importLog;
- Ui_ImportLog      importLogUI;
+  bool WriteNote (QSqlDatabase & db, 
+                 const qint64    noteid,
+                 const QString  &usergivenid,
+                 const QString  &notetext,
+                 const uint      timestamp);
+  bool MergeAllRefs (QSqlDatabase & toDB,
+                  QSqlDatabase & fromDB,
+                  qint64        noteid);
+  bool MergeRefs (QSqlDatabase  & toDB,
+                  QSqlDatabase  & fromDB,
+                  QString         tablename,
+                  QString         fieldname,
+                  qint64          noteid);
+
+  QSqlDatabase    * myDB;
+  QSqlDatabase    otherDB;
  
- QString    otherDir;
- QString    source;
-
-
+  QString        otherCon;
+ 
+  QDialog           importDialog;
+  Ui_ImportDialog   importUI;
+  QDialog           importLog;
+  Ui_ImportLog      importLogUI;
+ 
+  QString    otherDir;
+  QString    source;
+  
+  QSqlQuery  otherQuery;
+  int        idNdx;
+  int        titleNdx;
+  int        bodyNdx;
+  bool       queryBusy;
+  
 };
 
 

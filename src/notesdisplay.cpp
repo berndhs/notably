@@ -53,7 +53,8 @@ NotesDisplay::NotesDisplay (QApplication & app)
  mConName ("nota_dbcon"),
  noLabel (this),
  maxTags (5),
- numTags (0)
+ numTags (0),
+ updateTimer (this)
 {
   setupUi (this);
   SetupMenu ();
@@ -94,6 +95,9 @@ NotesDisplay::NotesDisplay (QApplication & app)
   #if DELIBERATE_DEBUG && 0
   debugTimer.start (3000);
   #endif
+  connect (&updateTimer, SIGNAL (timeout()),
+           this, SLOT (update()));
+  updateTimer.start (500);
 }
 
 void
@@ -162,6 +166,8 @@ NotesDisplay::SetupMenu ()
              this, SLOT (ExportAllImages (QString)));
   connect (&manageMenu, SIGNAL (SigMerge (QString)), 
              &importer, SLOT (MergeFrom (QString)));
+  connect (&importer, SIGNAL (Busy(bool)), 
+             &manageMenu, SLOT (ImportBusy(bool)));
   
   connect (&contentMenu, SIGNAL (Selected (NoteIdSetType &)),
            this, SLOT (SelectionMade (NoteIdSetType &)));
@@ -195,6 +201,13 @@ NotesDisplay::SetupEdit ()
             this, SLOT (CopyNoteLink()));
   connect (&specialMenu, SIGNAL (SigPasteNoteLink ()),
             this, SLOT (PasteNoteLink()));
+}
+
+void
+NotesDisplay::update ()
+{
+  importer.update();
+  QMainWindow::update();
 }
 
 void
@@ -875,6 +888,16 @@ NotesDisplay::WriteNote (const qint64 id,
     InsertQuery.bindValue (i,v[i]);
   }
   bool worked = InsertQuery.exec ();
+  QDateTime now = QDateTime::currentDateTime ();
+  uint timestamp = now.toTime_t();
+  QString timeCmd = QString ("insert or replace into lastupdate "               
+                             " (noteid, updatetime ) "
+                             " values (?,?)");
+  InsertQuery.prepare (timeCmd);
+  InsertQuery.bindValue (0,id);
+  InsertQuery.bindValue (1,timestamp);
+  worked &= InsertQuery.exec ();
+  
   QString result;
   if (worked) {
     QString pat (tr("saved as \"%1\""));

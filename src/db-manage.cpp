@@ -25,8 +25,7 @@ DBManage::DBManage (QSqlDatabase & db)
 {
   pDB = &db;
   tagList.clear();
-  tagList << "notag"
-          << "important"
+  tagList << "important"
           << "dead"
           << "done";
    dbElementList << "notes"      
@@ -36,8 +35,10 @@ DBManage::DBManage (QSqlDatabase & db)
                  << "books"
                  << "bookrefs"
                  << "identndx"
+                 << "lastupdate"
                  << "uniquepairs"
                  << "uniquebooktitle"
+                 << "uniqueupdate"
                  << "uniquetags";
 }
 

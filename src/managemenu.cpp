@@ -85,6 +85,14 @@ ManageMenu::ConnectDialogs ()
            this, SLOT (CancelExport()));
   #endif
 }
+
+void
+ManageMenu::ImportBusy (bool busy)
+{
+  if (mergeAction) {
+    mergeAction->setEnabled (!busy);
+  }
+}
 void
 ManageMenu::Exec (QPoint here)
 {
@@ -109,7 +117,6 @@ ManageMenu::MergeOtherDB ()
   QString mergeFromHere = QFileDialog::getOpenFileName(this, tr("Open File"),
                             userHome,
                             tr("SQLite Files (*.sql);; All Files (*.*)"));
-  qDebug () << " they want to merge from " << mergeFromHere;
   if (mergeFromHere.length() > 0 ) {
     emit SigMerge (mergeFromHere);
   }

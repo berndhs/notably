@@ -71,6 +71,7 @@ public:
 public slots:
 
   void quit ();
+  void update ();
   void AboutToQuit ();
   void UserPicked (QListWidgetItem *item);
   void SaveCurrent ();
@@ -211,6 +212,7 @@ private:
   QShortcut  *contentShort;
   
   QTimer     debugTimer;
+  QTimer     updateTimer;
 
 };
 
