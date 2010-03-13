@@ -18,8 +18,10 @@
 #include <QSqlDatabase>
 #include <QTimer>
 #include <QSqlQuery>
+#include <QStringList>
 #include "ui_import.h"
 #include "ui_importlog.h"
+#include "utility-types.h"
 
 
 namespace nota {
@@ -56,15 +58,24 @@ private:
 
   void Connect ();
   void InitButtons ();
+  
+  void FinishMerge ();
  
   uint TimeStamp (QSqlDatabase & db, qint64 noteid);
   bool NoteExists (QSqlDatabase &db, qint64 noteid);
+  bool KeyExists (QSqlDatabase &db, const QString table, 
+                  const QString keyField, const QString keyVal);
  
   bool WriteNote (QSqlDatabase & db, 
                  const qint64    noteid,
                  const QString  &usergivenid,
                  const QString  &notetext,
-                 const uint      timestamp);
+                 const uint      timestamp); 
+  bool ReadNote (QSqlDatabase & db, 
+                 const qint64     noteid,
+                       QString  & usergivenid,
+                       QString  & notetext,
+                       uint     & timestamp);
   bool MergeAllRefs (QSqlDatabase & toDB,
                   QSqlDatabase & fromDB,
                   qint64        noteid);
@@ -72,7 +83,17 @@ private:
                   QSqlDatabase  & fromDB,
                   QString         tablename,
                   QString         fieldname,
-                  qint64          noteid);
+                  qint64          noteid,
+                  QSet<QString>   & refList);
+  bool MergeBooks (QSqlDatabase & toDB,
+                   QSqlDatabase & fromDB,
+                   QSet<QString>  & bookNames);
+  bool MergeTags (QSqlDatabase & toDB,
+                   QSqlDatabase & fromDB,
+                   QSet<QString>  & tagNames);
+  bool MergeImages (QSqlDatabase & toDB,
+                    QSqlDatabase & fromDB,
+                    QSet<QString>  & imageNames);
 
   QSqlDatabase    * myDB;
   QSqlDatabase    otherDB;
@@ -87,12 +108,12 @@ private:
   QString    otherDir;
   QString    source;
   
-  QSqlQuery  otherQuery;
-  int        idNdx;
-  int        titleNdx;
-  int        bodyNdx;
   bool       queryBusy;
   
+  NoteIdSetType  idSet;
+  QSet<QString>    bookList;
+  QSet<QString>    tagList;
+  QSet<QString>    imageList;
 };
 
 

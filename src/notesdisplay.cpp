@@ -93,7 +93,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
   connect (editBox, SIGNAL (LinkToNote (qint64)),
            this, SLOT (InterNoteLink (qint64)));
   #if DELIBERATE_DEBUG && 0
-  debugTimer.start (3000);
+  debugTimer.start (1000);
   #endif
   connect (&updateTimer, SIGNAL (timeout()),
            this, SLOT (update()));
@@ -206,6 +206,7 @@ NotesDisplay::SetupEdit ()
 void
 NotesDisplay::update ()
 {
+  //qDebug () << " update " << objectName ();
   importer.update();
   QMainWindow::update();
 }
@@ -985,15 +986,11 @@ NotesDisplay::ExportAllImages (QString path)
 void
 NotesDisplay::DebugCheck ()
 {
+  static int debugCount(0);
 #ifndef _WIN32
-  qDebug () << " debug timer check " << time (0);
-  qDebug () << " editbox modified " << isChanged;
-  qDebug () << " isNew " << isNew;
-  qDebug () << " nameChanged " << nameChanged;
-  qDebug () << " showingNote " << showingNote;
-  qDebug () << " currentId " << currentId;
-  qDebug () << " currentName " << currentName;
-  qDebug () << " newName " << newName;
+  debugCount++;
+  qDebug () << " debug timer check " << debugCount << " at "<< time (0);
+  update ();
 #endif
 }
 
