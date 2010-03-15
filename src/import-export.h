@@ -1,5 +1,5 @@
-#ifndef IMPORT_H
-#define IMPORT_H
+#ifndef IMPORT_EXPORT_H
+#define IMPORT_EXPORT_H
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -22,22 +22,27 @@
 #include "ui_import.h"
 #include "ui_importlog.h"
 #include "utility-types.h"
+#include "db-manage.h"
+#include "notaconf.h"
 
 
 namespace nota {
 
-class Importer : public QWidget {
+class ImportExport : public QWidget {
 Q_OBJECT
 
 public:
 
-Importer (QWidget *parent, QSqlDatabase &mine);
+ImportExport (QWidget *parent, QSqlDatabase &mine);
+
+void SetConf (NotaConf *pC) { pConf = pC; }
 
 bool IsBusy () { return queryBusy; }
 
 public slots:
 
 void MergeFrom (QString otherPath);
+void ExportBook (QString bookname, QString destfile);
 void update ();
 
 private slots:
@@ -58,8 +63,9 @@ private:
 
   void Connect ();
   void InitButtons ();
+  void StartMerge (QString selectNotes);
   
-  void FinishMerge ();
+  void FinishMerge (QSqlDatabase & toDB, QSqlDatabase & fromDB);
  
   uint TimeStamp (QSqlDatabase & db, qint64 noteid);
   bool NoteExists (QSqlDatabase &db, qint64 noteid);
@@ -97,6 +103,11 @@ private:
 
   QSqlDatabase    * myDB;
   QSqlDatabase    otherDB;
+  NotaConf        * pConf;
+  
+  
+  QSqlDatabase    *toDB;
+  QSqlDatabase    *fromDB;
  
   QString        otherCon;
  

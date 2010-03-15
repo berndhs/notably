@@ -33,12 +33,15 @@ ManageMenu::ManageMenu (QWidget * parent)
 
   exportAction = new QAction (tr("Export All"), this);
   menu.addAction (exportAction);
+  bookExSqlAction = new QAction (tr("Export Book as Sql"), this);
+  menu.addAction (bookExSqlAction);
+  
   htmlAction = new QAction (tr("Export Book as HTML"), this);
   menu.addAction (htmlAction);
   if (!IsFingerInterface()) {
     menu.addSeparator ();
   }
-  mergeAction = new QAction (tr("Pull In Notes..."), this);
+  mergeAction = new QAction (tr("Import Notes..."), this);
   menu.addAction (mergeAction);
   if (!IsFingerInterface()) {
     menu.addSeparator ();
@@ -55,6 +58,7 @@ ManageMenu::ManageMenu (QWidget * parent)
   
   connect (exportAction, SIGNAL (triggered()), this, SLOT (ExportAll()));
   connect (htmlAction, SIGNAL (triggered()), this, SLOT (ExportBook()));
+  connect (bookExSqlAction, SIGNAL (triggered()), this, SLOT (ExportBookSql()));
   connect (bookAction, SIGNAL (triggered()), this, SLOT (EditBooks()));
   connect (tagAction, SIGNAL (triggered()), this, SLOT (EditTags()));
   connect (fileNameAction, SIGNAL (triggered()), this, SLOT(ChangeFilename()));
@@ -78,12 +82,6 @@ ManageMenu::ConnectDialogs ()
            this, SLOT (SaveLoc()));
   connect (fileUI.cancelButton, SIGNAL (clicked()),
            this, SLOT (CancelLoc()));
-  #if 0
-  connect (exportUI.saveButton, SIGNAL (clicked()),
-           this, SLOT (DoExport()));
-  connect (exportUI.cancelButton, SIGNAL (clicked()),
-           this, SLOT (CancelExport()));
-  #endif
 }
 
 void
@@ -125,11 +123,24 @@ ManageMenu::MergeOtherDB ()
 void
 ManageMenu::ExportAll ()
 {
-  QString dataHome = QDesktopServices::storageLocation 
-                         (QDesktopServices::DataLocation);
-  QString copyToHere = QFileDialog::getSaveFileName(this, tr("Save File"),
-                            dataHome,
-                            tr("All Files (*.*)"));
+  QString defaultTarget = QDesktopServices::storageLocation 
+                         (QDesktopServices::DataLocation)
+                         + QDir::separator()
+                         + tr("nota-export.sql");
+  QString copyToHere ;
+                    
+  QFileDialog askThem (this, tr("Save File"),
+                       defaultTarget,
+                       tr("SQLite Files (*.sql);; All Files (*.*)"));
+  askThem.setAcceptMode (QFileDialog::AcceptSave);
+  askThem.setConfirmOverwrite (true);
+  askThem.setFileMode (QFileDialog::AnyFile);
+  int wantit = askThem.exec();        
+  QStringList results = askThem.selectedFiles();
+  if (wantit > 0 && !results.isEmpty()) {
+    copyToHere = results.first();
+  }
+                            
   if (copyToHere.length() > 0) {
     QFile oldDB (pConf->CompleteDBName());
     QFile newDB (copyToHere);
@@ -175,6 +186,34 @@ ManageMenu::ExportBook ()
 }
 
 void
+ManageMenu::ExportBookSql ()
+{
+  int wantExport = bookPicker.Exec ();
+  if (wantExport) {
+    QString bookname = bookPicker.TitleSelected();
+    QString defaultTarget = QDesktopServices::storageLocation 
+                         (QDesktopServices::HomeLocation)
+                         + QDir::separator()
+                         + bookname + tr(".sql");
+    QFileDialog askThem (this, tr("Save File"),
+                         defaultTarget,
+                         tr("SQLite Files (*.sql);; All Files (*.*)"));
+    askThem.setAcceptMode (QFileDialog::AcceptSave);
+    askThem.setConfirmOverwrite (true);
+    askThem.setFileMode (QFileDialog::AnyFile);
+    int wantit = askThem.exec();       
+    QStringList results = askThem.selectedFiles();
+    QString     mergeToHere;
+    if (wantit > 0 && !results.isEmpty()) {
+      mergeToHere = results.first();
+    }
+    if (mergeToHere.length() > 0 ) {
+      emit SigExportBookSql (bookname, mergeToHere);
+    }
+  }
+}
+
+void
 ManageMenu::SaveLoc ()
 {
   pConf->SetFileName (fileUI.notesFileEdit->text());
@@ -188,12 +227,6 @@ void
 ManageMenu::CancelLoc ()
 {
   fileDialog.reject ();
-}
-
-void
-ManageMenu::DoExport ()
-{
-  qDebug () << " do export called";
 }
 
 void

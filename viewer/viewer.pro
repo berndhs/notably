@@ -79,7 +79,7 @@ SOURCES = \
 	../src/tag-edit.cpp \
 	../src/export-html.cpp \
 	../src/fancy-search.cpp \
-	../src/import.cpp \
+	../src/import-export.cpp \
 	../src/notably.cpp
 
 HEADERS = \
@@ -105,7 +105,7 @@ HEADERS = \
 	../src/tag-edit.h \
 	../src/export-html.h \
 	../src/fancy-search.h \
-	../src/import.h \
+	../src/import-export.h \
 	../src/helpbox.h 
 	
 

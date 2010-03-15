@@ -44,11 +44,11 @@ public slots:
   void ChangeFilename ();
   void SaveLoc ();
   void CancelLoc ();
-  void DoExport ();
   void ExportAll ();
   void EditBooks ();
   void EditTags ();
   void ExportBook ();
+  void ExportBookSql ();
   void MergeOtherDB ();
   void ImportBusy (bool busy);
   
@@ -56,6 +56,7 @@ signals:
 
   void SigReload ();
   void SigExportBook (QString bookname);
+  void SigExportBookSql (QString bookname, QString destfile);
   void SigExportImages (QString destDBName);
   void SigMerge (QString path);
 
@@ -76,6 +77,7 @@ private:
   QAction  *fileNameAction;
   QAction  *exportAction;
   QAction  *bookAction;
+  QAction  *bookExSqlAction;
   QAction  *tagAction;
   QAction  *htmlAction;
   QAction  *mergeAction;

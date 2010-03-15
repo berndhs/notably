@@ -1,5 +1,5 @@
 
-#include "import.h"
+#include "import-export.h"
 
 //
 //  Copyright (C) 2010 - Bernd H Stramm 
@@ -20,11 +20,13 @@
 #include <QSqlRecord>
 #include <QDateTime>
 #include "delib-debug.h"
+#include "db-manage.h"
 
 namespace nota {
 
-Importer::Importer (QWidget *parent, QSqlDatabase &mine)
+ImportExport::ImportExport (QWidget *parent, QSqlDatabase &mine)
 :QWidget (parent),
+ pConf (0),
  importDialog (this),
  importLog (this),
  queryBusy (false)
@@ -38,7 +40,7 @@ Importer::Importer (QWidget *parent, QSqlDatabase &mine)
 }
 
 void
-Importer::Update ()
+ImportExport::Update ()
 {
   importLog.update();
   update ();
@@ -46,7 +48,7 @@ Importer::Update ()
 
 
 void
-Importer::Connect ()
+ImportExport::Connect ()
 {
   connect (importUI.startButton, SIGNAL (clicked()),
            &importDialog, SLOT (accept()));
@@ -60,7 +62,7 @@ Importer::Connect ()
 }
 
 void
-Importer::InitButtons ()
+ImportExport::InitButtons ()
 {
   importUI.addNew->setChecked(true);
   importUI.overwriteOld->setChecked (false);
@@ -70,7 +72,7 @@ Importer::InitButtons ()
 }
 
 void
-Importer::MergeFrom (QString otherPath)
+ImportExport::MergeFrom (QString otherPath)
 {
   source = otherPath;
   otherDB = QSqlDatabase::addDatabase ("QSQLITE",otherCon);
@@ -91,24 +93,52 @@ Importer::MergeFrom (QString otherPath)
   if (doimport) {
     QFileInfo  info (otherPath);
     otherDir = info.path();
-    QTimer::singleShot (50,this,SLOT(DoMerge ()));
+    toDB = myDB;
+    fromDB = &otherDB;
+    QTimer::singleShot (50, this, SLOT(DoMerge ()));
   } else {
     otherDB.close();
   }
 }
 
 void
-Importer::DoMerge ()
+ImportExport::ExportBook (QString bookname, QString destfile)
+{
+  // make sure the destination is a new database
+  DBManage  dbManage (otherDB);
+  dbManage.SetName (destfile);
+  dbManage.SetCon (QString ("sql_export_temp") );
+  QFileInfo info (destfile);
+  if (info.exists()) {
+    QFile::remove (destfile);
+  }
+  dbManage.MakeTables ();
+  
+  fromDB = myDB;
+  toDB = &otherDB;
+  QString  qryPattern ("select noteid from bookrefs where bookname = \"%1\"");
+  QString  qryString = qryPattern.arg(bookname);
+  StartMerge (qryString);
+  
+}
+
+void
+ImportExport::DoMerge ()
+{
+  StartMerge ("select noteid from notes where 1");
+}
+
+void
+ImportExport::StartMerge (QString selectNotes)
 {
   queryBusy = true;
   emit Busy (queryBusy);
   bookList.clear();
   imageList.clear();
   tagList.clear();
-  QString  allnotes ("select noteid from notes where 1");
-  QSqlQuery otherQuery (otherDB);
+  QSqlQuery otherQuery (*fromDB);
   otherQuery.setForwardOnly (true);
-  bool ok = otherQuery.exec (allnotes);
+  bool ok = otherQuery.exec (selectNotes);
   if (!ok) {
     QMessageBox box (this);
     box.setText (tr("Query failed, bad database?"));
@@ -129,18 +159,18 @@ Importer::DoMerge ()
   if (idSet.size() > 0) {
     emit SigResult ();
   } else {
-    FinishMerge ();
+    FinishMerge (*toDB, *fromDB);
   }
 }
 
 void
-Importer::FinishMerge ()
+ImportExport::FinishMerge (QSqlDatabase & toDB, QSqlDatabase & fromDB)
 {
-  MergeBooks (*myDB, otherDB, bookList);
+  MergeBooks (toDB, fromDB, bookList);
   bookList.clear ();
-  MergeTags (*myDB, otherDB, tagList);
+  MergeTags (toDB, fromDB, tagList);
   tagList.clear ();
-  MergeImages (*myDB, otherDB, imageList);
+  MergeImages (toDB, fromDB, imageList);
   imageList.clear ();
   otherDB.close ();
   queryBusy = false;
@@ -149,7 +179,7 @@ Importer::FinishMerge ()
 }
 
 void
-Importer::CatchResult ()
+ImportExport::CatchResult ()
 {
   static int catchCount(0);
   if ((catchCount++) >= 10) {
@@ -172,23 +202,23 @@ Importer::CatchResult ()
     id = *nit;
     idSet.erase (nit);
   } else {
-    FinishMerge ();
+    FinishMerge (*toDB, *fromDB);
     return;
   }
   bool copyIt (false);
-  bool readok = ReadNote (otherDB, id, title, body, otherTime);
-  if (readok && NoteExists (*myDB, id)) {
-    myTime = TimeStamp (*myDB, id);
+  bool readok = ReadNote (*fromDB, id, title, body, otherTime);
+  if (readok && NoteExists (*toDB, id)) {
+    myTime = TimeStamp (*toDB, id);
     copyIt = (myTime < otherTime);
   } else {
     copyIt = true;
   }
   if (copyIt) {
-    QSqlQuery transact (*myDB);
+    QSqlQuery transact (*toDB);
     transact.exec ("BEGIN TRANSACTION");
-    bool ok = WriteNote (*myDB, id, title, body, otherTime);
+    bool ok = WriteNote (*toDB, id, title, body, otherTime);
     if (ok) {
-      ok &= MergeAllRefs (*myDB, otherDB, id);
+      ok &= MergeAllRefs (*toDB, *fromDB, id);
     }
     transact.exec ("COMMIT TRANSACTION");
     logline = mergedPat.arg(title).arg((ok ? tr("good ") : tr("bad? ")));
@@ -199,27 +229,27 @@ Importer::CatchResult ()
   if (idSet.count() > 0) {
     emit SigResult ();
   } else {
-    FinishMerge ();
+    FinishMerge (*toDB, *fromDB);
   }
 }
 
 
 void
-Importer::LineLogger (QString line)
+ImportExport::LineLogger (QString line)
 {
   importLogUI.messageBox->append (line);
   Update ();
 }
 
 void
-Importer::update ()
+ImportExport::update ()
 {
   importLog.update();
   QWidget::update();
 }
 
 bool
-Importer::WriteNote (QSqlDatabase & db, 
+ImportExport::WriteNote (QSqlDatabase & db, 
                      const qint64    noteid,
                      const QString  &usergivenid,
                      const QString  &notetext,
@@ -244,7 +274,7 @@ Importer::WriteNote (QSqlDatabase & db,
 }
 
 bool 
-Importer::ReadNote (QSqlDatabase & db, 
+ImportExport::ReadNote (QSqlDatabase & db, 
                  const qint64     noteid,
                        QString  & usergivenid,
                        QString  & notetext,
@@ -276,7 +306,7 @@ Importer::ReadNote (QSqlDatabase & db,
 }
 
 uint
-Importer::TimeStamp (QSqlDatabase &db, qint64 noteid)
+ImportExport::TimeStamp (QSqlDatabase &db, qint64 noteid)
 {
   QString cmdPat ("select updatetime from lastupdate where noteid =%1 ");
   QString cmdQuery = cmdPat.arg(noteid);
@@ -289,7 +319,7 @@ Importer::TimeStamp (QSqlDatabase &db, qint64 noteid)
 }
 
 bool
-Importer::NoteExists (QSqlDatabase &db, qint64 noteid)
+ImportExport::NoteExists (QSqlDatabase &db, qint64 noteid)
 {
   QString cmdPat ("select count(noteid) from notes where noteid=%1");
   QString cmdStr = cmdPat.arg(QString::number(noteid));
@@ -305,7 +335,7 @@ Importer::NoteExists (QSqlDatabase &db, qint64 noteid)
 }
 
 bool
-Importer::KeyExists (QSqlDatabase &db, 
+ImportExport::KeyExists (QSqlDatabase &db, 
                      const QString table, 
                      const QString keyField,
                      const QString keyVal)
@@ -321,7 +351,7 @@ Importer::KeyExists (QSqlDatabase &db,
 }
 
 bool
-Importer::MergeAllRefs (QSqlDatabase & toDB,
+ImportExport::MergeAllRefs (QSqlDatabase & toDB,
                      QSqlDatabase & fromDB,
                      qint64         noteid)
 {
@@ -333,7 +363,7 @@ Importer::MergeAllRefs (QSqlDatabase & toDB,
 }
 
 bool
-Importer::MergeRefs (QSqlDatabase  & toDB,
+ImportExport::MergeRefs (QSqlDatabase  & toDB,
                   QSqlDatabase  & fromDB,
                   QString         tablename,
                   QString         fieldname,
@@ -361,7 +391,7 @@ Importer::MergeRefs (QSqlDatabase  & toDB,
 }
 
 bool
-Importer::MergeBooks (QSqlDatabase & toDB,
+ImportExport::MergeBooks (QSqlDatabase & toDB,
                       QSqlDatabase & fromDB,
                       QSet<QString>  & refs)
 {
@@ -403,7 +433,7 @@ Importer::MergeBooks (QSqlDatabase & toDB,
 }
 
 bool
-Importer::MergeTags (QSqlDatabase & toDB,
+ImportExport::MergeTags (QSqlDatabase & toDB,
                       QSqlDatabase & fromDB,
                       QSet<QString>  & refs)
 {
@@ -450,7 +480,7 @@ Importer::MergeTags (QSqlDatabase & toDB,
 }
 
 bool
-Importer::MergeImages (QSqlDatabase & toDB,
+ImportExport::MergeImages (QSqlDatabase & toDB,
                       QSqlDatabase & fromDB,
                       QSet<QString>  & refs)
 {
@@ -513,7 +543,7 @@ Importer::MergeImages (QSqlDatabase & toDB,
 }
 
 void
-Importer::CloseLog ()
+ImportExport::CloseLog ()
 {
   importLog.reject ();
 }

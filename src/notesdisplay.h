@@ -32,7 +32,7 @@
 #include "helpbox.h"
 #include "nota-help.h"
 #include "export-html.h"
-#include "import.h"
+#include "import-export.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -165,7 +165,7 @@ private:
   NoteTagEdit   noteTagEditor;
   NoteBookEdit  noteBookEditor;
   ExportHtml    htmlExporter;
-  Importer      importer;
+  ImportExport      impex;
   
   DBManage      dbManager;
   QSqlDatabase  db;

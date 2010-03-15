@@ -13,6 +13,7 @@
   <file>qrcfiles/schema-bookrefs.sql</file>
   <file>qrcfiles/schema-lastupdate.sql</file>
   <file>qrcfiles/schema-uniqueupdate.sql</file>
+  <file>qrcfiles/schema-uniquetagref.sql</file>
   <file>img/nb.png</file>
   <file>img/notag.png</file>
   <file>img/dead.png</file>

@@ -50,7 +50,11 @@ BookPick::Exec ()
   selectedSomething = false;
   selectedTitle = QString("");
   ListBooks ();
-  return exec ();
+  int accepted(0);
+  do {
+    accepted = exec ();
+  } while (accepted == 1 && selectedTitle.length() < 1);
+  return accepted;
 }
 
 bool

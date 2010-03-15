@@ -13,6 +13,7 @@
 //
 
 #include <QFile>
+#include <QFileInfo>
 #include <QDir>
 #include <QByteArray>
 #include <QVariant>
@@ -21,7 +22,6 @@
 namespace nota {
 
 DBManage::DBManage (QSqlDatabase & db)
-:pConf (0)
 {
   pDB = &db;
   tagList.clear();
@@ -39,20 +39,23 @@ DBManage::DBManage (QSqlDatabase & db)
                  << "uniquepairs"
                  << "uniquebooktitle"
                  << "uniqueupdate"
+                 << "uniquetagref"
                  << "uniquetags";
 }
 
 
 void 
-DBManage::MakeTables (QString connectionName)
+DBManage::MakeTables ()
 {
-  OpenDB (connectionName);
-  QString dirname = pConf->Directory();
+  OpenDB (conName);
+  QFileInfo info (dbCompleteName);
+  
+  QString dirname = info.path();
+  QString filename = info.fileName();
   QDir dir (dirname);
   if (!dir.exists()) {
     dir.mkpath (dirname);
   }
-  QString filename = pConf->DataFile ();
   QFile file (filename);
   file.open (QFile::WriteOnly);
   file.write (QString("").toLatin1(), 0);
@@ -71,7 +74,7 @@ DBManage::OpenDB (QString conName)
     return;
   }
   *pDB = QSqlDatabase::addDatabase ("QSQLITE",conName);
-  pDB->setDatabaseName (pConf->CompleteDBName());
+  pDB->setDatabaseName (dbCompleteName);
   pDB->open ();
 }
 

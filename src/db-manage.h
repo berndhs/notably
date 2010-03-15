@@ -26,9 +26,11 @@ public:
 
   DBManage (QSqlDatabase & db);
   
-  void SetConf (NotaConf * pC) { pConf = pC; }
+  void SetName (QString name) { dbCompleteName = name; }
+  void SetCon  (QString name) { conName = name; }
+  
     
-  void MakeTables (QString connectionName);
+  void MakeTables ();
   void InitTags ();
   
 private:
@@ -37,9 +39,10 @@ private:
   void OpenDB (QString conName);
 
   QSqlDatabase   *pDB;
-  NotaConf       *pConf;
   QStringList    tagList;
   QStringList    dbElementList;
+  QString        dbCompleteName;
+  QString        conName;
 
 };
 

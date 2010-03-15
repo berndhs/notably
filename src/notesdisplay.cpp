@@ -48,7 +48,7 @@ NotesDisplay::NotesDisplay (QApplication & app)
  noteTagEditor (this),
  noteBookEditor (this),
  htmlExporter (this,db),
- importer (this, db),
+ impex (this, db),
  dbManager (db),
  mConName ("nota_dbcon"),
  noLabel (this),
@@ -165,8 +165,10 @@ NotesDisplay::SetupMenu ()
   connect (&manageMenu, SIGNAL (SigExportImages (QString)),
              this, SLOT (ExportAllImages (QString)));
   connect (&manageMenu, SIGNAL (SigMerge (QString)), 
-             &importer, SLOT (MergeFrom (QString)));
-  connect (&importer, SIGNAL (Busy(bool)), 
+             &impex, SLOT (MergeFrom (QString)));
+  connect (&manageMenu, SIGNAL (SigExportBookSql (QString, QString)),
+             &impex, SLOT (ExportBook (QString, QString)));
+  connect (&impex, SIGNAL (Busy(bool)), 
              &manageMenu, SLOT (ImportBusy(bool)));
   
   connect (&contentMenu, SIGNAL (Selected (NoteIdSetType &)),
@@ -207,7 +209,7 @@ void
 NotesDisplay::update ()
 {
   //qDebug () << " update " << objectName ();
-  importer.update();
+  impex.update();
   QMainWindow::update();
 }
 
@@ -226,7 +228,7 @@ NotesDisplay::SetConf (NotaConf & conf)
   specialMenu.SetConf (pConf);
   manageMenu.SetConf (pConf);
   contentMenu.SetConf (pConf);
-  dbManager.SetConf (pConf);
+  impex.SetConf (pConf);
 }
 
 void
@@ -708,7 +710,9 @@ void
 NotesDisplay::SaveCurrent ()
 {
   if (!DBExists()) {
-    dbManager.MakeTables (mConName);
+    dbManager.SetName (pConf->CompleteDBName());
+    dbManager.SetCon (mConName);
+    dbManager.MakeTables ();
   }
   OpenDB ();
   if (!showingNote) {
@@ -761,6 +765,7 @@ NotesDisplay::OpenDB ()
   }
   db = QSqlDatabase::addDatabase ("QSQLITE",mConName);
   db.setDatabaseName (pConf->CompleteDBName());
+ 
   bool ok = db.open ();
   if (!ok) {
     ok = QSqlDatabase::isDriverAvailable ("QSQLITE");
@@ -987,11 +992,13 @@ void
 NotesDisplay::DebugCheck ()
 {
   static int debugCount(0);
-#ifndef _WIN32
   debugCount++;
-  qDebug () << " debug timer check " << debugCount << " at "<< time (0);
-  update ();
+  qDebug () << " debug timer check " << debugCount 
+#ifndef _WIN32
+             << " at "<< time (0)
 #endif
+             ;
+  update ();
 }
 
 }
