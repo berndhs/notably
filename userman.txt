@@ -1,7 +1,7 @@
 Notably Manual
 ==============
 Bernd Stramm <bernd.stramm@gmail.com>
-v0.2, March 2010
+v0.3, March 2010
 
 *Notably* is a note taker program. *Notably* focuses on simplicity and quick usage. 
 
