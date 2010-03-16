@@ -67,6 +67,32 @@ DBManage::MakeTables ()
   InitTags  ();
 }
 
+bool
+DBManage::CheckTables (bool create)
+{
+  int goodElements (0);
+  if (pDB) {
+    if (!pDB->open()) {
+      OpenDB (conName);
+    }
+    QStringList::iterator elit;
+    QString name;
+    QString kind;
+    for (elit = dbElementList.begin(); elit != dbElementList.end(); elit++) {
+      name = *elit;
+      kind = ElementType (name).toUpper();
+      if (kind != "TABLE" && kind != "INDEX") {
+        if (create) {
+          MakeTable (name);
+        }
+      }
+    }
+  } else {
+    return false;
+  }
+  return goodElements == dbElementList.size();
+}
+
 void
 DBManage::OpenDB (QString conName)
 {
@@ -76,6 +102,20 @@ DBManage::OpenDB (QString conName)
   *pDB = QSqlDatabase::addDatabase ("QSQLITE",conName);
   pDB->setDatabaseName (dbCompleteName);
   pDB->open ();
+}
+
+QString
+DBManage::ElementType (QString name)
+{
+  QSqlQuery query (*pDB);
+  QString   cmdPat ("select * from main.sqlite_master where name=\"%1\"");
+  QString   cmd = cmdPat.arg (name);
+  bool ok = query.exec (cmd);
+  if (ok && query.next()) {
+    QString tp = query.value(0).toString();
+    return tp;
+  }
+  return QString ("none");
 }
 
 

@@ -82,6 +82,8 @@ ManageMenu::ConnectDialogs ()
            this, SLOT (SaveLoc()));
   connect (fileUI.cancelButton, SIGNAL (clicked()),
            this, SLOT (CancelLoc()));
+  connect (fileUI.changeButton, SIGNAL (clicked()),
+           this, SLOT (GetNewFilename()));
 }
 
 void
@@ -105,6 +107,33 @@ ManageMenu::ChangeFilename ()
   fileUI.directoryEdit->setText (pConf->Directory());
   fileUI.notesFileEdit->setText (pConf->FileName());
   fileDialog.exec ();
+}
+
+void
+ManageMenu::GetNewFilename ()
+{
+  QString newName ;
+  QString defaultTarget = fileUI.directoryEdit->text()
+                         + QDir::separator()
+                         + fileUI.notesFileEdit->text();
+                    
+  QFileDialog askThem (this, tr("Database File"),
+                       defaultTarget,
+                       tr("SQLite Files (*.sql);; All Files (*.*)"));
+  askThem.setAcceptMode (QFileDialog::AcceptSave);
+  askThem.setConfirmOverwrite (false);
+  askThem.setFileMode (QFileDialog::AnyFile);
+  int wantit = askThem.exec();        
+  QStringList results = askThem.selectedFiles();
+  if (wantit > 0 && !results.isEmpty()) {
+    newName = results.first();
+    QFileInfo info (newName);
+    QString dir = info.path();
+    QString file = info.fileName();
+    fileUI.directoryEdit->setText (dir);
+    fileUI.notesFileEdit->setText (file);
+  }
+  
 }
 
 void

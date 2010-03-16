@@ -237,6 +237,11 @@ NotesDisplay::Start ()
   restart = false;
   editMenu.Init ();
   specialMenu.Init ();
+  if (pConf) {
+    dbManager.SetName (pConf->CompleteDBName());
+  }
+  dbManager.SetCon (mConName);
+  dbManager.CheckTables (true);
   if (Settings().contains("size")) {
     QSize defaultSize = size();
     QSize newsize = Settings().value ("size", defaultSize).toSize();
@@ -264,6 +269,7 @@ NotesDisplay::ReloadDB ()
   #else
   CloseDB ();
   OpenDB ();
+  dbManager.CheckTables (true);
   FillNotesList (notesIndex);
   ShowNothing ();
   #endif

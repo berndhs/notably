@@ -51,6 +51,7 @@ public slots:
   void ExportBookSql ();
   void MergeOtherDB ();
   void ImportBusy (bool busy);
+  void GetNewFilename ();
   
 signals:
 

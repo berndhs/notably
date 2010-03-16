@@ -194,7 +194,7 @@ ImportExport::CatchResult ()
     return;
   }
   QString logline;
-  QString mergedPat (tr("merged %2 \"%1\""));
+  QString mergedPat (tr("merge %2 \"%1\""));
   QString skippedPat (tr("skipped \"%1\""));
   qint64 id;
   QString title;

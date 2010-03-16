@@ -32,11 +32,13 @@ public:
     
   void MakeTables ();
   void InitTags ();
+  bool CheckTables (bool create=false);
   
 private:
 
   void MakeTable (QString table);
   void OpenDB (QString conName);
+  QString ElementType (QString name);
 
   QSqlDatabase   *pDB;
   QStringList    tagList;
