@@ -496,7 +496,7 @@ and linked together with an index. The index is written as
 an HTML file (web page) to wherever you want. All Notes are written
 to the same directory as the index, and all images are copied to the same
 area.</p></div>
-<h3 id="Exporting">Exporting Books</h3><div style="clear:left"></div>
+<h3 id="Exporting">Exporting Books as HTML</h3><div style="clear:left"></div>
 <div class="paragraph"><p>To export all Notes in a Book to HTML format, select <strong>Manage&#8230;</strong>
 from the main window. Then select <strong>Export Book as HTML</strong>.</p></div>
 <div class="paragraph"><p>This will bring up a dialog asking where you want to save the index file.
@@ -511,6 +511,46 @@ export the book wherever you can write files.</p></div>
 that are linked to by these Notes</em>.</td>
 </tr></table>
 </div>
+<h3 id="_exporting_books_as_sql">Exporting Books as Sql</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Books can be exported as a <strong>Notably</strong> database. This new database is complete, and
+can be used by itself. Like any other <strong>Notably</strong> database, it can also be used
+as an import source. This means you can use the Export as Sql feature to share
+some of your note with other users.</p></div>
+<div class="paragraph"><p>To export a book, select <strong>Manage&#8594;Export Book as Sql</strong>. You will be asked
+for a file name - this is where <strong>Notably</strong> will write the exported database.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">If the file selected already exists, it will be overwritten. This mean
+the file will contain <em>only</em> the Notes exported, not any previous Notes.</td>
+</tr></table>
+</div>
+<h3 id="Importing">Importing Notes</h3><div style="clear:left"></div>
+<div class="paragraph"><p>You can import Notes from another <strong>Notably</strong> database into your database. This is
+useful when, for example, synchronizing Notes between a desktop
+computer and a mobile computer (smart phone, laptop etc.). It is also useful
+for synchronizing Notes with other users. You can export from one database and
+import into another.</p></div>
+<div class="paragraph"><p>To import Notes, select <strong>Manage&#8594;Import Notes&#8230;</strong>. You will be asked for
+a file name to import from. This file must  be a <strong>Notably</strong> database.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content"><strong>Notably</strong> will compare Notes by their internal identifier, and by
+the date last modified. The identifier is <strong>not</strong> the title of the Note - you can
+have several Notes with the same title. If a Note with the same identifier exists
+in both your database and the imported database, the <em>more recent</em> of the two
+Note will be chosen.</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>Along with the Notes, <strong>Notably</strong> will also import any tags and books from the
+import database that are used by the imported Notes. Tag references and book
+references will also be copied. The tags and books from the imported database that
+are <em>not</em> used by Notes chosen to be copied <em>will not be imported</em>.</p></div>
 </div>
 <h2 id="Tags">Tags</h2>
 <div class="sectionbody">
@@ -652,7 +692,7 @@ of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p></div>
 <div id="footer">
 <div id="footer-text">
 Version 0.2<br />
-Last updated 2010-03-09 09:45:17 EDT
+Last updated 2010-03-15 20:19:47 EDT
 </div>
 </div>
 </body>

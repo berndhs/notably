@@ -104,7 +104,7 @@ to the same directory as the index, and all images are copied to the same
 area.
 
 [[Exporting]]
-=== Exporting Books
+=== Exporting Books as HTML
 To export all Notes in a Book to HTML format, select *Manage...*
 from the main window. Then select *Export Book as HTML*.
 
@@ -114,6 +114,41 @@ export the book wherever you can write files.
 
 IMPORTANT: The book will contain all Notes marked as part of it, _and all Notes 
 that are linked to by these Notes_.
+
+=== Exporting Books as Sql
+Books can be exported as a *Notably* database. This new database is complete, and
+can be used by itself. Like any other *Notably* database, it can also be used
+as an import source. This means you can use the Export as Sql feature to share
+some of your note with other users. 
+
+To export a book, select *Manage->Export Book as Sql*. You will be asked
+for a file name - this is where *Notably* will write the exported database.
+
+IMPORTANT: If the file selected already exists, it will be overwritten. This mean
+the file will contain _only_ the Notes exported, not any previous Notes.
+
+[[Importing]]
+=== Importing Notes
+You can import Notes from another *Notably* database into your database. This is
+useful when, for example, synchronizing Notes between a desktop
+computer and a mobile computer (smart phone, laptop etc.). It is also useful
+for synchronizing Notes with other users. You can export from one database and
+import into another.
+
+To import Notes, select *Manage->Import Notes...*. You will be asked for
+a file name to import from. This file must  be a *Notably* database.
+
+IMPORTANT: *Notably* will compare Notes by their internal identifier, and by
+the date last modified. The identifier is *not* the title of the Note - you can
+have several Notes with the same title. If a Note with the same identifier exists
+in both your database and the imported database, the _more recent_ of the two
+Note will be chosen.
+
+Along with the Notes, *Notably* will also import any tags and books from the
+import database that are used by the imported Notes. Tag references and book
+references will also be copied. The tags and books from the imported database that 
+are _not_ used by Notes chosen to be copied _will not be imported_.
+
 
 [[Tags]]
 == Tags

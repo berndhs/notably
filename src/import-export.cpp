@@ -88,8 +88,11 @@ ImportExport::MergeFrom (QString otherPath)
     box.exec ();
     return;
   }
+  #if 0
   importUI.importPath->setText (otherPath);
   int doimport = importDialog.exec ();
+  #endif
+  int doimport = 1;
   if (doimport) {
     QFileInfo  info (otherPath);
     otherDir = info.path();
