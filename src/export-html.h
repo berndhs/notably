@@ -18,6 +18,7 @@
 #if DELIBERATE_HAVE_WEBELT
 #include <QWebElementCollection>
 #include <QWebElement>
+#endif
 #include <QWebFrame>
 #include <QTextEdit>
 #include <QDir>
@@ -31,7 +32,6 @@
 #include <QDesktopServices>
 #include <QWebView>
 #include <map>
-#endif
 
 #include <QByteArray>
 #include <QFile>
