@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Copyright (C) 2010 Bernd Stramm</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
@@ -105,11 +106,12 @@
      <x>0</x>
      <y>0</y>
      <width>640</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
  </widget>
+ <layoutdefault spacing="4" margin="7"/>
  <customwidgets>
   <customwidget>
    <class>nota::EditBox</class>

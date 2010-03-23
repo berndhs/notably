@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Copyright (C) 2010, Bernd Stramm</author>
  <class>GetStringDialog</class>
  <widget class="QDialog" name="GetStringDialog">
   <property name="geometry">
