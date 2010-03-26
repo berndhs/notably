@@ -97,6 +97,16 @@ main (int argc, char* argv[])
   langok = notaTrans.load (tname,":/viewer");
   App.installTranslator (&notaTrans);
   pv.CLIVersion ();
+  if (argc > 0) {
+    QString qs_arg;
+    for (int a=1; a<argc; a++) {
+      qs_arg = QString (argv[a]);
+      if (qs_arg == QString("--version") || qs_arg == QString ("-v")) {
+        return 0;
+      }
+    }
+    
+  }
 
 #if 0
   paths = App.applicationDirPath();
