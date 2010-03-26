@@ -9,5 +9,5 @@ echo "QMAKE = qmake" > Makefile
 QM=`sh ./findqmake.sh`
 echo "QMAKE = $QM" >> Makefile
 cat Makefile.in >> Makefile
-echo "Now you can   make"
+echo "Now you can build with   make"
 

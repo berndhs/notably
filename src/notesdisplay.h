@@ -135,7 +135,7 @@ private:
   
   void ListTags (const qint64 noteid);
   void GetTagPix (const QString tagname, int t);
-  void OpenDB ();
+  bool OpenDB ();
   void WriteNote (const qint64 id, 
                 const QString & name,
                 const QString & text);

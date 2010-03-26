@@ -668,7 +668,6 @@ NotesDisplay::MakeNew (qint64 & id, QString &name)
   QTime time = QTime::currentTime();
   qint64 sectime = now.toTime_t();
   id = (sectime * 1000 + time.msec());
-  qDebug () << " new id " << id;
   name = now.toString ("yyyy-MM-dd-hh-mm-ss-Note");
 }
 
@@ -763,11 +762,11 @@ NotesDisplay::ReportText ()
   StdOut() << editBox->toHtml ();
 }
 
-void
+bool
 NotesDisplay::OpenDB ()
 {
   if (db.isOpen()) {
-    return;
+    return true;
   }
   db = QSqlDatabase::addDatabase ("QSQLITE",mConName);
   db.setDatabaseName (pConf->CompleteDBName());
@@ -775,11 +774,14 @@ NotesDisplay::OpenDB ()
   bool ok = db.open ();
   if (!ok) {
     ok = QSqlDatabase::isDriverAvailable ("QSQLITE");
-    QString msg = (ok ? "Sqlite driver ok" : "No QSQLITE Driver");
-    QMessageBox box(this);
-    box.setText (msg);
-    box.exec ();
+    if (!ok) {
+      QString msg = tr("No QSQLITE Driver");
+      QMessageBox box(this);
+      box.setText (msg);
+      box.exec ();
+    }
   }
+  return ok;
 }
 
 void

@@ -37,7 +37,7 @@ public:
 private:
 
   void MakeTable (QString table);
-  void OpenDB (QString conName);
+  void OpenDB (QString conName, bool createFile = false);
   QString ElementType (QString name);
 
   QSqlDatabase   *pDB;

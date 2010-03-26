@@ -17,16 +17,17 @@
 DIR_BIN=./bin
 SYS_DEST_DIR=/usr/local/bin
 INSTALL_SYS=yes
+INSTALL_CMD="install -p"
 
 install_item () {
   ITEM=$1
   if [ -e $ITEM ]
   then
-    install $ITEM $DIR_BIN
+    ${INSTALL_CMD} $ITEM $DIR_BIN
     if [ $INSTALL_SYS == "yes" ]
     then
-      install $ITEM $SYS_DEST_DIR
-      echo install $ITEM $SYS_DEST_DIR
+      ${INSTALL_CMD} $ITEM $SYS_DEST_DIR
+      echo ${INSTALL_CMD} $ITEM $SYS_DEST_DIR
     fi
   else
     echo "cannot find " $ITEM " to install"

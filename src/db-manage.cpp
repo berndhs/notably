@@ -73,7 +73,7 @@ DBManage::CheckTables (bool create)
   int goodElements (0);
   if (pDB) {
     if (!pDB->open()) {
-      OpenDB (conName);
+      OpenDB (conName, create);
     }
     QStringList::iterator elit;
     QString name;
@@ -94,10 +94,20 @@ DBManage::CheckTables (bool create)
 }
 
 void
-DBManage::OpenDB (QString conName)
+DBManage::OpenDB (QString conName, bool createFile)
 {
   if (pDB->isOpen()) {
     return;
+  }
+  // first make sure files is there
+  QFileInfo dbinfo (dbCompleteName);
+  if (!dbinfo.exists()) {
+    QFile dbfile (dbCompleteName);
+    bool opened = dbfile.open(QFile::WriteOnly);
+    if (opened) {
+      dbfile.write (QString("").toUtf8());
+      dbfile.close();
+    }
   }
   *pDB = QSqlDatabase::addDatabase ("QSQLITE",conName);
   pDB->setDatabaseName (dbCompleteName);
