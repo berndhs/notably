@@ -14,10 +14,8 @@
 #//
 
 PRO_FILE = notably.pro
-MAKEFILE = MakeNotably
 DESTDIR = /usr/bin
-
-QMAKE = `sh ./findqmake.sh`
+MAKEFILE = MakeNotably
 
 all: $(MAKEFILE)
 	make -f $(MAKEFILE) all
