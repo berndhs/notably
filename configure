@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# configure script for
+#
+#  Notably
+#
+
+cp Makefile.in Makefile
+
+echo "Now you can   make"
+
