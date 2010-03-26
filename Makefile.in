@@ -22,6 +22,10 @@ all: $(MAKEFILE)
 
 clean: $(MAKEFILE)
 	make -f $(MAKEFILE) clean
+
+distclean: $(MAKEFILE)
+	make -f $(MAKEFILE) distclean
+	rm -f $(MAKEFILE)
 	
 debug: $(MAKEFILE)
 	make -f $(MAKEFILE) debug
