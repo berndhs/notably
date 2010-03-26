@@ -25,28 +25,40 @@ You need:
 Build
 =====
 
-as any user, run:
+You can build in several ways, the easiest is:
+
+As any user, run:
 
 $ sh build.sh
 
 This will tell you whether the build worked or not.
+
+OR you can build in the traditional Unixy automake way:
+
+$ ./configure
+$ make
 
 
 Install Executable
 ==================
 
 Depending on where you want to install the executable program,
-you may need to have administrative privileges to do this:
+you may need to have administrative privileges (root, sudo, ...)
+to do this:
 
 # sh install.sh
 
 will install into /usr/local/bin
 
-or 
+OR 
 
 # sh install.sh /your/choice/of/directory/for/executable
 
 will install where you tell it to. 
+
+OR
+
+# make install DESTDIR=/where/you/want/it/bin
 
 In either case, the destination directory must already exist.
 

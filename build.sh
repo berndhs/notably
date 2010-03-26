@@ -16,7 +16,7 @@
 
 TARGET=notably
 DOT_PRO_FILE=$TARGET.pro
-LOCALMAKE=Makefile
+LOCALMAKE=MakeNotably
 MAKE=make
 BUILD_DIR=viewer
 
