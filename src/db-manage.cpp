@@ -71,6 +71,7 @@ bool
 DBManage::CheckTables (bool create)
 {
   int goodElements (0);
+  bool madeTagTable (false);
   if (pDB) {
     if (!pDB->open()) {
       OpenDB (conName, create);
@@ -84,11 +85,17 @@ DBManage::CheckTables (bool create)
       if (kind != "TABLE" && kind != "INDEX") {
         if (create) {
           MakeTable (name);
+          if (name == "tags") {
+            madeTagTable = true;
+          }
         }
       }
     }
   } else {
     return false;
+  }
+  if (create && madeTagTable) {
+    InitTags ();
   }
   return goodElements == dbElementList.size();
 }
@@ -102,10 +109,15 @@ DBManage::OpenDB (QString conName, bool createFile)
   // first make sure files is there
   QFileInfo dbinfo (dbCompleteName);
   if (!dbinfo.exists()) {
+    QString path = dbinfo.path();
+    QDir dbdir (path);
+    if (!dbdir.exists()) {
+      dbdir.mkpath (path);
+    }
     QFile dbfile (dbCompleteName);
     bool opened = dbfile.open(QFile::WriteOnly);
     if (opened) {
-      dbfile.write (QString("").toUtf8());
+      bool written = dbfile.write (QString("").toUtf8());
       dbfile.close();
     }
   }
@@ -141,7 +153,8 @@ DBManage::MakeTable (QString table)
   QString querytext (createcommands);
   QSqlQuery qry (*pDB);
   qry.prepare (querytext);
-  qry.exec ();
+  bool ok = qry.exec ();
+  qDebug () << " ok: " << ok << " for " << createcommands;
 }
 
 void
