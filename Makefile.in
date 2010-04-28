@@ -34,7 +34,7 @@ debug: $(MAKEFILE)
 release: $(MAKEFILE)
 	make -f $(MAKEFILE) release
 
-install:
+install: all FORCE
 	sh install.sh $(DESTDIR)
 
 userinstall:
@@ -45,3 +45,6 @@ qmake:
 
 $(MAKEFILE): $(PRO_FILE)
 	$(QMAKE) $(PRO_FILE)
+
+FORCE:
+
