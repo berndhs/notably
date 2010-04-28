@@ -14,7 +14,6 @@
 #//
 
 PRO_FILE = notably.pro
-DESTDIR = /usr/bin
 MAKEFILE = MakeNotably
 TOP_MAKEFILE = Makefile
 
