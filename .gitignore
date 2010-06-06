@@ -3,4 +3,5 @@ html/
 viewer/debug
 viewer/release
 viewer/ui_*.h
+viewer/tmp
 

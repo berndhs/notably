@@ -16,6 +16,7 @@
 PRO_FILE = notably.pro
 MAKEFILE = MakeNotably
 TOP_MAKEFILE = Makefile
+TARGETS = "bin/notably"
 
 all: $(MAKEFILE)
 	make -f $(MAKEFILE) all
@@ -35,10 +36,10 @@ release: $(MAKEFILE)
 	make -f $(MAKEFILE) release
 
 install: all FORCE
-	sh install.sh $(DESTDIR)
+	install -p $(TARGETS) $(DESTDIR)
 
 userinstall:
-	sh install.sh $(HOME)/bin
+	install -p $(TARGETS) $(HOME)/bin
 
 qmake: 
 	$(QMAKE) $(PRO_FILE)

@@ -23,16 +23,21 @@ DEFINES += DELIBERATE_QTP=$$QT_PATCH_VERSION
 
 CONFIG(debug, debug|release) {
   DEFINES += DELIBERATE_DEBUG=1
-  TARGET = notablyd
+  TARGET = ../bin/notablyd
 }
 
 CONFIG(release, debug|release) {
   DEFINES += DELIBERATE_DEBUG=0
-  TARGET = notably
+  TARGET = ../bin/notably
 }
 
 
 QT += gui core sql webkit
+
+MOC_DIR = tmp/moc
+RCC_DIR = tmp/rcc
+UI_DIR = tmp/ui
+OBJECTS_DIR = tmp/obj
 
 TRANSLATIONS = notably_de.ts
 
