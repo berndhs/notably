@@ -33,6 +33,9 @@ using namespace deliberate;
 
 namespace nota {
 
+/** \brief The main window of Notably. This drives the rest of the application.
+  */
+
 NotesDisplay::NotesDisplay (QApplication & app)
 :pApp(&app),
  restart (false),
@@ -115,7 +118,7 @@ NotesDisplay::SetupMenu ()
   menubar->addAction (specialAction);
   manageAction = new QAction (tr("M&anage..."), this);
   menubar->addAction (manageAction);
-  contentAction = new QAction (tr("Con&tent..."), this);
+  contentAction = new QAction (tr("Selec&t..."), this);
   menubar->addAction (contentAction);
   helpAction = new QAction (tr("&Help"), this);
   menubar->addAction (helpAction);
