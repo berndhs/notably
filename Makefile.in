@@ -23,6 +23,7 @@ all: $(MAKEFILE)
 
 clean: $(MAKEFILE)
 	make -f $(MAKEFILE) clean
+	rm $(TARGETS)
 
 distclean: $(MAKEFILE)
 	make -f $(MAKEFILE) distclean
